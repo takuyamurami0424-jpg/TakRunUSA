@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        /* --- 基本設定 --- */
+        :root {
+            --primary-color: #333;
+            --accent-color: #007bff;
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; padding: 0; }
+
+        /* --- ヘッダー --- */
+        header {
+            background: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        nav ul { display: flex; gap: 20px; }
+        nav a:hover { color: var(--accent-color); }
+
+        /* --- メインコンテンツ --- */
+        section {
+            padding: 80px 20px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 10px;
+            /* センタリングのトリック */
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* --- Hero セクション --- */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #fff;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; color: #666; }
+
+        /* --- Works (グリッドレイアウト) --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin-top: 0; }
+
+        /* --- Contact --- */
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #fff;
+            padding: 10px 30px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover { opacity: 0.9; }
+
+        /* --- フッター --- */
+        footer {
+            background: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- レスポンシブ対応 --- */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            nav ul { font-size: 0.9rem; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">My Portfolio</div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#works">Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to My Page</h1>
+        <p>Web Developer / Creative Thinker</p>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <div style="background: #fff; padding: 40px; border-radius: 8px;">
+            <p>ここに自己紹介文が入ります。経歴やスキルセット、大切にしている価値観などを記載しましょう。</p>
+            <p style="margin-top: 20px;">
+                <strong>Skills:</strong> HTML, CSS, JavaScript, etc.
+            </p>
+        </div>
+    </section>
+
+    <section id="works">
+        <h2>Works</h2>
+        <div class="grid">
+            <article class="card">
+                <h3>Project A</h3>
+                <p>プロジェクトの簡単な説明文。使用技術や役割など。</p>
+            </article>
+            <article class="card">
+                <h3>Project B</h3>
+                <p>ツールの開発や趣味で作ったアプリなど。</p>
+            </article>
+            <article class="card">
+                <h3>Blog / Notes</h3>
+                <p>日々の記録や学習メモへのリンク。</p>
+            </article>
+        </div>
+    </section>
+
+    <section id="contact" style="text-align: center;">
+        <h2>Contact</h2>
+        <p>お仕事のご依頼やご相談はこちらから。</p>
+        <a href="mailto:your-email@example.com" class="btn">Email Me</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 My Name. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // シンプルなスムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
