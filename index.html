@@ -3,120 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>TakRunUSA | Takuya's Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- 基本設定 --- */
+        /* --- 🎨 カラーパレット & 基本設定 --- */
         :root {
-            --primary-color: #333;
-            --accent-color: #007bff;
-            --bg-color: #f9f9f9;
-            --text-color: #333;
+            --primary: #0f2027; /* 深い紺色 */
+            --secondary: #203a43; /* 少し明るい紺 */
+            --accent: #f77f00;   /* ランニングシューズのようなオレンジ */
+            --text-main: #333;
+            --text-light: #f4f4f4;
+            --bg-light: #f8f9fa;
         }
+        
         body {
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            font-family: 'Noto Sans JP', sans-serif;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            line-height: 1.8;
         }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; padding: 0; }
 
         /* --- ヘッダー --- */
         header {
-            background: #fff;
-            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .logo { font-size: 1.5rem; font-weight: bold; }
-        nav ul { display: flex; gap: 20px; }
-        nav a:hover { color: var(--accent-color); }
+        .logo { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--accent); } /* "USA"などを色変え */
 
-        /* --- メインコンテンツ --- */
-        section {
-            padding: 80px 20px;
-            max-width: 960px;
-            margin: 0 auto;
+        nav ul { display: flex; gap: 30px; list-style: none; margin: 0; }
+        nav a { 
+            text-decoration: none; 
+            color: var(--primary); 
+            font-weight: bold; 
+            font-size: 0.9rem;
+            transition: color 0.3s;
         }
-        h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-            border-bottom: 3px solid var(--accent-color);
-            display: inline-block;
-            padding-bottom: 10px;
-            /* センタリングのトリック */
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+        nav a:hover { color: var(--accent); }
 
-        /* --- Hero セクション --- */
+        /* --- ヒーローセクション（トップ画像エリア） --- */
         .hero {
-            height: 80vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            height: 60vh; /* 画面の60%の高さ */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: #fff;
+            padding: 20px;
         }
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
-        .hero p { font-size: 1.2rem; color: #666; }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        .btn-main {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(247, 127, 0, 0.4);
+        }
 
-        /* --- Works (グリッドレイアウト) --- */
+        /* --- 共通セクション設定 --- */
+        section {
+            padding: 80px 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            color: var(--primary);
+        }
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto 0;
+        }
+
+        /* --- About (2カラムレイアウト) --- */
+        .about-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+        }
+        .about-text { flex: 2; }
+        .about-stats { 
+            flex: 1; 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .stat-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .stat-label { font-size: 0.8rem; color: #888; display: block; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+
+        /* --- Works (カードデザイン) --- */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
         .card {
             background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-top: 5px solid var(--primary);
         }
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { margin-top: 0; }
+        .card:hover { transform: translateY(-10px); }
+        .card-content { padding: 25px; }
+        .card h3 { margin: 0 0 10px; color: var(--secondary); }
+        .tag {
+            display: inline-block;
+            background: #eee;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #555;
+            margin-right: 5px;
+        }
 
         /* --- Contact --- */
-        .btn {
-            display: inline-block;
-            background: var(--accent-color);
-            color: #fff;
-            padding: 10px 30px;
-            border-radius: 5px;
-            margin-top: 20px;
+        .contact-box {
+            text-align: center;
+            background: #fff;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
-        .btn:hover { opacity: 0.9; }
 
         /* --- フッター --- */
         footer {
-            background: var(--primary-color);
-            color: #fff;
+            background: var(--primary);
+            color: #888;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
+            margin-top: 80px;
         }
 
-        /* --- レスポンシブ対応 --- */
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 2rem; }
-            nav ul { font-size: 0.9rem; gap: 10px; }
+        /* --- スマホ対応 --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-container { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">My Portfolio</div>
+        <div class="logo">TakRun<span>USA</span></div>
         <nav>
             <ul>
                 <li><a href="#about">About</a></li>
@@ -127,56 +208,80 @@
     </header>
 
     <section class="hero">
-        <h1>Welcome to My Page</h1>
-        <p>Web Developer / Creative Thinker</p>
+        <h1>Run & Create</h1>
+        <p>Supply Chain Professional / Marathon Runner in Georgia</p>
+        <a href="#about" class="btn-main">View Profile</a>
     </section>
 
     <section id="about">
         <h2>About Me</h2>
-        <div style="background: #fff; padding: 40px; border-radius: 8px;">
-            <p>ここに自己紹介文が入ります。経歴やスキルセット、大切にしている価値観などを記載しましょう。</p>
-            <p style="margin-top: 20px;">
-                <strong>Skills:</strong> HTML, CSS, JavaScript, etc.
-            </p>
+        <div class="about-container">
+            <div class="about-text">
+                <p>はじめまして。アメリカ・ジョージア州でサプライチェーンマネジメントの仕事をしながら、ランニングとプログラミングを楽しんでいます。</p>
+                <p>「TakRunUSA」という名前の通り、アメリカの道を走りながら、日々の気づきや開発したツールをここで発信していきます。</p>
+            </div>
+            <div class="about-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Location</span>
+                    <span class="stat-value">Georgia, USA</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Interest</span>
+                    <span class="stat-value">Marathon / Coding</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Language</span>
+                    <span class="stat-value">Japanese / English</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="works">
-        <h2>Works</h2>
+        <h2>Projects</h2>
         <div class="grid">
             <article class="card">
-                <h3>Project A</h3>
-                <p>プロジェクトの簡単な説明文。使用技術や役割など。</p>
+                <div class="card-content">
+                    <span class="tag">Web App</span>
+                    <h3>Quotation Tool</h3>
+                    <p>業務効率化のために作成した、モバイル見積もりツール。</p>
+                </div>
             </article>
             <article class="card">
-                <h3>Project B</h3>
-                <p>ツールの開発や趣味で作ったアプリなど。</p>
+                <div class="card-content">
+                    <span class="tag">Running</span>
+                    <h3>Marathon Record</h3>
+                    <p>これまでの大会記録や、日々のトレーニングログ。</p>
+                </div>
             </article>
             <article class="card">
-                <h3>Blog / Notes</h3>
-                <p>日々の記録や学習メモへのリンク。</p>
+                <div class="card-content">
+                    <span class="tag">Blog</span>
+                    <h3>US Life Blog</h3>
+                    <p>アメリカでの生活、釣り、家庭菜園についての記録。</p>
+                </div>
             </article>
         </div>
     </section>
 
-    <section id="contact" style="text-align: center;">
-        <h2>Contact</h2>
-        <p>お仕事のご依頼やご相談はこちらから。</p>
-        <a href="mailto:your-email@example.com" class="btn">Email Me</a>
+    <section id="contact">
+        <div class="contact-box">
+            <h2>Contact</h2>
+            <p>お問い合わせやSNSのフォローはこちらから。</p>
+            <a href="#" class="btn-main">Send Email</a>
+        </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 My Name. All Rights Reserved.</p>
+        <p>&copy; 2026 TakRunUSA. All Rights Reserved.</p>
     </footer>
 
     <script>
-        // シンプルなスムーズスクロール
+        // スムーズスクロール
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
             });
         });
     </script>
