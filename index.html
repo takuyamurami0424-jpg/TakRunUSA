@@ -9,16 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=Press+Start+2P&family=Yuji+Syuku&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Icons (Updated to latest version for X logo support) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     
     <!-- Three.js (3D Library) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Three.js OrbitControls (For interaction) -->
+    <!-- Three.js OrbitControls -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <!-- Markdown Parser (for AI response) -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
         /* --- 🏳️ White & Global Theme --- */
@@ -220,50 +217,6 @@
         }
         .btn-note { background: #2cb696; color: #fff; padding: 10px 25px; border-radius: 50px; font-weight: 600; }
 
-        /* --- ✨ AI Assistant Section --- */
-        #ai-assistant {
-            background: linear-gradient(135deg, #fff 0%, #f0f4f8 100%);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 60px 40px;
-            margin-top: 80px;
-            border: 1px solid #fff;
-        }
-        .ai-container { max-width: 800px; margin: 0 auto; text-align: center; }
-        
-        .ai-input-group { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
-        .ai-input {
-            flex: 1; padding: 15px 25px; border-radius: 50px;
-            border: 2px solid #e2e8f0; font-size: 1rem; outline: none; transition: 0.3s;
-        }
-        .ai-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(44,82,130,0.1); }
-        .btn-ai {
-            background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
-            color: #fff; padding: 15px 35px; border-radius: 50px;
-            font-weight: 700; cursor: pointer; border: none;
-            display: inline-flex; align-items: center; gap: 8px;
-            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3); transition: 0.3s;
-        }
-        .btn-ai:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4); }
-        .btn-ai:disabled { opacity: 0.7; cursor: not-allowed; }
-        
-        .ai-response-box {
-            margin-top: 30px; background: #fff; border-radius: 15px;
-            padding: 30px; text-align: left; min-height: 100px;
-            display: none; border: 1px solid #e2e8f0; position: relative;
-        }
-        .ai-response-box::before {
-            content: 'AI Takuya'; position: absolute; top: -12px; left: 20px;
-            background: var(--accent); color: #fff; font-size: 0.75rem;
-            padding: 2px 10px; border-radius: 10px; font-weight: 700;
-        }
-        .loading-spinner {
-            display: inline-block; width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
-            border-top-color: #fff; animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
         /* Footer */
         .social-icons { display: flex; justify-content: center; gap: 20px; margin: 40px 0; }
         .social-link {
@@ -279,8 +232,6 @@
             .works-container { grid-template-columns: 1fr; }
             .note-highlight { flex-direction: column; text-align: center; gap: 20px; }
             canvas { height: 250px; }
-            .ai-input-group { flex-direction: column; }
-            .btn-ai { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -292,7 +243,7 @@
             <ul>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#game-section" class="nav-link">Game</a></li>
-                <li><a href="#ai-assistant" class="nav-link" style="color:var(--accent);">AI Chat</a></li>
+                <li><a href="#experience" class="nav-link">Career</a></li>
             </ul>
         </nav>
     </header>
@@ -365,31 +316,6 @@
         </div>
     </div>
 
-    <!-- ✨ AI ASSISTANT SECTION (GEMINI API) -->
-    <section id="ai-assistant">
-        <div class="ai-container">
-            <div class="section-header" style="margin-bottom: 30px;">
-                <span class="section-subtitle">AI ADVISOR</span>
-                <h2 class="section-title">Ask AI Takuya</h2>
-                <p style="color: var(--text-sub);">
-                    サプライチェーンの専門用語や、マラソントレーニングの悩みなど、<br>
-                    TakuyaのAI分身がお答えします。
-                </p>
-            </div>
-
-            <div class="ai-input-group">
-                <input type="text" id="userQuery" class="ai-input" placeholder="例: Kaizenとは何ですか？ / フルマラソンのコツは？">
-                <button onclick="askGemini()" class="btn-ai" id="askBtn">
-                    ✨ Ask AI
-                </button>
-            </div>
-
-            <div id="aiResponse" class="ai-response-box">
-                <!-- Response will appear here -->
-            </div>
-        </div>
-    </section>
-
     <!-- Experience -->
     <section id="experience">
         <div class="section-header">
@@ -418,10 +344,11 @@
             </div>
             <div class="card">
                 <span class="exp-year">2006 - 2017</span>
-                <h3 class="exp-title">Purchasing Manager</h3>
+                <h3 class="exp-title">Purchasing / Production Control / Import & Export</h3>
                 <p style="color:#718096;">Nisshinbo Brake Inc | Japan</p>
                 <ul class="exp-list">
                     <li>Global centralized purchasing.</li>
+                    <li>Managed production planning and import/export operations.</li>
                     <li>Maintained 98% on-time delivery rate.</li>
                 </ul>
             </div>
@@ -444,7 +371,7 @@
             </div>
             <div class="card">
                 <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">PROJECT</span>
-                <h3>Quotation Tool</h3>
+                <h3>Mobile Quotation Tool on web</h3>
                 <p style="color:#718096;">Excel-based tool to reduce user errors.</p>
             </div>
             <div class="card">
@@ -459,7 +386,11 @@
     <div style="background:#f7fafc; padding:80px 5%; text-align:center; border-top:1px solid #e2e8f0;">
         <h2 class="section-title">Connect With Me</h2>
         <div class="social-icons">
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/" target="_blank" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            
             <a href="https://note.com/tak0424" target="_blank" class="social-link"><i class="fa-solid fa-pen-nib"></i></a>
+            <!-- X (Updated Logo) -->
             <a href="https://x.com/Murami10" target="_blank" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="https://www.facebook.com/takuya.murami.1" target="_blank" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="https://www.youtube.com/@takuyamurami6423" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
@@ -559,7 +490,7 @@
         let stamina = 100;
         let speed = 0;
         let frame = 0;
-        let baseSpeed = 10; // Speed Up
+        let baseSpeed = 12; // High Speed
 
         // Player
         const player = { x: 50, y: 240, w: 40, h: 40, dy: 0, jump: -12, g: 0.6, grounded: false };
@@ -657,7 +588,7 @@
             stamina -= decay;
             if (stamina < 0) stamina = 0;
 
-            distance += (speed * 0.002);
+            distance += (speed * 0.003);
             
             distDisplay.innerText = distance.toFixed(3);
             staminaBar.style.width = stamina + '%';
@@ -675,7 +606,7 @@
             }
 
             // Spawn
-            if (frame % 60 === 0) {
+            if (frame % 50 === 0) {
                 let r = Math.random();
                 if (r > 0.6) {
                     objects.push({ type: 'water', x: canvas.width, y: 210, w: 20, h: 30 });
@@ -743,77 +674,5 @@
 
     </script>
 
-    <!-- ✨ GEMINI API SCRIPT -->
-    <script>
-        // API Key embedded directly in the code
-        const apiKey = "";
-
-        async function askGemini() {
-            const query = document.getElementById('userQuery').value;
-            const responseBox = document.getElementById('aiResponse');
-            const askBtn = document.getElementById('askBtn');
-
-            if (!query) return;
-
-            // UI Loading State
-            askBtn.disabled = true;
-            askBtn.innerHTML = '<span class="loading-spinner"></span> Thinking...';
-            responseBox.style.display = 'block';
-            responseBox.innerHTML = 'Thinking...';
-
-            const systemPrompt = `
-                あなたはTakuya Muramiです。ジョージア州在住のサプライチェーンマネージャーであり、マラソンランナー、そして敬虔なクリスチャンです。
-                以下のトピックについて、プロフェッショナルかつ親しみやすいトーンで日本語で回答してください：
-                1. サプライチェーン、ロジスティクス、Kaizen、調達について。
-                2. マラソンのトレーニング、持久力、30kmの壁の乗り越え方について。
-                3. アメリカでの生活や、日々の信仰、価値観について。
-                
-                回答は簡潔に、要点をまとめてください。マークダウン形式で出力してください。
-            `;
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{ text: query }]
-                        }],
-                        systemInstruction: {
-                            parts: [{ text: systemPrompt }]
-                        }
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0].content) {
-                    const answer = data.candidates[0].content.parts[0].text;
-                    // Parse Markdown
-                    responseBox.innerHTML = marked.parse(answer);
-                } else {
-                    responseBox.innerHTML = "すみません、今ちょっと考えがまとまりません。もう一度聞いてみてください。";
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                responseBox.innerHTML = "エラーが発生しました。ネットワーク接続を確認してください。";
-            } finally {
-                askBtn.disabled = false;
-                askBtn.innerHTML = '✨ Ask AI';
-            }
-        }
-        
-        // Allow Enter key to submit
-        document.getElementById('userQuery').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                askGemini();
-            }
-        });
-    </script>
-
 </body>
 </html>
-
