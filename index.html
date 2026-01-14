@@ -4,494 +4,885 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TakRunUSA | Takuya Murami</title>
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=Press+Start+2P&family=Yuji+Syuku&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome (SNSアイコン用) -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js (3D Library) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js OrbitControls (For interaction) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Markdown Parser (for AI response) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
-        /* --- 🎨 モダン・カラーパレット --- */
+        /* --- 🏳️ White & Global Theme --- */
         :root {
-            --bg-color: #0f172a;       /* 全体の背景：ダークネイビー */
-            --card-bg: rgba(30, 41, 59, 0.7); /* カード背景：半透明 */
-            --text-main: #f8fafc;      /* 白に近いグレー */
-            --text-muted: #94a3b8;     /* 薄いグレー */
-            --accent: #f97316;         /* 鮮やかなオレンジ */
-            --accent-glow: rgba(249, 115, 22, 0.3);
-            --gradient: linear-gradient(135deg, #f97316, #db2777); /* オレンジ〜ピンクのグラデーション */
+            --bg-body: #f7f9fc;
+            --text-main: #2d3748;
+            --text-sub: #718096;
+            --accent: #2c5282;        /* Navy */
+            --accent-light: #63b3ed;  /* Sky Blue */
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
+            --ink: #1a202c;
         }
         
         * { box-sizing: border-box; }
-
         body {
-            font-family: 'Noto Sans JP', sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: 'Lato', 'Noto Sans JP', sans-serif;
+            margin: 0; padding: 0;
             color: var(--text-main);
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(249, 115, 22, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(219, 39, 119, 0.05) 0%, transparent 40%);
+            background-color: var(--bg-body);
             line-height: 1.8;
             overflow-x: hidden;
         }
         
-        h1, h2, h3, .logo { font-family: 'Montserrat', sans-serif; }
-        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        h1, h2, h3 { margin: 0; font-weight: 700; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-        /* --- ✨ Glassmorphism Header --- */
+        /* --- Header --- */
         header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 1.2rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border);
         }
-        .logo { 
-            font-size: 1.5rem; 
-            font-weight: 900; 
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; }
+        .logo span { color: var(--text-sub); font-weight: 400; font-size: 1rem; }
+        nav ul { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+        .nav-link { font-size: 0.95rem; color: var(--text-sub); font-weight: 500; }
+        .nav-link:hover { color: var(--accent); }
+
+        /* --- 🌍 3D Hero Section --- */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            cursor: grab; /* ドラッグできることを示すカーソル */
+        }
+        .hero:active { cursor: grabbing; }
+
+        /* 3D Canvas Container */
+        #canvas-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.6; /* 少し薄くして文字を見やすく */
         }
         
-        nav ul { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
-        nav a { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            color: var(--text-muted);
-            position: relative;
-        }
-        nav a:hover, nav a.active { color: #fff; }
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0; height: 2px;
-            bottom: -5px; left: 0;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-        nav a:hover::after { width: 100%; }
-
-        /* --- 🚀 Hero Section --- */
-        .hero {
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5%;
-            position: relative;
-        }
         .hero-content {
-            max-width: 1200px;
+            position: relative;
+            z-index: 2; /* 3Dより手前に */
             width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: 1fr 1fr;
             gap: 50px;
             align-items: center;
+            pointer-events: none; /* 3D操作のためにクリックを透過させる */
+        }
+        /* インタラクティブな要素はクリック可能に戻す */
+        .hero-text, .profile-wrapper { pointer-events: auto; }
+
+        .kanji-name {
+            font-family: 'Yuji Syuku', serif;
+            font-size: 3.5rem;
+            color: var(--ink);
+            line-height: 1.2;
+            margin-bottom: 10px;
         }
         .hero-text h1 {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin: 0 0 20px;
-            background: linear-gradient(to right, #fff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-text h1 span {
-            display: block;
-            font-size: 1.5rem;
-            color: var(--accent);
-            -webkit-text-fill-color: var(--accent);
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.2em;
+            color: var(--accent); margin-bottom: 20px;
         }
         .hero-text p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 500px;
-            margin-bottom: 30px;
+            color: var(--text-sub); max-width: 500px; margin-bottom: 40px;
+            background: rgba(255,255,255,0.6); /* 文字が読めるように背景 */
+            padding: 10px; border-radius: 8px;
+            backdrop-filter: blur(5px);
         }
-        
-        /* プロフィール写真のデザイン */
-        .hero-image {
-            position: relative;
-            display: flex;
-            justify-content: center;
-        }
+
         .profile-img {
-            width: 320px;
-            height: 320px;
-            object-fit: cover;
-            border-radius: 30px;
-            box-shadow: 20px 20px 60px rgba(0,0,0,0.3);
-            transform: rotate(-3deg);
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: transform 0.5s ease;
-            z-index: 2;
-        }
-        .hero-image:hover .profile-img { transform: rotate(0deg) scale(1.02); }
-        
-        .hero-bg-shape {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--gradient);
-            filter: blur(80px);
-            opacity: 0.4;
-            z-index: 1;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            width: 100%; max-width: 350px;
+            border-radius: 20px;
+            box-shadow: 20px 20px 0px rgba(44, 82, 130, 0.2);
+            display: block; margin: 0 auto;
         }
 
-        /* ボタン */
-        .btn-group { display: flex; gap: 15px; }
+        /* Buttons */
         .btn {
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            padding: 12px 35px; border-radius: 50px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
         }
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 10px 20px var(--accent-glow);
-            border: none;
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
-        .btn-secondary {
-            background: rgba(255,255,255,0.05);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-        .btn-note { background: #2cb696; color: white; }
+        .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 15px rgba(44,82,130,0.3); }
+        .btn-primary:hover { transform: translateY(-2px); background: #1a365d; }
+        .btn-outline { background: #fff; color: var(--accent); border: 1px solid var(--accent); margin-left: 15px; }
+        .btn-outline:hover { background: var(--accent); color: #fff; }
 
-        /* --- 🧩 Sections --- */
-        section { padding: 100px 5%; }
-        .section-title {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 60px;
-            color: white;
+        /* --- 🏃 Game Section --- */
+        #game-section {
+            padding: 80px 5%; background: #fff; text-align: center;
+            border-top: 1px solid var(--border);
         }
-        .section-title span { color: var(--accent); }
+        .game-title {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--accent); font-size: 1.5rem; margin-bottom: 10px;
+        }
+        .game-ui-container {
+            position: relative; max-width: 750px; margin: 0 auto;
+            background: #f7fafc; border: 2px solid var(--accent);
+            border-radius: 12px; overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        canvas { display: block; width: 100%; height: 320px; image-rendering: pixelated; }
 
-        /* --- 📝 Bento Grid Layout (Experience) --- */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
+        /* Game UI Overlay */
+        .game-hud {
+            position: absolute; top: 10px; left: 10px; right: 10px;
+            display: flex; justify-content: space-between; align-items: flex-start;
+            z-index: 20; font-family: 'Press Start 2P', cursive; font-size: 0.8rem;
         }
-        .bento-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
+        .hud-box {
+            background: rgba(0,0,0,0.6); color: #fff;
+            padding: 8px 12px; border-radius: 4px; border: 2px solid #fff;
         }
-        .bento-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(30, 41, 59, 0.9);
-        }
-        .bento-card.large { grid-column: span 2; }
         
-        .job-year { font-size: 0.9rem; color: var(--accent); font-weight: bold; margin-bottom: 10px; display: block; }
-        .job-title { font-size: 1.4rem; margin: 0 0 5px; color: #fff; }
-        .job-company { color: var(--text-muted); font-size: 0.95rem; display: block; margin-bottom: 15px; }
-        .job-desc { color: #cbd5e1; font-size: 0.95rem; padding-left: 20px; }
-        .job-desc li { margin-bottom: 8px; }
-
-        /* --- 🏷 Skills --- */
-        .skills-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
+        /* Power Bar */
+        .power-bar-container {
+            width: 150px; height: 15px; background: #333; border: 2px solid #fff;
+            margin-top: 5px; position: relative;
         }
-        .skill-pill {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-muted);
-            padding: 8px 20px;
-            border-radius: 100px;
+        .power-bar-fill {
+            height: 100%; background: #48bb78; width: 100%; transition: width 0.1s;
+        }
+        .power-label { font-size: 0.6rem; color: #fff; margin-bottom: 2px; display: block; text-align: left; }
+
+        /* Warning Message */
+        .game-message {
+            position: absolute;
+            top: 60px; left: 0; width: 100%;
+            text-align: center;
+            font-family: 'Press Start 2P', cursive;
             font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .skill-pill:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(249, 115, 22, 0.1);
+            z-index: 25;
+            text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+            pointer-events: none;
         }
 
-        /* --- ✍️ Note & Works --- */
-        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
+        .game-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(255,255,255,0.9);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 30;
         }
-        .note-card {
-            background: #fff;
-            color: #333;
+        .hidden { display: none !important; }
+        .game-btn {
+            background: var(--accent); color: #fff; border: none;
+            padding: 15px 30px; font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem; cursor: pointer; border-radius: 5px; margin-top: 20px;
+        }
+        .game-btn:hover { background: #1a365d; }
+
+        /* --- Sections (Exp & Works) --- */
+        section { padding: 100px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-title { font-size: 2.2rem; color: var(--text-main); margin-bottom: 10px; }
+        .section-subtitle { color: var(--accent); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.9rem; }
+
+        .exp-grid, .works-container {
+            display: grid; gap: 30px;
+        }
+        .exp-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .works-container { grid-template-columns: repeat(2, 1fr); }
+
+        .card {
+            background: #fff; padding: 40px; border-radius: 12px;
+            box-shadow: var(--shadow); border: 1px solid #f0f0f0; transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        .exp-year { color: var(--accent); font-weight: 700; display: block; margin-bottom: 5px; }
+        .exp-title { font-size: 1.3rem; margin-bottom: 5px; }
+        .exp-list { padding-left: 20px; font-size: 0.95rem; }
+
+        .note-highlight {
+            grid-column: span 2; background: #fff; padding: 50px;
+            border-left: 5px solid #2cb696; display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-note { background: #2cb696; color: #fff; padding: 10px 25px; border-radius: 50px; font-weight: 600; }
+
+        /* --- ✨ AI Assistant Section --- */
+        #ai-assistant {
+            background: linear-gradient(135deg, #fff 0%, #f0f4f8 100%);
             border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s;
+            box-shadow: var(--shadow);
+            padding: 60px 40px;
+            margin-top: 80px;
+            border: 1px solid #fff;
         }
-        .note-card:hover { transform: translateY(-5px); }
-        .note-header { background: #41c9b4; padding: 20px; text-align: center; color: white; font-size: 3rem; }
-        .note-body { padding: 30px; text-align: center; }
-        .note-body h3 { font-size: 1.5rem; margin: 0 0 15px; color: #1a1a1a; }
-        .note-body p { color: #666; margin-bottom: 25px; font-size: 0.95rem; }
-
-        /* --- 🤝 Contact (SNS) --- */
-        .sns-container {
+        .ai-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .ai-input-group {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 30px;
             flex-wrap: wrap;
         }
-        .sns-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
+        .ai-input {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 2px solid #e2e8f0;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
         }
-        .sns-btn:hover {
-            transform: translateY(-5px);
+        .ai-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(44,82,130,0.1); }
+        .btn-ai {
+            background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
             color: #fff;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
+            transition: 0.3s;
         }
-        /* 各SNSのホバー色 */
-        .sns-btn.note:hover { background: #2cb696; border-color: #2cb696; box-shadow: 0 5px 15px rgba(44,182,150,0.3); }
-        .sns-btn.x:hover { background: #000; border-color: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); } /* Xは黒 */
-        .sns-btn.fb:hover { background: #1877f2; border-color: #1877f2; box-shadow: 0 5px 15px rgba(24,119,242,0.3); }
-        .sns-btn.yt:hover { background: #ff0000; border-color: #ff0000; box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
+        .btn-ai:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4); }
+        .btn-ai:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        .ai-response-box {
+            margin-top: 30px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: left;
+            min-height: 100px;
+            display: none; /* Hidden by default */
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        .ai-response-box::before {
+            content: 'AI Takuya';
+            position: absolute;
+            top: -12px; left: 20px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* --- 📱 Responsive --- */
+        /* Footer */
+        .social-icons { display: flex; justify-content: center; gap: 20px; margin: 40px 0; }
+        .social-link {
+            width: 50px; height: 50px; border-radius: 50%; background: #fff; color: var(--accent);
+            display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);
+            font-size: 1.2rem; transition: 0.3s;
+        }
+        .social-link:hover { background: var(--accent); color: #fff; transform: translateY(-3px); }
+        footer { text-align: center; padding: 40px; color: var(--text-sub); border-top: 1px solid var(--border); font-size: 0.9rem; }
+
         @media (max-width: 768px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
-            .hero-text h1 { font-size: 3rem; }
-            .hero-text p { margin: 0 auto 30px; }
-            .btn-group { justify-content: center; }
-            .hero-image { order: -1; margin-bottom: 40px; }
-            .profile-img { width: 200px; height: 200px; }
-            .bento-card.large { grid-column: span 1; }
+            .works-container { grid-template-columns: 1fr; }
+            .note-highlight { flex-direction: column; text-align: center; gap: 20px; }
+            canvas { height: 250px; }
+            .ai-input-group { flex-direction: column; }
+            .btn-ai { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <header>
         <a href="#" class="logo">TakRun<span>USA</span></a>
         <nav>
             <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#game-section" class="nav-link">Game</a></li>
+                <li><a href="#ai-assistant" class="nav-link" style="color:var(--accent);">AI Chat</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- 🌍 HERO SECTION with 3D Earth -->
+    <div class="hero" id="about">
+        <!-- 3D Canvas Background -->
+        <div id="canvas-container"></div>
+
         <div class="hero-content">
             <div class="hero-text">
-                <h1>
-                    <span>Takuya Murami</span>
-                    Supply Chain <br> & Marathon
-                </h1>
+                <div class="kanji-name">村見 拓哉</div>
+                <h1>Takuya Murami</h1>
                 <p>
-                    Connecting global operations with Kaizen philosophy. 
-                    Running through challenges in business and life.
+                    Supply Chain Manager / Marathon Runner<br>
+                    Global operations with Kaizen philosophy.<br>
                     Based in Georgia, USA.
                 </p>
-                <div class="btn-group">
+                <div>
                     <a href="#works" class="btn btn-primary">View Works</a>
-                    <!-- noteへのリンクボタン -->
-                    <a href="https://note.com/tak0424" target="_blank" class="btn btn-secondary">
-                        <i class="fa-solid fa-pen-nib"></i> Read my Note
+                    <a href="https://note.com/tak0424" target="_blank" class="btn btn-outline">
+                        <i class="fa-solid fa-pen-nib"></i> Note
                     </a>
                 </div>
             </div>
             
-            <div class="hero-image">
-                <div class="hero-bg-shape"></div>
-                <!-- 写真ファイル名をここで指定 -->
+            <div>
                 <img src="Me.JPG" alt="Takuya Murami" class="profile-img">
+            </div>
+        </div>
+    </div>
+
+    <!-- 🏃 MARATHON GAME SECTION -->
+    <div id="game-section">
+        <h2 class="game-title">Full Marathon Challenge</h2>
+        <p style="color: #718096; margin-bottom: 30px;">
+            Goal: 42.195km. <br>Grab 💧Water to recover Stamina.<br> Beware the "Wall" at 30km!
+        </p>
+        
+        <div class="game-ui-container">
+            <div class="game-hud">
+                <div class="hud-box" style="text-align: left;">
+                    <span class="power-label">STAMINA</span>
+                    <div class="power-bar-container">
+                        <div class="power-bar-fill" id="staminaBar"></div>
+                    </div>
+                </div>
+                <div class="hud-box">
+                    DIST: <span id="distDisplay">0.000</span> km
+                </div>
+            </div>
+
+            <!-- New Alert Message Area -->
+            <div id="gameMessage" class="game-message hidden"></div>
+
+            <canvas id="gameCanvas" width="800" height="320"></canvas>
+            
+            <!-- Start Screen -->
+            <div id="startScreen" class="game-overlay">
+                <h3 style="color: var(--accent); margin-bottom: 10px;">Ready for 42.195km?</h3>
+                <p style="font-size: 0.8rem; color: #555;">[SPACE] or [TAP] to Jump</p>
+                <button class="game-btn" onclick="startGame()">START RACE</button>
+            </div>
+            
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="game-overlay hidden">
+                <h3 id="resultTitle" style="color: var(--accent); margin-bottom: 10px;">Race Finished!</h3>
+                <p style="color: #333;">Result: <span id="finalDist">0.000</span> km</p>
+                <button class="game-btn" onclick="startGame()">TRY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✨ AI ASSISTANT SECTION (GEMINI API) -->
+    <section id="ai-assistant">
+        <div class="ai-container">
+            <div class="section-header" style="margin-bottom: 30px;">
+                <span class="section-subtitle">AI ADVISOR</span>
+                <h2 class="section-title">Ask AI Takuya</h2>
+                <p style="color: var(--text-sub);">
+                    サプライチェーンの専門用語や、マラソントレーニングの悩みなど、<br>
+                    TakuyaのAI分身がお答えします。
+                </p>
+            </div>
+
+            <div class="ai-input-group">
+                <input type="text" id="userQuery" class="ai-input" placeholder="例: Kaizenとは何ですか？ / フルマラソンのコツは？">
+                <button onclick="askGemini()" class="btn-ai" id="askBtn">
+                    ✨ Ask AI
+                </button>
+            </div>
+
+            <div id="aiResponse" class="ai-response-box">
+                <!-- Response will appear here -->
             </div>
         </div>
     </section>
 
-    <!-- Experience Section (Bento Grid) -->
+    <!-- Experience -->
     <section id="experience">
-        <h2 class="section-title">Professional <span>History</span></h2>
-        
-        <div class="bento-grid">
-            <!-- 最新の職歴 -->
-            <div class="bento-card large">
-                <span class="job-year">2019 - Present</span>
-                <h3 class="job-title">Logistics & Sales Support Manager</h3>
-                <span class="job-company">Sakai America Inc | Adairsville, GA</span>
-                <ul class="job-desc">
-                    <li>Achieved $630K in domestic freight cost savings (18% reduction).</li>
-                    <li>Designed an Excel-based quoting tool, saving 44 mins/month and reducing errors.</li>
-                    <li>Developed inventory visibility tools to accelerate sales.</li>
+        <div class="section-header">
+            <span class="section-subtitle">Career Path</span>
+            <h2 class="section-title">Professional Experience</h2>
+        </div>
+        <div class="exp-grid">
+            <div class="card">
+                <span class="exp-year">2019 - Present</span>
+                <h3 class="exp-title">Logistics and Sales Operation</h3>
+                <p style="color:#718096;">Sakai America Inc | GA, USA</p>
+                <ul class="exp-list">
+                    <li>Achieved $630K in freight cost savings (18% reduction).</li>
+                    <li>Designed Excel-based quoting tool.</li>
+                    <li>Developed inventory visibility tools.</li>
                 </ul>
             </div>
-
-            <!-- 過去の職歴 -->
-            <div class="bento-card">
-                <span class="job-year">2017 - 2018</span>
-                <h3 class="job-title">SCM Advisor</h3>
-                <span class="job-company">Nisshinbo Automotive | Covington, GA</span>
-                <ul class="job-desc">
-                    <li>Realized $500K in supplier cost reductions via strategic sourcing.</li>
-                    <li>Supervised a supply chain team of 8 staff members.</li>
+            <div class="card">
+                <span class="exp-year">2017 - 2018</span>
+                <h3 class="exp-title">SCM Advisor</h3>
+                <p style="color:#718096;">Nisshinbo Automotive | GA, USA</p>
+                <ul class="exp-list">
+                    <li>Realized $500K in supplier cost reductions.</li>
+                    <li>Reduced inventory costs by $100K annually.</li>
                 </ul>
             </div>
-
-            <div class="bento-card">
-                <span class="job-year">2006 - 2017</span>
-                <h3 class="job-title">Purchasing Manager</h3>
-                <span class="job-company">Nisshinbo Brake Inc | Gunma, Japan</span>
-                <ul class="job-desc">
-                    <li>Collaborated in global centralized purchasing teams (US, DE, CN, JP).</li>
+            <div class="card">
+                <span class="exp-year">2006 - 2017</span>
+                <h3 class="exp-title">Purchasing Manager</h3>
+                <p style="color:#718096;">Nisshinbo Brake Inc | Japan</p>
+                <ul class="exp-list">
+                    <li>Global centralized purchasing.</li>
                     <li>Maintained 98% on-time delivery rate.</li>
                 </ul>
             </div>
         </div>
-        
-        <!-- Skills -->
-        <div style="margin-top: 60px;">
-            <div class="skills-wrapper">
-                <span class="skill-pill">Global SCM</span>
-                <span class="skill-pill">Kaizen</span>
-                <span class="skill-pill">Strategic Planning</span>
-                <span class="skill-pill">Import/Export (DDP/CIF)</span>
-                <span class="skill-pill">Advanced Excel (VBA)</span>
-                <span class="skill-pill">Oracle ERP</span>
-                <span class="skill-pill">Servant Leadership</span>
-                <span class="skill-pill">Marathon Runner</span>
+    </section>
+
+    <!-- Works -->
+    <section id="works">
+        <div class="section-header">
+            <span class="section-subtitle">Output</span>
+            <h2 class="section-title">Latest Activities</h2>
+        </div>
+        <div class="works-container">
+            <div class="card note-highlight">
+                <div>
+                    <h3 style="font-size:1.5rem;">Official Note Blog</h3>
+                    <p style="color:#718096; margin-top:5px;">Supply Chain, US Life & Running.</p>
+                </div>
+                <a href="https://note.com/tak0424" target="_blank" class="btn-note">Read</a>
+            </div>
+            <div class="card">
+                <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">PROJECT</span>
+                <h3>Quotation Tool</h3>
+                <p style="color:#718096;">Excel-based tool to reduce user errors.</p>
+            </div>
+            <div class="card">
+                <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">LIFESTYLE</span>
+                <h3>Running Logs</h3>
+                <p style="color:#718096;">Documenting marathons across the US.</p>
             </div>
         </div>
     </section>
 
-    <!-- Works & Note Section -->
-    <section id="works">
-        <h2 class="section-title">Works & <span>Notes</span></h2>
-        <div class="works-grid">
-            
-            <article class="note-card">
-                <div class="note-header">
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-                <div class="note-body">
-                    <h3>My Note Blog</h3>
-                    <p>日々の気づき、サプライチェーンのトレンド、アメリカ生活やランニングについて書いています。</p>
-                    <a href="https://note.com/tak0424" target="_blank" class="btn btn-note" style="width: 100%; justify-content: center;">
-                        Read Articles
-                    </a>
-                </div>
-            </article>
-
-            <article class="bento-card">
-                <span class="job-year" style="color: var(--text-muted);">Efficiency Tool</span>
-                <h3 class="job-title">Quotation System</h3>
-                <p style="color: var(--text-muted);">Designed an Excel-based quoting tool with dropdown menus to reduce user errors.</p>
-            </article>
-
-            <article class="bento-card">
-                <span class="job-year" style="color: var(--text-muted);">Marathon</span>
-                <h3 class="job-title">Running Logs</h3>
-                <p style="color: var(--text-muted);">Documenting my journey in marathons across the US. Applying endurance to life.</p>
-            </article>
-
+    <!-- Contact -->
+    <div style="background:#f7fafc; padding:80px 5%; text-align:center; border-top:1px solid #e2e8f0;">
+        <h2 class="section-title">Connect With Me</h2>
+        <div class="social-icons">
+            <a href="https://note.com/tak0424" target="_blank" class="social-link"><i class="fa-solid fa-pen-nib"></i></a>
+            <a href="https://x.com/Murami10" target="_blank" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.facebook.com/takuya.murami.1" target="_blank" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.youtube.com/@takuyamurami6423" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
         </div>
-    </section>
+    </div>
 
-    <!-- Contact & SNS Section -->
-    <section id="contact" style="text-align: center;">
-        <h2 class="section-title">Connect <span>With Me</span></h2>
-        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">
-            フォロー、お仕事のご依頼、ランニングのお誘いなど、お気軽にご連絡ください。
-        </p>
-
-        <!-- ▼▼▼ SNSリンクの設定 ▼▼▼ -->
-        <div class="sns-container">
-            
-            <!-- Note -->
-            <a href="https://note.com/tak0424" target="_blank" class="sns-btn note" title="Note">
-                <i class="fa-solid fa-pen-nib"></i>
-            </a>
-            
-            <!-- X (Twitter) -->
-            <a href="https://x.com/Murami10" target="_blank" class="sns-btn x" title="X (Twitter)">
-                <i class="fa-brands fa-x-twitter"></i>
-            </a>
-
-            <!-- Facebook -->
-            <a href="https://www.facebook.com/takuya.murami.1" target="_blank" class="sns-btn fb" title="Facebook">
-                <i class="fa-brands fa-facebook-f"></i>
-            </a>
-
-            <!-- YouTube -->
-            <a href="https://www.youtube.com/@takuyamurami6423" target="_blank" class="sns-btn yt" title="YouTube">
-                <i class="fa-brands fa-youtube"></i>
-            </a>
-
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer style="text-align: center; padding: 40px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05);">
-        <p>&copy; 2026 TakRunUSA | Takuya Murami. All Rights Reserved.</p>
+    <footer>
+        &copy; 2026 TakRunUSA | Takuya Murami. All Rights Reserved.
     </footer>
 
+    <!-- 🌍 THREE.JS (3D Earth) SCRIPT -->
     <script>
-        // スムーズスクロール
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                // リンク先が空(#だけ)の場合はスクロールさせない
-                if(this.getAttribute('href') === '#') return;
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            });
+        // Init Scene
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        // Camera
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.z = 18; // 距離調整
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; // 慣性をつける
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = false;   // ページスクロールと干渉しないようにズームは無効化
+        controls.enablePan = false;    // 平行移動も無効化
+        controls.autoRotate = true;    // カメラ自体もゆっくり回す
+        controls.autoRotateSpeed = 1.0;
+
+        // --- Create Particle Globe (Wireframe-ish look) ---
+        const geometry = new THREE.SphereGeometry(10, 32, 32);
+        
+        // Material: Dots (Supply Chain Nodes style)
+        const pointsMaterial = new THREE.PointsMaterial({
+            color: 0x2c5282, // Navy
+            size: 0.15,
+            transparent: true,
+            opacity: 0.8
+        });
+        const globePoints = new THREE.Points(geometry, pointsMaterial);
+        scene.add(globePoints);
+
+        // Material: Wireframe (Network connection style)
+        const lineMaterial = new THREE.MeshBasicMaterial({
+            color: 0x63b3ed, // Light Blue
+            wireframe: true,
+            transparent: true,
+            opacity: 0.1
+        });
+        const globeLines = new THREE.Mesh(geometry, lineMaterial);
+        scene.add(globeLines);
+
+        // Animation Loop
+        function animateGlobe() {
+            requestAnimationFrame(animateGlobe);
+            
+            // 自転（メッシュ自体の回転）
+            globePoints.rotation.y += 0.001;
+            globeLines.rotation.y += 0.001;
+            globePoints.rotation.x += 0.0005;
+
+            controls.update(); // Update controls
+
+            renderer.render(scene, camera);
+        }
+        animateGlobe();
+
+        // Resize Handle
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
         });
     </script>
+
+    <!-- 🏃 MARATHON GAME SCRIPT -->
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+
+        // UI Elements
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const distDisplay = document.getElementById('distDisplay');
+        const finalDist = document.getElementById('finalDist');
+        const staminaBar = document.getElementById('staminaBar');
+        const resultTitle = document.getElementById('resultTitle');
+        const gameMessage = document.getElementById('gameMessage');
+
+        // Game State
+        let isRunning = false;
+        let distance = 0.0; // km
+        let stamina = 100;
+        let speed = 0; // pixel speed
+        let frame = 0;
+        let baseSpeed = 10; // Speed Up!! (was 8)
+
+        // Player
+        const player = { x: 50, y: 240, w: 40, h: 40, dy: 0, jump: -12, g: 0.6, grounded: false };
+        // Items & Obstacles
+        let objects = []; // { type: 'water' | 'cone', x, y, w, h }
+
+        // Constants
+        const GOAL_DIST = 42.195;
+        const WALL_DIST = 30.0;
+        const ALERT_DIST = 25.0; // Alert starts here
+        const COLORS = { sky: '#ebf8ff', road: '#718096', grass: '#68d391' };
+
+        function drawRect(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(Math.floor(x), Math.floor(y), w, h); }
+
+        function drawPlayer(p) {
+            // Simple Runner Sprite
+            const baseY = p.y;
+            drawRect(p.x+10, baseY, 15, 12, '#f6e05e'); // Head (Blonde/Hat)
+            drawRect(p.x+5, baseY+12, 25, 18, '#2c5282'); // Shirt
+            // Legs
+            if(p.grounded) {
+                if (Math.floor(frame/10)%2===0) {
+                    drawRect(p.x+5, baseY+30, 8, 10, '#1a202c');
+                    drawRect(p.x+22, baseY+30, 8, 10, '#1a202c');
+                } else {
+                    drawRect(p.x+10, baseY+28, 8, 8, '#1a202c');
+                    drawRect(p.x+18, baseY+28, 8, 8, '#1a202c');
+                }
+            } else {
+                drawRect(p.x+5, baseY+28, 8, 10, '#1a202c'); // Jump leg
+            }
+        }
+
+        function drawWater(o) {
+            // Blue Cup
+            drawRect(o.x, o.y+10, 15, 20, '#4299e1');
+            drawRect(o.x+2, o.y+8, 11, 2, '#fff'); // Rim
+            ctx.fillStyle='#2b6cb0'; ctx.font='8px Arial'; ctx.fillText('H2O', o.x, o.y+22);
+        }
+
+        function drawCone(o) {
+            // Orange Triangle
+            ctx.fillStyle = '#ed8936';
+            ctx.beginPath();
+            ctx.moveTo(o.x + 10, o.y);
+            ctx.lineTo(o.x + 20, o.y + 30);
+            ctx.lineTo(o.x, o.y + 30);
+            ctx.fill();
+        }
+
+        function startGame() {
+            isRunning = true;
+            distance = 0.0;
+            stamina = 100;
+            speed = baseSpeed;
+            objects = [];
+            player.y = 240; player.dy = 0;
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            gameMessage.classList.add('hidden');
+            update();
+        }
+
+        function update() {
+            if (!isRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // --- 1. Background ---
+            // Sky
+            let grad = ctx.createLinearGradient(0,0,0,320);
+            grad.addColorStop(0, COLORS.sky); grad.addColorStop(1, '#fff');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width, 320);
+            
+            // Road & Grass
+            drawRect(0, 240, canvas.width, 80, COLORS.road);
+            drawRect(0, 230, canvas.width, 10, COLORS.grass);
+
+            // --- 2. Game Logic ---
+            // Stamina Decay
+            let decay = 0.05;
+            // The "Wall" at 30km Logic
+            if (distance >= WALL_DIST) {
+                decay = 0.15; // Triple decay
+                if (stamina < 30) {
+                    speed = baseSpeed * 0.5; // Slow down
+                    // Alert Message: Slow Down
+                    gameMessage.innerText = "⚠️ 30kmの壁！ペースダウン...";
+                    gameMessage.style.color = "#e53e3e"; // Red
+                    gameMessage.classList.remove('hidden');
+                } else {
+                    speed = baseSpeed;
+                    gameMessage.classList.add('hidden'); // Hide if recovered
+                }
+            } else if (distance >= ALERT_DIST) {
+                // Alert Message: Warning
+                speed = baseSpeed;
+                gameMessage.innerText = "⚠️ 30kmの壁が接近中...";
+                gameMessage.style.color = "#d69e2e"; // Yellow
+                gameMessage.classList.remove('hidden');
+            } else {
+                speed = baseSpeed;
+                gameMessage.classList.add('hidden');
+            }
+
+            stamina -= decay;
+            if (stamina < 0) stamina = 0;
+
+            // Distance Update
+            // Multiplier doubled for much faster game flow (0.001 -> 0.002)
+            distance += (speed * 0.002);
+            
+            // UI Update
+            distDisplay.innerText = distance.toFixed(3);
+            staminaBar.style.width = stamina + '%';
+            if(stamina < 20) staminaBar.style.background = '#e53e3e'; // Red
+            else if(stamina < 50) staminaBar.style.background = '#ecc94b'; // Yellow
+            else staminaBar.style.background = '#48bb78'; // Green
+
+            // Goal Check
+            if (distance >= GOAL_DIST) {
+                endGame(true);
+                return;
+            }
+            // Game Over Check (Stamina 0)
+            if (stamina <= 0) {
+                // Keep running very slow or stop? Let's stop.
+                endGame(false);
+                return;
+            }
+
+            // --- 3. Objects Spawning ---
+            // Spawn rate adjusted for higher speed (80 -> 60)
+            if (frame % 60 === 0) {
+                // Chance to spawn Water (Help) or Cone (Obstacle)
+                // More water after 30km?
+                let r = Math.random();
+                if (r > 0.6) {
+                    objects.push({ type: 'water', x: canvas.width, y: 210, w: 20, h: 30 });
+                } else {
+                    // objects.push({ type: 'cone', x: canvas.width, y: 210, w: 20, h: 30 });
+                    // *User requested just Power Up mechanics mainly, but obstacles add fun. Let's stick to Water for now to match "Drinking water increases power"*
+                     objects.push({ type: 'water', x: canvas.width, y: 210, w: 20, h: 30 });
+                }
+            }
+
+            // --- 4. Physics & Drawing ---
+            player.dy += player.g;
+            player.y += player.dy;
+            if (player.y > 240) { player.y = 240; player.dy = 0; player.grounded = true; }
+            
+            drawPlayer(player);
+
+            // Objects Loop
+            for (let i = 0; i < objects.length; i++) {
+                let o = objects[i];
+                o.x -= speed;
+                
+                if (o.type === 'water') drawWater(o);
+                else drawCone(o);
+
+                // Collision
+                if (
+                    player.x < o.x + o.w &&
+                    player.x + player.w > o.x &&
+                    player.y < o.y + o.h &&
+                    player.y + player.h > o.y
+                ) {
+                    if (o.type === 'water') {
+                        stamina += 15; // Power Up!
+                        if (stamina > 100) stamina = 100;
+                        objects.splice(i, 1);
+                        i--;
+                    }
+                }
+                // Cleanup
+                if (o.x < -50) { objects.splice(i, 1); i--; }
+            }
+
+            frame++;
+            requestAnimationFrame(update);
+        }
+
+        function endGame(isGoal) {
+            isRunning = false;
+            finalDist.innerText = distance.toFixed(3);
+            if (isGoal) {
+                resultTitle.innerText = "GOAL!! Full Marathon Complete!";
+                resultTitle.style.color = "#48bb78";
+                distDisplay.innerText = "42.195";
+            } else {
+                resultTitle.innerText = "Retired... (Out of Stamina)";
+                resultTitle.style.color = "#e53e3e";
+            }
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        // Input
+        function jump() {
+            if (player.grounded) {
+                player.dy = player.jump;
+                player.grounded = false;
+            }
+        }
+        document.addEventListener('keydown', (e) => { if(e.code==='Space'){ e.preventDefault(); if(isRunning) jump(); else startGame(); } });
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); if(isRunning) jump(); else startGame(); });
+        canvas.addEventListener('mousedown', (e) => { if(isRunning) jump(); else startGame(); });
+
+    </script>
+
+    <!-- ✨ GEMINI API SCRIPT -->
+    <script>
+        const apiKey = ""; // API Key injected by environment
+
+        async function askGemini() {
+            const query = document.getElementById('userQuery').value;
+            const responseBox = document.getElementById('aiResponse');
+            const askBtn = document.getElementById('askBtn');
+
+            if (!query) return;
+
+            // UI Loading State
+            askBtn.disabled = true;
+            askBtn.innerHTML = '<span class="loading-spinner"></span> Thinking...';
+            responseBox.style.display = 'block';
+            responseBox.innerHTML = 'Thinking...';
+
+            const systemPrompt = `
+                あなたはTakuya Muramiです。ジョージア州在住のサプライチェーンマネージャーであり、マラソンランナーです。
+                以下のトピックについて、プロフェッショナルかつ親しみやすいトーンで日本語で回答してください：
+                1. サプライチェーン、ロジスティクス、Kaizen、調達について。
+                2. マラソンのトレーニング、持久力、30kmの壁の乗り越え方について。
+                3. アメリカでの生活について。
+                
+                回答は簡潔に、要点をまとめてください。マークダウン形式で出力してください。
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: query }]
+                        }],
+                        systemInstruction: {
+                            parts: [{ text: systemPrompt }]
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content) {
+                    const answer = data.candidates[0].content.parts[0].text;
+                    // Parse Markdown
+                    responseBox.innerHTML = marked.parse(answer);
+                } else {
+                    responseBox.innerHTML = "すみません、今ちょっと考えがまとまりません。もう一度聞いてみてください。";
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                responseBox.innerHTML = "エラーが発生しました。ネットワーク接続を確認してください。";
+            } finally {
+                askBtn.disabled = false;
+                askBtn.innerHTML = '✨ Ask AI';
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('userQuery').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                askGemini();
+            }
+        });
+    </script>
+
 </body>
 </html>
