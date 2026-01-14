@@ -70,7 +70,7 @@
             align-items: center;
             overflow: hidden;
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            cursor: grab; /* ドラッグできることを示すカーソル */
+            cursor: grab;
         }
         .hero:active { cursor: grabbing; }
 
@@ -79,12 +79,12 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            opacity: 0.6; /* 少し薄くして文字を見やすく */
+            opacity: 0.6;
         }
         
         .hero-content {
             position: relative;
-            z-index: 2; /* 3Dより手前に */
+            z-index: 2;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
@@ -93,9 +93,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 50px;
             align-items: center;
-            pointer-events: none; /* 3D操作のためにクリックを透過させる */
+            pointer-events: none;
         }
-        /* インタラクティブな要素はクリック可能に戻す */
         .hero-text, .profile-wrapper { pointer-events: auto; }
 
         .kanji-name {
@@ -111,7 +110,7 @@
         }
         .hero-text p {
             color: var(--text-sub); max-width: 500px; margin-bottom: 40px;
-            background: rgba(255,255,255,0.6); /* 文字が読めるように背景 */
+            background: rgba(255,255,255,0.6);
             padding: 10px; border-radius: 8px;
             backdrop-filter: blur(5px);
         }
@@ -161,7 +160,6 @@
             padding: 8px 12px; border-radius: 4px; border: 2px solid #fff;
         }
         
-        /* Power Bar */
         .power-bar-container {
             width: 150px; height: 15px; background: #333; border: 2px solid #fff;
             margin-top: 5px; position: relative;
@@ -171,7 +169,6 @@
         }
         .power-label { font-size: 0.6rem; color: #fff; margin-bottom: 2px; display: block; text-align: left; }
 
-        /* Warning Message */
         .game-message {
             position: absolute;
             top: 60px; left: 0; width: 100%;
@@ -197,15 +194,13 @@
         }
         .game-btn:hover { background: #1a365d; }
 
-        /* --- Sections (Exp & Works) --- */
+        /* --- Sections --- */
         section { padding: 100px 5%; max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 60px; }
         .section-title { font-size: 2.2rem; color: var(--text-main); margin-bottom: 10px; }
         .section-subtitle { color: var(--accent); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.9rem; }
 
-        .exp-grid, .works-container {
-            display: grid; gap: 30px;
-        }
+        .exp-grid, .works-container { display: grid; gap: 30px; }
         .exp-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
         .works-container { grid-template-columns: repeat(2, 1fr); }
 
@@ -234,73 +229,38 @@
             margin-top: 80px;
             border: 1px solid #fff;
         }
-        .ai-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .ai-input-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
+        .ai-container { max-width: 800px; margin: 0 auto; text-align: center; }
+        
+        .ai-input-group { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
         .ai-input {
-            flex: 1;
-            padding: 15px 25px;
-            border-radius: 50px;
-            border: 2px solid #e2e8f0;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
+            flex: 1; padding: 15px 25px; border-radius: 50px;
+            border: 2px solid #e2e8f0; font-size: 1rem; outline: none; transition: 0.3s;
         }
         .ai-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(44,82,130,0.1); }
         .btn-ai {
             background: linear-gradient(135deg, #2c5282 0%, #4299e1 100%);
-            color: #fff;
-            padding: 15px 35px;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);
-            transition: 0.3s;
+            color: #fff; padding: 15px 35px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; border: none;
+            display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3); transition: 0.3s;
         }
         .btn-ai:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4); }
         .btn-ai:disabled { opacity: 0.7; cursor: not-allowed; }
         
         .ai-response-box {
-            margin-top: 30px;
-            background: #fff;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: left;
-            min-height: 100px;
-            display: none; /* Hidden by default */
-            border: 1px solid #e2e8f0;
-            position: relative;
+            margin-top: 30px; background: #fff; border-radius: 15px;
+            padding: 30px; text-align: left; min-height: 100px;
+            display: none; border: 1px solid #e2e8f0; position: relative;
         }
         .ai-response-box::before {
-            content: 'AI Takuya';
-            position: absolute;
-            top: -12px; left: 20px;
-            background: var(--accent);
-            color: #fff;
-            font-size: 0.75rem;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-weight: 700;
+            content: 'AI Takuya'; position: absolute; top: -12px; left: 20px;
+            background: var(--accent); color: #fff; font-size: 0.75rem;
+            padding: 2px 10px; border-radius: 10px; font-weight: 700;
         }
         .loading-spinner {
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
+            display: inline-block; width: 20px; height: 20px;
+            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top-color: #fff; animation: spin 1s ease-in-out infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -347,7 +307,7 @@
                 <div class="kanji-name">村見 拓哉</div>
                 <h1>Takuya Murami</h1>
                 <p>
-                    Supply Chain Manager / Marathon Runner<br>
+                    Supply Chain Manager / Marathon Runner / Christian<br>
                     Global operations with Kaizen philosophy.<br>
                     Based in Georgia, USA.
                 </p>
@@ -385,7 +345,6 @@
                 </div>
             </div>
 
-            <!-- New Alert Message Area -->
             <div id="gameMessage" class="game-message hidden"></div>
 
             <canvas id="gameCanvas" width="800" height="320"></canvas>
@@ -518,7 +477,7 @@
         const scene = new THREE.Scene();
         // Camera
         const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.z = 18; // 距離調整
+        camera.position.z = 18; 
 
         // Renderer
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -528,11 +487,11 @@
 
         // OrbitControls
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // 慣性をつける
+        controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.enableZoom = false;   // ページスクロールと干渉しないようにズームは無効化
-        controls.enablePan = false;    // 平行移動も無効化
-        controls.autoRotate = true;    // カメラ自体もゆっくり回す
+        controls.enableZoom = false;
+        controls.enablePan = false;
+        controls.autoRotate = true;
         controls.autoRotateSpeed = 1.0;
 
         // --- Create Particle Globe (Wireframe-ish look) ---
@@ -540,7 +499,7 @@
         
         // Material: Dots (Supply Chain Nodes style)
         const pointsMaterial = new THREE.PointsMaterial({
-            color: 0x2c5282, // Navy
+            color: 0x2c5282,
             size: 0.15,
             transparent: true,
             opacity: 0.8
@@ -550,7 +509,7 @@
 
         // Material: Wireframe (Network connection style)
         const lineMaterial = new THREE.MeshBasicMaterial({
-            color: 0x63b3ed, // Light Blue
+            color: 0x63b3ed,
             wireframe: true,
             transparent: true,
             opacity: 0.1
@@ -561,14 +520,10 @@
         // Animation Loop
         function animateGlobe() {
             requestAnimationFrame(animateGlobe);
-            
-            // 自転（メッシュ自体の回転）
             globePoints.rotation.y += 0.001;
             globeLines.rotation.y += 0.001;
             globePoints.rotation.x += 0.0005;
-
-            controls.update(); // Update controls
-
+            controls.update();
             renderer.render(scene, camera);
         }
         animateGlobe();
@@ -600,31 +555,29 @@
 
         // Game State
         let isRunning = false;
-        let distance = 0.0; // km
+        let distance = 0.0;
         let stamina = 100;
-        let speed = 0; // pixel speed
+        let speed = 0;
         let frame = 0;
-        let baseSpeed = 10; // Speed Up!! (was 8)
+        let baseSpeed = 10; // Speed Up
 
         // Player
         const player = { x: 50, y: 240, w: 40, h: 40, dy: 0, jump: -12, g: 0.6, grounded: false };
         // Items & Obstacles
-        let objects = []; // { type: 'water' | 'cone', x, y, w, h }
+        let objects = []; 
 
         // Constants
         const GOAL_DIST = 42.195;
         const WALL_DIST = 30.0;
-        const ALERT_DIST = 25.0; // Alert starts here
+        const ALERT_DIST = 25.0;
         const COLORS = { sky: '#ebf8ff', road: '#718096', grass: '#68d391' };
 
         function drawRect(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(Math.floor(x), Math.floor(y), w, h); }
 
         function drawPlayer(p) {
-            // Simple Runner Sprite
             const baseY = p.y;
-            drawRect(p.x+10, baseY, 15, 12, '#f6e05e'); // Head (Blonde/Hat)
-            drawRect(p.x+5, baseY+12, 25, 18, '#2c5282'); // Shirt
-            // Legs
+            drawRect(p.x+10, baseY, 15, 12, '#f6e05e'); 
+            drawRect(p.x+5, baseY+12, 25, 18, '#2c5282');
             if(p.grounded) {
                 if (Math.floor(frame/10)%2===0) {
                     drawRect(p.x+5, baseY+30, 8, 10, '#1a202c');
@@ -634,19 +587,17 @@
                     drawRect(p.x+18, baseY+28, 8, 8, '#1a202c');
                 }
             } else {
-                drawRect(p.x+5, baseY+28, 8, 10, '#1a202c'); // Jump leg
+                drawRect(p.x+5, baseY+28, 8, 10, '#1a202c');
             }
         }
 
         function drawWater(o) {
-            // Blue Cup
             drawRect(o.x, o.y+10, 15, 20, '#4299e1');
-            drawRect(o.x+2, o.y+8, 11, 2, '#fff'); // Rim
+            drawRect(o.x+2, o.y+8, 11, 2, '#fff');
             ctx.fillStyle='#2b6cb0'; ctx.font='8px Arial'; ctx.fillText('H2O', o.x, o.y+22);
         }
 
         function drawCone(o) {
-            // Orange Triangle
             ctx.fillStyle = '#ed8936';
             ctx.beginPath();
             ctx.moveTo(o.x + 10, o.y);
@@ -672,37 +623,31 @@
             if (!isRunning) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // --- 1. Background ---
-            // Sky
+            // Background
             let grad = ctx.createLinearGradient(0,0,0,320);
             grad.addColorStop(0, COLORS.sky); grad.addColorStop(1, '#fff');
             ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width, 320);
             
-            // Road & Grass
             drawRect(0, 240, canvas.width, 80, COLORS.road);
             drawRect(0, 230, canvas.width, 10, COLORS.grass);
 
-            // --- 2. Game Logic ---
-            // Stamina Decay
+            // Logic
             let decay = 0.05;
-            // The "Wall" at 30km Logic
             if (distance >= WALL_DIST) {
-                decay = 0.15; // Triple decay
+                decay = 0.15;
                 if (stamina < 30) {
-                    speed = baseSpeed * 0.5; // Slow down
-                    // Alert Message: Slow Down
+                    speed = baseSpeed * 0.5;
                     gameMessage.innerText = "⚠️ 30kmの壁！ペースダウン...";
-                    gameMessage.style.color = "#e53e3e"; // Red
+                    gameMessage.style.color = "#e53e3e";
                     gameMessage.classList.remove('hidden');
                 } else {
                     speed = baseSpeed;
-                    gameMessage.classList.add('hidden'); // Hide if recovered
+                    gameMessage.classList.add('hidden');
                 }
             } else if (distance >= ALERT_DIST) {
-                // Alert Message: Warning
                 speed = baseSpeed;
                 gameMessage.innerText = "⚠️ 30kmの壁が接近中...";
-                gameMessage.style.color = "#d69e2e"; // Yellow
+                gameMessage.style.color = "#d69e2e";
                 gameMessage.classList.remove('hidden');
             } else {
                 speed = baseSpeed;
@@ -712,52 +657,39 @@
             stamina -= decay;
             if (stamina < 0) stamina = 0;
 
-            // Distance Update
-            // Multiplier doubled for much faster game flow (0.001 -> 0.002)
             distance += (speed * 0.002);
             
-            // UI Update
             distDisplay.innerText = distance.toFixed(3);
             staminaBar.style.width = stamina + '%';
-            if(stamina < 20) staminaBar.style.background = '#e53e3e'; // Red
-            else if(stamina < 50) staminaBar.style.background = '#ecc94b'; // Yellow
-            else staminaBar.style.background = '#48bb78'; // Green
+            if(stamina < 20) staminaBar.style.background = '#e53e3e';
+            else if(stamina < 50) staminaBar.style.background = '#ecc94b';
+            else staminaBar.style.background = '#48bb78';
 
-            // Goal Check
             if (distance >= GOAL_DIST) {
                 endGame(true);
                 return;
             }
-            // Game Over Check (Stamina 0)
             if (stamina <= 0) {
-                // Keep running very slow or stop? Let's stop.
                 endGame(false);
                 return;
             }
 
-            // --- 3. Objects Spawning ---
-            // Spawn rate adjusted for higher speed (80 -> 60)
+            // Spawn
             if (frame % 60 === 0) {
-                // Chance to spawn Water (Help) or Cone (Obstacle)
-                // More water after 30km?
                 let r = Math.random();
                 if (r > 0.6) {
                     objects.push({ type: 'water', x: canvas.width, y: 210, w: 20, h: 30 });
                 } else {
-                    // objects.push({ type: 'cone', x: canvas.width, y: 210, w: 20, h: 30 });
-                    // *User requested just Power Up mechanics mainly, but obstacles add fun. Let's stick to Water for now to match "Drinking water increases power"*
                      objects.push({ type: 'water', x: canvas.width, y: 210, w: 20, h: 30 });
                 }
             }
 
-            // --- 4. Physics & Drawing ---
             player.dy += player.g;
             player.y += player.dy;
             if (player.y > 240) { player.y = 240; player.dy = 0; player.grounded = true; }
             
             drawPlayer(player);
 
-            // Objects Loop
             for (let i = 0; i < objects.length; i++) {
                 let o = objects[i];
                 o.x -= speed;
@@ -765,7 +697,6 @@
                 if (o.type === 'water') drawWater(o);
                 else drawCone(o);
 
-                // Collision
                 if (
                     player.x < o.x + o.w &&
                     player.x + player.w > o.x &&
@@ -773,13 +704,12 @@
                     player.y + player.h > o.y
                 ) {
                     if (o.type === 'water') {
-                        stamina += 15; // Power Up!
+                        stamina += 15;
                         if (stamina > 100) stamina = 100;
                         objects.splice(i, 1);
                         i--;
                     }
                 }
-                // Cleanup
                 if (o.x < -50) { objects.splice(i, 1); i--; }
             }
 
@@ -801,7 +731,6 @@
             gameOverScreen.classList.remove('hidden');
         }
 
-        // Input
         function jump() {
             if (player.grounded) {
                 player.dy = player.jump;
@@ -816,7 +745,8 @@
 
     <!-- ✨ GEMINI API SCRIPT -->
     <script>
-        const apiKey = ""; // API Key injected by environment
+        // API Key embedded directly in the code
+        const apiKey = "AIzaSyBoC1YSTEydtoGoJFyYeKiyIpmf6m2d8Pw";
 
         async function askGemini() {
             const query = document.getElementById('userQuery').value;
@@ -832,11 +762,11 @@
             responseBox.innerHTML = 'Thinking...';
 
             const systemPrompt = `
-                あなたはTakuya Muramiです。ジョージア州在住のサプライチェーンマネージャーであり、マラソンランナーです。
+                あなたはTakuya Muramiです。ジョージア州在住のサプライチェーンマネージャーであり、マラソンランナー、そして敬虔なクリスチャンです。
                 以下のトピックについて、プロフェッショナルかつ親しみやすいトーンで日本語で回答してください：
                 1. サプライチェーン、ロジスティクス、Kaizen、調達について。
                 2. マラソンのトレーニング、持久力、30kmの壁の乗り越え方について。
-                3. アメリカでの生活について。
+                3. アメリカでの生活や、日々の信仰、価値観について。
                 
                 回答は簡潔に、要点をまとめてください。マークダウン形式で出力してください。
             `;
