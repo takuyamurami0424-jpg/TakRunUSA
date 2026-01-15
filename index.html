@@ -9,13 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=Press+Start+2P&family=Yuji+Syuku&display=swap" rel="stylesheet">
     
-    <!-- Icons (Updated to latest version for X logo support) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     
     <!-- Three.js (3D Library) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Three.js OrbitControls -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Leaflet JS (Map) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <style>
         /* --- 🏳️ White & Global Theme --- */
@@ -191,6 +196,41 @@
         }
         .game-btn:hover { background: #1a365d; }
 
+        /* --- 🗺️ Journey Map Section --- */
+        #journey {
+            padding: 80px 5%; max-width: 1200px; margin: 0 auto;
+        }
+        #journey-map {
+            height: 400px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            z-index: 1;
+        }
+        .journey-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .journey-stat-item {
+            text-align: center;
+        }
+        .journey-val {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Lato', sans-serif;
+        }
+        .journey-label {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
         /* --- Sections --- */
         section { padding: 100px 5%; max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 60px; }
@@ -242,7 +282,7 @@
         <nav>
             <ul>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#game-section" class="nav-link">Game</a></li>
+                <li><a href="#journey" class="nav-link">Journey</a></li>
                 <li><a href="#experience" class="nav-link">Career</a></li>
             </ul>
         </nav>
@@ -316,6 +356,35 @@
         </div>
     </div>
 
+    <!-- 🗺️ JOURNEY MAP SECTION (Running Log) -->
+    <section id="journey">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <span class="section-subtitle">Real World Data</span>
+            <h2 class="section-title">Running Journey</h2>
+            <p style="color: var(--text-sub);">
+                2024年7月から現在までの累計走行距離を地図上に可視化。<br>
+                ジョージア州から西へ約3000km、仮想の旅を続けています。
+            </p>
+        </div>
+
+        <div class="journey-stats">
+            <div class="journey-stat-item">
+                <div class="journey-val">3,000<span style="font-size:1.2rem;">km</span></div>
+                <div class="journey-label">Total Distance</div>
+            </div>
+            <div class="journey-stat-item">
+                <div class="journey-val">July 2024</div>
+                <div class="journey-label">Start Date</div>
+            </div>
+            <div class="journey-stat-item">
+                <div class="journey-val">Georgia</div>
+                <div class="journey-label">Base Location</div>
+            </div>
+        </div>
+
+        <div id="journey-map"></div>
+    </section>
+
     <!-- Experience -->
     <section id="experience">
         <div class="section-header">
@@ -372,12 +441,20 @@
             <div class="card">
                 <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">PROJECT</span>
                 <h3>Mobile Quotation Tool on web</h3>
-                <p style="color:#718096;">Excel-based tool to reduce user errors.</p>
+                <p style="color:#718096; margin-bottom: 15px;">Excel-based tool to reduce user errors.</p>
+                <!-- 実際にファイルをアップロードしたら href="ファイル名.xlsx" に書き換えてください -->
+                <a href="#" class="btn-outline" style="font-size: 0.8rem; padding: 8px 20px;" download>
+                    <i class="fa-solid fa-file-excel"></i> Download Sample
+                </a>
             </div>
             <div class="card">
                 <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">LIFESTYLE</span>
                 <h3>Running Logs</h3>
-                <p style="color:#718096;">Documenting marathons across the US.</p>
+                <p style="color:#718096; margin-bottom: 15px;">Documenting marathons across the US.</p>
+                <!-- 実際にファイルをアップロードしたら href="running_logs.xlsx" 等に書き換えてください -->
+                <a href="#" class="btn-outline" style="font-size: 0.8rem; padding: 8px 20px;" download>
+                    <i class="fa-solid fa-file-excel"></i> Download Logs
+                </a>
             </div>
         </div>
     </section>
@@ -386,11 +463,14 @@
     <div style="background:#f7fafc; padding:80px 5%; text-align:center; border-top:1px solid #e2e8f0;">
         <h2 class="section-title">Connect With Me</h2>
         <div class="social-icons">
+            <!-- Strava -->
+            <a href="https://www.strava.com/athletes/146407804" target="_blank" class="social-link" title="Strava"><i class="fa-brands fa-strava"></i></a>
             <!-- LinkedIn -->
             <a href="https://www.linkedin.com/" target="_blank" class="social-link" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/takuyamurami/" target="_blank" class="social-link" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
             
             <a href="https://note.com/tak0424" target="_blank" class="social-link"><i class="fa-solid fa-pen-nib"></i></a>
-            <!-- X (Updated Logo) -->
             <a href="https://x.com/Murami10" target="_blank" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="https://www.facebook.com/takuya.murami.1" target="_blank" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="https://www.youtube.com/@takuyamurami6423" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
@@ -490,7 +570,7 @@
         let stamina = 100;
         let speed = 0;
         let frame = 0;
-        let baseSpeed = 12; // High Speed
+        let baseSpeed = 12; // Speed Up
 
         // Player
         const player = { x: 50, y: 240, w: 40, h: 40, dy: 0, jump: -12, g: 0.6, grounded: false };
@@ -674,5 +754,55 @@
 
     </script>
 
+    <!-- 🗺️ LEAFLET MAP SCRIPT -->
+    <script>
+        // Init Map
+        const map = L.map('journey-map').setView([38.0, -100.0], 4); // US Wide View
+
+        // Tile Layer (OpenStreetMap)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Journey Route (Approximate ~3000km from GA to West)
+        // GA -> TN -> MO -> KS -> CO -> UT -> NV
+        const latlngs = [
+            [34.37, -84.93], // Adairsville, GA (START)
+            [36.16, -86.78], // Nashville, TN
+            [38.62, -90.19], // St. Louis, MO
+            [39.09, -94.57], // Kansas City, MO
+            [39.73, -104.99], // Denver, CO
+            [40.76, -111.89], // Salt Lake City, UT
+            [37.10, -113.50], // St. George, UT
+            [36.16, -115.13]  // Las Vegas, NV (Approx 3000km mark)
+        ];
+
+        // Draw Line
+        const polyline = L.polyline(latlngs, {color: '#2c5282', weight: 4, opacity: 0.8}).addTo(map);
+
+        // Zoom to fit
+        map.fitBounds(polyline.getBounds());
+
+        // Start Marker
+        L.marker([34.37, -84.93]).addTo(map).bindPopup("<b>Start: July 2024</b><br>Adairsville, GA");
+
+        // Current Location Marker (End of line)
+        const endIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: "<div style='background-color:#E11D48; width:12px; height:12px; border-radius:50%; border:2px solid white; box-shadow:0 0 5px rgba(0,0,0,0.5);'></div>",
+            iconSize: [15, 15],
+            iconAnchor: [7, 7]
+        });
+
+        L.marker([36.16, -115.13], {icon: endIcon}).addTo(map)
+            .bindPopup("<b>Current: Jan 2026</b><br>Total: 3,000km Run!<br>(Near Las Vegas)")
+            .openPopup();
+
+    </script>
+
 </body>
 </html>
+
+
