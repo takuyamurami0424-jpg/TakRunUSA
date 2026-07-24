@@ -24,11 +24,15 @@ def format_pace(seconds_per_km: float) -> str:
     return f"{minutes}:{seconds:02d}"
 
 
-def find_latest_run(activities: list[dict[str, Any]]) -> dict[str, Any]:
+def find_latest_run(
+    activities: list[dict[str, Any]],
+) -> dict[str, Any]:
     """最新のランニングアクティビティを探す。"""
     for activity in activities:
         activity_type = activity.get("activityType", {})
-        type_key = str(activity_type.get("typeKey", "")).lower()
+        type_key = str(
+            activity_type.get("typeKey", "")
+        ).lower()
 
         if type_key in {
             "running",
@@ -42,41 +46,125 @@ def find_latest_run(activities: list[dict[str, Any]]) -> dict[str, Any]:
         if "running" in type_key:
             return activity
 
-    raise RuntimeError("直近のアクティビティにラン記録が見つかりません。")
+    raise RuntimeError(
+        "直近のアクティビティにラン記録が見つかりません。"
+    )
+
+
+def translate_activity_name(
+    activity_name: str,
+) -> str:
+    """
+    Garminの日本語アクティビティ名を簡易的に英語へ変換する。
+
+    例:
+    Adairsville ラン
+    → Adairsville Run
+    """
+    translations = {
+        "トレッドミルランニング": "Treadmill Running",
+        "トレッドミルラン": "Treadmill Run",
+        "トラックランニング": "Track Running",
+        "トラックラン": "Track Run",
+        "トレイルランニング": "Trail Running",
+        "トレイルラン": "Trail Run",
+        "リカバリーラン": "Recovery Run",
+        "イージーラン": "Easy Run",
+        "ロングラン": "Long Run",
+        "テンポラン": "Tempo Run",
+        "インターバル走": "Interval Run",
+        "インターバル": "Intervals",
+        "ランニング": "Running",
+        "ラン": "Run",
+    }
+
+    translated = activity_name
+
+    # 長い語句から先に置換する
+    for japanese in sorted(
+        translations,
+        key=len,
+        reverse=True,
+    ):
+        translated = translated.replace(
+            japanese,
+            translations[japanese],
+        )
+
+    return translated.strip()
 
 
 def classify_run(
     distance_km: float,
     duration_minutes: float,
     average_hr: float | None,
-) -> tuple[str, int, str]:
-    """初期版のラン分類と評価。"""
+) -> tuple[str, int, str, str]:
+    """
+    初期版のラン分類と評価。
 
+    戻り値:
+    英語ランタイプ
+    スコア
+    日本語コメント
+    英語コメント
+    """
     if distance_km >= 24 or duration_minutes >= 120:
         return (
             "Long Run",
             88,
-            "持久力強化につながるロングランです。翌日は回復を優先してください。",
+            (
+                "持久力強化につながるロングランです。"
+                "翌日は回復を優先してください。"
+            ),
+            (
+                "This was a productive long run for building "
+                "endurance. Prioritize recovery tomorrow."
+            ),
         )
 
-    if duration_minutes <= 45 and average_hr is not None and average_hr < 140:
+    if (
+        duration_minutes <= 45
+        and average_hr is not None
+        and average_hr < 140
+    ):
         return (
             "Recovery Run",
             90,
-            "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
+            (
+                "心拍を抑えた回復目的のランとして、"
+                "適切にコントロールされています。"
+            ),
+            (
+                "This was a well-controlled recovery run "
+                "with an appropriately low heart rate."
+            ),
         )
 
-    if average_hr is not None and average_hr >= 165:
+    if (
+        average_hr is not None
+        and average_hr >= 165
+    ):
         return (
             "Tempo / High Intensity",
             86,
-            "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
+            (
+                "高強度トレーニングと推定されます。"
+                "翌日の疲労状態を確認してください。"
+            ),
+            (
+                "This appears to be a high-intensity workout. "
+                "Check your fatigue and recovery tomorrow."
+            ),
         )
 
     return (
         "Easy / Steady Run",
         85,
         "安定した有酸素トレーニングと推定されます。",
+        (
+            "This appears to be a steady and controlled "
+            "aerobic training run."
+        ),
     )
 
 
@@ -86,7 +174,8 @@ def main() -> None:
 
     if not email or not password:
         raise RuntimeError(
-            "GARMIN_EMAILまたはGARMIN_PASSWORDが設定されていません。"
+            "GARMIN_EMAILまたはGARMIN_PASSWORDが"
+            "設定されていません。"
         )
 
     client = Garmin(email, password)
@@ -96,10 +185,26 @@ def main() -> None:
     latest = find_latest_run(activities)
 
     activity_id = latest.get("activityId")
-    activity_name = latest.get("activityName", "Running")
-    start_time = latest.get("startTimeLocal") or latest.get("startTimeGMT")
 
-    distance_m = float(latest.get("distance") or 0)
+    activity_name = str(
+        latest.get("activityName")
+        or "Running"
+    )
+
+    activity_name_en = translate_activity_name(
+        activity_name
+    )
+
+    start_time = (
+        latest.get("startTimeLocal")
+        or latest.get("startTimeGMT")
+    )
+
+    distance_m = float(
+        latest.get("distance")
+        or 0
+    )
+
     duration_seconds = float(
         latest.get("movingDuration")
         or latest.get("duration")
@@ -111,6 +216,7 @@ def main() -> None:
     duration_minutes = duration_seconds / 60
 
     average_hr_value = latest.get("averageHR")
+
     average_hr = (
         float(average_hr_value)
         if average_hr_value is not None
@@ -118,13 +224,17 @@ def main() -> None:
     )
 
     maximum_hr_value = latest.get("maxHR")
+
     maximum_hr = (
         float(maximum_hr_value)
         if maximum_hr_value is not None
         else None
     )
 
-    elevation_m = float(latest.get("elevationGain") or 0)
+    elevation_m = float(
+        latest.get("elevationGain")
+        or 0
+    )
 
     pace_seconds_per_km = (
         duration_seconds / distance_km
@@ -132,7 +242,12 @@ def main() -> None:
         else 0
     )
 
-    run_type, score, comment = classify_run(
+    (
+        run_type,
+        score,
+        comment_ja,
+        comment_en,
+    ) = classify_run(
         distance_km,
         duration_minutes,
         average_hr,
@@ -141,10 +256,19 @@ def main() -> None:
     result = {
         "activity_id": activity_id,
         "activity_name": activity_name,
+        "activity_name_en": activity_name_en,
         "date": start_time,
-        "distance_km": round(distance_km, 2),
-        "duration_minutes": round(duration_minutes, 1),
-        "pace_per_km": format_pace(pace_seconds_per_km),
+        "distance_km": round(
+            distance_km,
+            2,
+        ),
+        "duration_minutes": round(
+            duration_minutes,
+            1,
+        ),
+        "pace_per_km": format_pace(
+            pace_seconds_per_km
+        ),
         "average_hr": (
             round(average_hr)
             if average_hr is not None
@@ -155,35 +279,65 @@ def main() -> None:
             if maximum_hr is not None
             else None
         ),
-        "elevation_m": round(elevation_m),
+        "elevation_m": round(
+            elevation_m
+        ),
         "estimated_run_type": run_type,
         "score": score,
-        "grade": "A" if score >= 85 else "B",
-        "comment": comment,
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "grade": (
+            "A"
+            if score >= 85
+            else "B"
+        ),
+        "comment": comment_ja,
+        "comment_en": comment_en,
+        "updated_at": datetime.now(
+            timezone.utc
+        ).isoformat(),
     }
 
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_FILE.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    previous = None
 
     if OUTPUT_FILE.exists():
         try:
             previous = json.loads(
-                OUTPUT_FILE.read_text(encoding="utf-8")
+                OUTPUT_FILE.read_text(
+                    encoding="utf-8"
+                )
             )
-
-            if previous.get("activity_id") == activity_id:
-                print("最新ランはすでに処理済みです。")
-                return
         except json.JSONDecodeError:
-            pass
+            previous = None
+
+    # 同じランでも、新しい項目が追加された場合は更新する
+    if (
+        previous
+        and previous.get("activity_id") == activity_id
+        and previous == result
+    ):
+        print(
+            "最新ランはすでに処理済みで、"
+            "変更もありません。"
+        )
+        return
 
     OUTPUT_FILE.write_text(
-        json.dumps(result, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
     print(
-        f"更新完了: {distance_km:.2f} km / "
+        f"更新完了: "
+        f"{distance_km:.2f} km / "
         f"{format_pace(pace_seconds_per_km)}/km / "
         f"{run_type}"
     )
