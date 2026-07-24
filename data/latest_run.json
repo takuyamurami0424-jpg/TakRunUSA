@@ -1,6 +1,7 @@
 {
   "activity_id": 23705912316,
   "activity_name": "Adairsville ラン",
+  "activity_name_en": "Adairsville Run",
   "date": "2026-07-23 12:21:59",
   "distance_km": 10.01,
   "duration_minutes": 54.6,
@@ -12,5 +13,6 @@
   "score": 85,
   "grade": "A",
   "comment": "安定した有酸素トレーニングと推定されます。",
-  "updated_at": "2026-07-24T14:46:08.864430+00:00"
+  "comment_en": "This appears to be a steady and controlled aerobic training run.",
+  "updated_at": "2026-07-24T16:59:01.002737+00:00"
 }
