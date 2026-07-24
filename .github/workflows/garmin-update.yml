@@ -40,13 +40,14 @@ jobs:
 
       - name: Commit updated running data
         run: |
-          if git diff --quiet; then
+          git add data/latest_run.json
+
+          if git diff --cached --quiet; then
             echo "No new running data."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest_run.json
           git commit -m "Update latest Garmin run"
           git push
