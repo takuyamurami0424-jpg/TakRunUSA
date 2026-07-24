@@ -481,6 +481,16 @@
                 <div>
                     <div id="run-type" class="run-type-badge">Running</div>
                     <h3 id="run-name" style="margin-top: 12px;">Latest Run</h3>
+
+                    <div
+                        id="run-name-en"
+                        style="
+                            color: var(--text-sub);
+                            font-size: 0.95rem;
+                            margin-top: 2px;
+                        "
+                    ></div>
+
                     <p id="run-date" style="color: var(--text-sub); margin: 5px 0 0;"></p>
                 </div>
 
@@ -522,10 +532,20 @@
             </div>
 
             <div class="run-comment">
-                <strong>Run Evaluation</strong>
+                <strong>Run Evaluation / ラン評価</strong>
+
                 <p id="run-comment-text" style="margin: 8px 0 0;">
                     評価を読み込んでいます。
                 </p>
+
+                <p
+                    id="run-comment-en"
+                    style="
+                        margin: 8px 0 0;
+                        color: var(--text-sub);
+                        font-size: 0.95rem;
+                    "
+                ></p>
             </div>
         </div>
 
@@ -1023,7 +1043,8 @@
         // Fallback data for the preview environment
         const fallbackData = {
             "estimated_run_type": "Running",
-            "activity_name": "Evening Run",
+            "activity_name": "夕方のラン",
+            "activity_name_en": "Evening Run",
             "date": "2026-07-23T18:30:00",
             "score": 85,
             "grade": "A",
@@ -1032,7 +1053,8 @@
             "pace_per_km": "06:11",
             "average_hr": 145,
             "elevation_m": 120,
-            "comment": "Good effort today!"
+            "comment": "今日は安定した走りでした。",
+            "comment_en": "This was a steady effort today."
         };
 
         try {
@@ -1055,17 +1077,55 @@
         }
         
         function displayRunData(run) {
-            document.getElementById("run-type").textContent = run.estimated_run_type || "Running";
-            document.getElementById("run-name").textContent = run.activity_name || "Latest Run";
-            document.getElementById("run-date").textContent = formatRunDate(run.date);
-            document.getElementById("run-score").innerHTML = `${run.score ?? "--"} <small>/ 100</small>`;
-            document.getElementById("run-grade").textContent = `Grade ${run.grade || "--"}`;
-            document.getElementById("run-distance").textContent = run.distance_km != null ? `${run.distance_km} km` : "--";
-            document.getElementById("run-duration").textContent = formatDuration(run.duration_minutes);
-            document.getElementById("run-pace").textContent = run.pace_per_km ? `${run.pace_per_km}/km` : "--";
-            document.getElementById("run-hr").textContent = run.average_hr != null ? `${run.average_hr} bpm` : "--";
-            document.getElementById("run-elevation").textContent = run.elevation_m != null ? `${run.elevation_m} m` : "--";
-            document.getElementById("run-comment-text").textContent = run.comment || "評価コメントはありません。";
+            document.getElementById("run-type").textContent =
+                run.estimated_run_type || "Running";
+
+            document.getElementById("run-name").textContent =
+                run.activity_name || "Latest Run";
+
+            document.getElementById("run-name-en").textContent =
+                run.activity_name_en &&
+                run.activity_name_en !== run.activity_name
+                    ? run.activity_name_en
+                    : "";
+
+            document.getElementById("run-date").textContent =
+                formatRunDate(run.date);
+
+            document.getElementById("run-score").innerHTML =
+                `${run.score ?? "--"} <small>/ 100</small>`;
+
+            document.getElementById("run-grade").textContent =
+                `Grade ${run.grade || "--"}`;
+
+            document.getElementById("run-distance").textContent =
+                run.distance_km != null
+                    ? `${run.distance_km} km`
+                    : "--";
+
+            document.getElementById("run-duration").textContent =
+                formatDuration(run.duration_minutes);
+
+            document.getElementById("run-pace").textContent =
+                run.pace_per_km
+                    ? `${run.pace_per_km}/km`
+                    : "--";
+
+            document.getElementById("run-hr").textContent =
+                run.average_hr != null
+                    ? `${run.average_hr} bpm`
+                    : "--";
+
+            document.getElementById("run-elevation").textContent =
+                run.elevation_m != null
+                    ? `${run.elevation_m} m`
+                    : "--";
+
+            document.getElementById("run-comment-text").textContent =
+                run.comment || "評価コメントはありません。";
+
+            document.getElementById("run-comment-en").textContent =
+                run.comment_en || "";
 
             loadingElement.classList.add("hidden");
             errorElement.classList.add("hidden");
