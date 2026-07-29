@@ -1,18 +1,18 @@
 {
-  "activity_id": 23765980517,
+  "activity_id": 23778906066,
   "activity_name": "Adairsville ラン",
   "activity_name_en": "Adairsville Run",
-  "date": "2026-07-28 12:32:06",
-  "distance_km": 8.01,
-  "duration_minutes": 38.0,
-  "pace_per_km": "4:45",
-  "average_hr": 164,
-  "maximum_hr": 180,
-  "elevation_m": 45,
+  "date": "2026-07-29 12:19:17",
+  "distance_km": 10.01,
+  "duration_minutes": 49.8,
+  "pace_per_km": "4:59",
+  "average_hr": 161,
+  "maximum_hr": 174,
+  "elevation_m": 63,
   "estimated_run_type": "Easy / Steady Run",
   "score": 85,
   "grade": "A",
   "comment": "安定した有酸素トレーニングと推定されます。",
   "comment_en": "This appears to be a steady and controlled aerobic training run.",
-  "updated_at": "2026-07-29T16:39:25.896395+00:00"
+  "updated_at": "2026-07-29T22:14:49.357735+00:00"
 }
