@@ -7,6 +7,9 @@ from typing import Any
 from garminconnect import Garmin
 
 OUTPUT_FILE = Path("data/latest_run.json")
+RUN_LOGS_FILE = Path("data/run_logs.json")
+RUN_LOG_LIMIT = 50
+ACTIVITY_FETCH_LIMIT = 100
 
 
 def format_pace(seconds_per_km: float) -> str:
@@ -24,26 +27,30 @@ def format_pace(seconds_per_km: float) -> str:
     return f"{minutes}:{seconds:02d}"
 
 
-def find_latest_run(
-    activities: list[dict[str, Any]],
-) -> dict[str, Any]:
-    """最新のランニングアクティビティを探す。"""
-    for activity in activities:
-        activity_type = activity.get("activityType", {})
-        type_key = str(
-            activity_type.get("typeKey", "")
-        ).lower()
+def is_running_activity(activity: dict[str, Any]) -> bool:
+    """Garminアクティビティがランニングか判定する。"""
+    activity_type = activity.get("activityType", {})
+    type_key = str(activity_type.get("typeKey", "")).lower()
 
-        if type_key in {
+    return (
+        type_key
+        in {
             "running",
             "run",
             "trail_running",
             "treadmill_running",
             "track_running",
-        }:
-            return activity
+        }
+        or "running" in type_key
+    )
 
-        if "running" in type_key:
+
+def find_latest_run(
+    activities: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """最新のランニングアクティビティを探す。"""
+    for activity in activities:
+        if is_running_activity(activity):
             return activity
 
     raise RuntimeError(
@@ -168,6 +175,85 @@ def classify_run(
     )
 
 
+def build_run_record(activity: dict[str, Any]) -> dict[str, Any]:
+    """Garminアクティビティを公開用のラン記録へ変換する。"""
+    activity_name = str(activity.get("activityName") or "Running")
+    start_time = (
+        activity.get("startTimeLocal")
+        or activity.get("startTimeGMT")
+    )
+    distance_m = float(activity.get("distance") or 0)
+    duration_seconds = float(
+        activity.get("movingDuration")
+        or activity.get("duration")
+        or activity.get("elapsedDuration")
+        or 0
+    )
+    distance_km = distance_m / 1000
+    duration_minutes = duration_seconds / 60
+
+    average_hr_value = activity.get("averageHR")
+    average_hr = (
+        float(average_hr_value)
+        if average_hr_value is not None
+        else None
+    )
+    maximum_hr_value = activity.get("maxHR")
+    maximum_hr = (
+        float(maximum_hr_value)
+        if maximum_hr_value is not None
+        else None
+    )
+    elevation_m = float(activity.get("elevationGain") or 0)
+    pace_seconds_per_km = (
+        duration_seconds / distance_km
+        if distance_km > 0
+        else 0
+    )
+    run_type, score, comment_ja, comment_en = classify_run(
+        distance_km,
+        duration_minutes,
+        average_hr,
+    )
+
+    return {
+        "activity_id": activity.get("activityId"),
+        "activity_name": activity_name,
+        "activity_name_en": translate_activity_name(activity_name),
+        "date": start_time,
+        "distance_km": round(distance_km, 2),
+        "duration_minutes": round(duration_minutes, 1),
+        "pace_per_km": format_pace(pace_seconds_per_km),
+        "average_hr": (
+            round(average_hr)
+            if average_hr is not None
+            else None
+        ),
+        "maximum_hr": (
+            round(maximum_hr)
+            if maximum_hr is not None
+            else None
+        ),
+        "elevation_m": round(elevation_m),
+        "estimated_run_type": run_type,
+        "score": score,
+        "grade": "A" if score >= 85 else "B",
+        "comment": comment_ja,
+        "comment_en": comment_en,
+    }
+
+
+def read_json(path: Path) -> Any:
+    """JSONファイルを安全に読み込む。"""
+    if not path.exists():
+        return None
+
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
 def main() -> None:
     email = os.environ.get("GARMIN_EMAIL")
     password = os.environ.get("GARMIN_PASSWORD")
@@ -181,153 +267,72 @@ def main() -> None:
     client = Garmin(email, password)
     client.login()
 
-    activities = client.get_activities(0, 20)
-    latest = find_latest_run(activities)
+    activities = client.get_activities(0, ACTIVITY_FETCH_LIMIT)
+    running_activities = [
+        activity
+        for activity in activities
+        if is_running_activity(activity)
+    ][:RUN_LOG_LIMIT]
 
-    activity_id = latest.get("activityId")
-
-    activity_name = str(
-        latest.get("activityName")
-        or "Running"
-    )
-
-    activity_name_en = translate_activity_name(
-        activity_name
-    )
-
-    start_time = (
-        latest.get("startTimeLocal")
-        or latest.get("startTimeGMT")
-    )
-
-    distance_m = float(
-        latest.get("distance")
-        or 0
-    )
-
-    duration_seconds = float(
-        latest.get("movingDuration")
-        or latest.get("duration")
-        or latest.get("elapsedDuration")
-        or 0
-    )
-
-    distance_km = distance_m / 1000
-    duration_minutes = duration_seconds / 60
-
-    average_hr_value = latest.get("averageHR")
-
-    average_hr = (
-        float(average_hr_value)
-        if average_hr_value is not None
-        else None
-    )
-
-    maximum_hr_value = latest.get("maxHR")
-
-    maximum_hr = (
-        float(maximum_hr_value)
-        if maximum_hr_value is not None
-        else None
-    )
-
-    elevation_m = float(
-        latest.get("elevationGain")
-        or 0
-    )
-
-    pace_seconds_per_km = (
-        duration_seconds / distance_km
-        if distance_km > 0
-        else 0
-    )
-
-    (
-        run_type,
-        score,
-        comment_ja,
-        comment_en,
-    ) = classify_run(
-        distance_km,
-        duration_minutes,
-        average_hr,
-    )
-
-    result = {
-        "activity_id": activity_id,
-        "activity_name": activity_name,
-        "activity_name_en": activity_name_en,
-        "date": start_time,
-        "distance_km": round(
-            distance_km,
-            2,
-        ),
-        "duration_minutes": round(
-            duration_minutes,
-            1,
-        ),
-        "pace_per_km": format_pace(
-            pace_seconds_per_km
-        ),
-        "average_hr": (
-            round(average_hr)
-            if average_hr is not None
-            else None
-        ),
-        "maximum_hr": (
-            round(maximum_hr)
-            if maximum_hr is not None
-            else None
-        ),
-        "elevation_m": round(
-            elevation_m
-        ),
-        "estimated_run_type": run_type,
-        "score": score,
-        "grade": (
-            "A"
-            if score >= 85
-            else "B"
-        ),
-        "comment": comment_ja,
-        "comment_en": comment_en,
-        "updated_at": datetime.now(
-            timezone.utc
-        ).isoformat(),
-    }
-
-    OUTPUT_FILE.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    previous = None
-
-    if OUTPUT_FILE.exists():
-        try:
-            previous = json.loads(
-                OUTPUT_FILE.read_text(
-                    encoding="utf-8"
-                )
-            )
-        except json.JSONDecodeError:
-            previous = None
-
-    # 同じランでも、新しい項目が追加された場合は更新する
-    if (
-        previous
-        and previous.get("activity_id") == activity_id
-        and previous == result
-    ):
-        print(
-            "最新ランはすでに処理済みで、"
-            "変更もありません。"
+    if not running_activities:
+        raise RuntimeError(
+            "直近のアクティビティにラン記録が見つかりません。"
         )
+
+    run_logs = [
+        build_run_record(activity)
+        for activity in running_activities
+    ]
+    latest_result = run_logs[0]
+
+    previous_latest = read_json(OUTPUT_FILE)
+    previous_logs = read_json(RUN_LOGS_FILE)
+    comparable_latest = (
+        {
+            key: value
+            for key, value in previous_latest.items()
+            if key != "updated_at"
+        }
+        if isinstance(previous_latest, dict)
+        else None
+    )
+    previous_run_list = (
+        previous_logs.get("runs")
+        if isinstance(previous_logs, dict)
+        else None
+    )
+
+    if (
+        comparable_latest == latest_result
+        and previous_run_list == run_logs
+    ):
+        print("Garminのラン記録に変更はありません。")
         return
 
+    generated_at = datetime.now(timezone.utc).isoformat()
+    latest_output = {
+        **latest_result,
+        "updated_at": generated_at,
+    }
+    logs_output = {
+        "generated_at": generated_at,
+        "count": len(run_logs),
+        "runs": run_logs,
+    }
+
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_FILE.write_text(
         json.dumps(
-            result,
+            latest_output,
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    RUN_LOGS_FILE.write_text(
+        json.dumps(
+            logs_output,
             ensure_ascii=False,
             indent=2,
         )
@@ -336,12 +341,12 @@ def main() -> None:
     )
 
     print(
-        f"更新完了: "
-        f"{distance_km:.2f} km / "
-        f"{format_pace(pace_seconds_per_km)}/km / "
-        f"{run_type}"
+        f"更新完了: {len(run_logs)}件 / "
+        f"最新 {latest_result['distance_km']:.2f} km / "
+        f"{latest_result['pace_per_km']}/km"
     )
 
 
 if __name__ == "__main__":
     main()
+
