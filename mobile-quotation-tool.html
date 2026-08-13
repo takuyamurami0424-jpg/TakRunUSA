@@ -1,0 +1,3480 @@
+<!DOCTYPE html>
+<!-- PUBLIC DEMO: original interface/layout retained; business data replaced. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Online Quotation Tool | Public Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="">
+  <style>
+    /* =========================================
+       Modern CSS Variables & Reset
+       ========================================= */
+    :root {
+      --primary-color: #111;
+      --accent-color: #fecb00; /* Demo Gold */
+      --accent-hover: #e5b600;
+      --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
+      --text-main: #2d3748;
+      --text-secondary: #718096;
+      --border-color: #e2e8f0;
+      --input-bg: #edf2f7;
+      --input-focus-border: #a0aec0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --danger-color: #ef4444;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --success-color: #10b981;
+      --info-color: #3b82f6;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =========================================
+       Header
+       ========================================= */
+    header {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 4px solid var(--accent-color);
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .app-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+    .version {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      margin-top: 2px;
+    }
+
+    /* =========================================
+       Layout & Container
+       ========================================= */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      padding-bottom: 100px;
+    }
+
+    /* =========================================
+       Tabs (Modern Segmented Control)
+       ========================================= */
+    .tabs {
+      display: flex;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    .tabs::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+    
+    .tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--primary-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab {
+      display: none;
+      animation: fadeScale 0.2s ease-out;
+    }
+    .tab.active { display: block; }
+    
+    @keyframes fadeScale {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* =========================================
+       Cards & Sections
+       ========================================= */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-color);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin: 0 0 20px 0;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--bg-color);
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 24px 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 16px;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    /* =========================================
+       Forms & Inputs
+       ========================================= */
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-main);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--text-secondary);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    }
+    
+    #editor-product, #final-base-cost-display {
+      font-weight: 700;
+    }
+
+    /* =========================================
+       Buttons
+       ========================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--primary-color);
+      color: #fff;
+      gap: 8px;
+    }
+    .btn:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+    .btn:active { transform: translateY(0); }
+    
+    .btn.secondary {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+    .btn.secondary:hover { background: #cbd5e0; }
+    
+    .btn.danger {
+      background: #fee2e2;
+      color: var(--danger-color);
+    }
+    .btn.danger:hover { background: #fecaca; }
+    
+    .btn.small {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+    
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    /* =========================================
+       Tables
+       ========================================= */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      background: var(--card-bg);
+    }
+    th {
+      background: #f8fafc;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    tr:last-child td { border-bottom: none; }
+    
+    /* =========================================
+       Specific Components
+       ========================================= */
+    .fixed-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+    }
+    
+    .price-summary {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-row.total {
+      background: #fafafa;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      border-top: 2px solid var(--border-color);
+    }
+    .price-label { color: var(--text-secondary); }
+    #list-price-detail-editor .price-row { padding: 8px 12px; }
+    #list-price-detail-editor .price-label { color: var(--text-main); padding-right: 12px; }
+    #list-price-detail-editor .list-line-amount { white-space: nowrap; text-align: right; }
+    #list-price-total-row { border-top: 2px solid var(--border-color); background: #f8fafc; }
+    
+    .product-photo {
+      width: 100%;
+      height: auto;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: white;
+      padding: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-expired { background: #fecaca; color: #b91c1c; }
+    .badge-soon { background: #fef3c7; color: #b45309; }
+    .badge-ok { background: #d1fae5; color: #047857; }
+
+    /* Alert / Demo Review Box - WARNING ONLY */
+    .drf-alert {
+      display: none;
+      background-color: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: #991b1b;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .drf-alert.active {
+      display: flex;
+      animation: slideDown 0.2s ease-out;
+    }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white;
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: scale(0.95);
+      animation: modalPop 0.2s forwards;
+    }
+    @keyframes modalPop { to { transform: scale(1); } }
+    
+    .modal-msg { margin-bottom: 24px; font-size: 1rem; color: var(--text-main); }
+    .modal-buttons { display: flex; justify-content: flex-end; gap: 12px; }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .row { grid-template-columns: 1fr; }
+      .drf-alert { flex-direction: column; align-items: center; text-align:center; }
+    }
+    
+    .note {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* =========================================
+       PRINT / PREVIEW OVERLAY STYLES
+       ========================================= */
+    #print-area { display: none; }
+
+    /* Class to activate Preview Mode (On Screen) */
+    body.showing-preview #print-area {
+      display: block;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: white;
+      z-index: 9999;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    body.showing-preview header, 
+    body.showing-preview .container, 
+    body.showing-preview #modal-overlay {
+      display: none !important;
+    }
+
+    /* Floating "Close / Print" button for Preview Mode */
+    .preview-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10000;
+    }
+    .preview-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .preview-btn.close-btn { background: #555; }
+
+    /* Spacer to push content above buttons */
+    .spacer-for-buttons { height: 120px; }
+
+    /* PRINT MEDIA QUERY */
+    @media print {
+      /* Hide App UI & Buttons */
+      header, .container, #modal-overlay, .tabs, .drf-alert, .action-bar, .preview-controls, .spacer-for-buttons {
+        display: none !important;
+      }
+      
+      /* Show Print Area */
+      #print-area {
+        display: block !important;
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        background: white;
+      }
+
+      /* Reset styling for inputs in print */
+      input, textarea {
+        border: none;
+        background: transparent;
+      }
+
+      @page { size: Letter portrait; margin: 0.5in; }
+      body { background: white; margin: 0; padding: 0; }
+    }
+  
+/* v0.82 Inventory and model transition */
+.inv82-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.inv82-state{padding:6px 9px;border-radius:5px;background:#eef2f7;color:#475569;font-size:.78rem;font-weight:700}.inv82-state.ok{background:#e6f4ea;color:#137333}.inv82-state.err{background:#fce8e6;color:#c5221f}.inv82-note{margin:13px 0;padding:12px 14px;background:#fff8e1;border:1px solid #f3d36b;border-left:6px solid #fbbc04;border-radius:7px;color:#5f4700}.inv82-note ol{margin:5px 0 0;padding-left:20px}.inv82-note li{margin:5px 0;line-height:1.45}.inv82-card{margin:13px 0;padding:12px;border:1px solid #cbd5e1;border-left:6px solid #1a73e8;border-radius:7px;background:#f8fbff}.inv82-grid{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:8px;margin-top:9px}.inv82-stat{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px}.inv82-stat label{display:block;font-size:.68rem;color:#64748b;text-transform:uppercase}.inv82-good{color:#137333}.inv82-bad{color:#c5221f}.inv82-muted{color:#64748b}.inv82-transition{margin-top:8px;padding:8px;border-radius:5px;background:#e8f0fe;color:#174ea6;font-size:.8rem}.inv82-months{display:flex;gap:7px;overflow-x:auto;padding-top:8px}.inv82-month{min-width:72px;border:1px solid #dbe3ec;background:#fff;border-radius:5px;padding:7px;text-align:center}.inv82-month span{display:block;color:#64748b;font-size:.68rem}.inv82-wrap{overflow:auto;max-height:65vh;border:1px solid #d9dee5;border-radius:7px}.inv82-table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%}.inv82-table th{position:sticky;top:0;z-index:3;background:#252525;color:#fff;padding:8px 7px;white-space:nowrap;font-size:.74rem}.inv82-table td{padding:7px;border-bottom:1px solid #e5e7eb;white-space:nowrap;text-align:center;font-size:.79rem}.inv82-table th:first-child,.inv82-table td:first-child{position:sticky;left:0;z-index:2;text-align:left}.inv82-table td:first-child{background:#fff;font-weight:700}.inv82-group td{position:static!important;background:#4a4a4a!important;color:#fff;font-weight:700;text-align:left!important}.inv82-stock{background:#d8f3dc!important}.inv82-zero{color:#c5221f;font-weight:700}.inv82-upload{position:relative;overflow:hidden}.inv82-upload input{position:absolute;inset:0;opacity:0;cursor:pointer}@media(max-width:700px){.inv82-grid{grid-template-columns:1fr}}
+
+/* Turbo startup optimization */
+.tab:not(.active){content-visibility:hidden;contain-intrinsic-size:1px 800px}
+.tab.active{content-visibility:visible}
+body:not(.quote-tool-ready) #editor-dealer,body:not(.quote-tool-ready) #editor-product{background-image:linear-gradient(90deg,#fff,#f5f5f5,#fff);background-size:200% 100%;animation:qtLoad .8s linear infinite}
+@keyframes qtLoad{to{background-position:-200% 0}}
+
+
+/* ============================================================
+   v0.84 Mobile Responsive Enhancement
+   Optimized for phones and small tablets without changing desktop
+   ============================================================ */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    min-height: 58px;
+    padding: 8px 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 9px;
+  }
+  .logo-area { width: 100%; gap: 9px; }
+  .logo-area img { height: 27px !important; width: auto; flex: 0 0 auto; }
+  .app-title { font-size: .92rem; line-height: 1.15; }
+  .version { font-size: .64rem; margin-top: 1px; }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 10px 8px 92px;
+  }
+
+  .tabs {
+    position: sticky;
+    top: 58px;
+    z-index: 900;
+    width: calc(100% + 16px);
+    margin: 0 -8px 12px;
+    padding: 6px 8px;
+    border-radius: 0;
+    gap: 6px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 2px 5px rgba(0,0,0,.08);
+  }
+  .tab-btn {
+    flex: 0 0 auto;
+    min-width: 94px;
+    min-height: 42px;
+    padding: 9px 12px;
+    font-size: .78rem;
+    white-space: nowrap;
+    scroll-snap-align: center;
+    touch-action: manipulation;
+  }
+  .tab-btn.active { box-shadow: 0 1px 4px rgba(0,0,0,.14); }
+
+  .card {
+    padding: 14px 11px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+  h2 { font-size: 1.05rem; margin-bottom: 14px; padding-bottom: 8px; }
+  h3 { margin-top: 16px; }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .row > *, .card > *, .tab, .tab > * { min-width: 0; max-width: 100%; }
+  [style*="grid-column: span"], [style*="grid-column: 1 / -1"] { grid-column: 1 !important; }
+  [style*="max-width:120px"], [style*="max-width: 120px"] { max-width: none !important; }
+
+  label { font-size: .71rem; margin-bottom: 5px; }
+  input, select, textarea {
+    min-height: 44px;
+    padding: 10px 11px;
+    font-size: 16px !important;
+    border-radius: 8px;
+  }
+  textarea { min-height: 88px; }
+
+  .btn, button {
+    min-height: 42px;
+    touch-action: manipulation;
+  }
+  .action-bar, .inv82-toolbar {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100%;
+    gap: 8px !important;
+  }
+  .action-bar .btn, .inv82-toolbar .btn, .inv82-toolbar label,
+  .action-bar button, .inv82-upload, #inv82-state {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .fixed-box { padding: 11px !important; }
+  .price-summary { padding: 12px; }
+  .price-row { gap: 8px; align-items: flex-start; }
+  .price-label { min-width: 0; }
+  .price-row.total { font-size: 1rem; }
+  #final-base-cost-display { font-size: 1.15rem; }
+
+  .product-photo {
+    display: block;
+    width: 100%;
+    max-width: 330px;
+    max-height: 220px;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .inv82-card { padding: 11px; margin: 10px 0; }
+  .inv82-grid { grid-template-columns: 1fr !important; gap: 7px; }
+  .inv82-stat { padding: 9px; }
+  .inv82-note { padding: 11px 11px 11px 12px; font-size: .78rem; }
+  .inv82-note ol { padding-left: 18px; }
+  .inv82-months {
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 4px;
+  }
+  .inv82-month { flex: 0 0 78px; scroll-snap-align: start; }
+  #inv82-search { min-width: 0 !important; width: 100% !important; }
+
+  .table-container, .inv82-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+    border-radius: 7px;
+  }
+  .inv82-wrap { max-height: 62vh; }
+  table { min-width: 720px; }
+  .inv82-table { min-width: 1050px; }
+  table th, table td { padding: 8px 7px; font-size: .72rem; }
+  .inv82-table th:first-child, .inv82-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    box-shadow: 2px 0 3px rgba(0,0,0,.08);
+  }
+  .inv82-table th:first-child { background: #252525; }
+  .inv82-group td { position: static !important; }
+
+  .modal {
+    width: calc(100% - 20px);
+    max-width: none;
+    max-height: 90vh;
+    padding: 18px;
+    overflow-y: auto;
+  }
+  .modal-buttons { display: grid; grid-template-columns: 1fr 1fr; }
+  .modal-buttons button { width: 100%; }
+
+  body.showing-preview #print-area { padding: 0; }
+  .preview-controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    padding: 8px !important;
+  }
+  .preview-controls .btn { width: 100%; }
+}
+
+@media (max-width: 390px) {
+  .container { padding-left: 6px; padding-right: 6px; }
+  .tabs { width: calc(100% + 12px); margin-left: -6px; margin-right: -6px; }
+  .card { padding: 12px 9px; }
+  .tab-btn { min-width: 88px; padding-left: 10px; padding-right: 10px; }
+  .preview-controls { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body><div style="background:#7f1d1d;color:#fff;text-align:center;padding:9px 14px;font:800 12px/1.3 Inter,system-ui,sans-serif;letter-spacing:.04em;position:relative;z-index:10000">PUBLIC PORTFOLIO DEMO • ALL NAMES, MODELS, PRICES AND POLICIES ARE FICTIONAL</div>
+
+<div id="print-area"></div>
+
+<div id="modal-overlay" class="modal-overlay">
+  <div class="modal">
+    <div id="modal-message" class="modal-msg"></div>
+    <div class="modal-buttons">
+      <button id="modal-cancel" class="btn secondary">Cancel</button>
+      <button id="modal-ok" class="btn">OK</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo-area">
+    <img src="" 
+         alt="ASTERION Logo" 
+         style="height: 32px;">
+    <div>
+      <div class="app-title">Online Quotation Tool</div>
+      <div
+        class="version"
+        id="rsm-screen-release"
+        data-version="DEMO"
+        data-build="PUBLIC"
+      >Public Portfolio Demo</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="editor">Editor</button>
+    <button class="tab-btn" data-tab="dealers">Dealers</button>
+    <button class="tab-btn" data-tab="products">Products</button>
+    <button class="tab-btn" data-tab="options">Options</button>
+    <button class="tab-btn" data-tab="extraWarrantyMaster">Warranty</button>
+    <button class="tab-btn" data-tab="history">History</button>
+    <button class="tab-btn" data-tab="inventory">Inventory Availability</button>
+    <button class="tab-btn" data-tab="changelog">Changelog</button>
+  </div>
+
+  <div class="tab active" id="editor">
+    
+    <div class="card">
+      <div class="row">
+        <div style="grid-column: 1 / -1;">
+          <div class="fixed-box" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <strong>From:</strong> Asterion Demo Works <span style="color:var(--text-secondary); font-size:0.8em; margin-left:8px;">(Demo City, ZZ)</span>
+            </div>
+            <div id="from-contact-line" style="color:var(--info-color); font-weight:500; font-size:0.9em;">
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="editor-dealer">Dealer</label>
+          <select id="editor-dealer"></select>
+          <div style="margin-top:8px; height:40px; display:flex; align-items:center;">
+             <img id="editor-dealer-logo" src="" alt="Dealer Logo" style="display:none; max-height:100%;" />
+          </div>
+          <div style="margin-top:8px;">
+            <label for="quote-price-type" style="margin-bottom:4px;">Price Type</label>
+            <select id="quote-price-type" style="font-size:0.9rem;">
+              <option value="Dealer" selected>Dealer</option>
+              <option value="Partner Demo">Partner Demo</option>
+            </select>
+            <div id="quote-price-type-note" class="note">Dealer pricing</div>
+            <img id="partner-demo-editor-logo" src="" alt="Partner Demo" style="display:none; margin-top:8px; max-width:155px; height:auto; object-fit:contain;" />
+          </div>
+        </div>
+        <div>
+          <label for="editor-sales">Sales Representative</label>
+          <select id="editor-sales"></select>
+        </div>
+        <div>
+          <label for="quote-date">Quote Date</label>
+          <input type="date" id="quote-date" />
+        </div>
+        <div>
+          <label for="expiry-date">Expiry Date</label>
+          <input type="date" id="expiry-date" />
+        </div>
+        <div>
+          <label for="quote-name-auto">Quote Name</label>
+          <input type="text" id="quote-name-auto" readonly style="background:#f8fafc;font-weight:600;" />
+          <input type="text" id="quote-name-custom" placeholder="Optional suffix / custom name" style="margin-top:8px; font-size:0.85rem;" />
+          <input type="text" id="quote-name-final" placeholder="Final Quote Name" style="margin-top:8px; font-size:0.85rem; font-weight:600;" />
+        </div>
+        <div>
+          <label for="dealer-salesman-name">Dealer Salesman</label>
+          <input type="text" id="dealer-salesman-name" placeholder="Dealer salesman name" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="payment-term">Payment Term</label>
+          <select id="payment-term">
+            <option value="Net 30">Net 30 days</option>
+            <option value="6M Floor">6 months interest free floor plan</option>
+            <option value="Net 60">Net 60 days (only selected dealers)</option>
+          </select>
+          <div id="payment-warning" class="note" style="color:var(--danger-color); display:none; margin-top:6px;">
+            ⚠ Check Demo Review approval for non-standard terms.
+          </div>
+        </div>
+        <div>
+          <label>Dealer Response (Optional)</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <input type="text" id="dealer-response-po" placeholder="PO#" style="font-size:0.85rem;">
+            <input type="text" id="dealer-response-terms" placeholder="Terms Req." style="font-size:0.85rem;">
+          </div>
+          <input type="text" id="dealer-response-notes" placeholder="Dealer Notes..." style="margin-top:8px; font-size:0.85rem;">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Product & Pricing</h2>
+      
+      <div class="row">
+        <div style="flex:2;">
+          <label for="editor-product">Asterion Model</label>
+          <select id="editor-product" style="font-size:1.1em;"></select>
+        </div>
+        <div style="flex:1; max-width:120px;">
+          <label for="editor-qty">Qty</label>
+          <input type="number" id="editor-qty" min="1" value="1" />
+        </div>
+        <div style="flex:2;">
+          <label for="std-warranty">Standard Warranty</label>
+          <select id="std-warranty">
+            <option value="3/3000" selected>3 years / 3000 hours full machine</option>
+            <option value="1/1000">1 year / 1000 hours full machine</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="inv82-card">
+        <div class="inv82-toolbar" style="justify-content:space-between"><strong>Inventory Availability</strong><span id="inv82-editor-state" class="inv82-state">Loading...</span></div>
+        <div class="inv82-grid"><div class="inv82-stat"><label>Quotation Model</label><strong id="inv82-model">-</strong></div><div class="inv82-stat"><label>Inventory Status</label><strong id="inv82-status" class="inv82-muted">-</strong></div><div class="inv82-stat"><label>Total Current Available</label><strong id="inv82-qty" class="inv82-muted">-</strong></div></div>
+        <div id="inv82-transition" class="inv82-transition" style="display:none"></div><div id="inv82-months" class="inv82-months"></div>
+      </div>
+      <div class="inv82-note"><strong>Important Inventory Notes</strong><ol><li>Inventory Availability may be different at the time of order than it was at the time of quotation. To help secure inventory, we recommend placing your order as soon as possible after receiving the quotation.</li><li><b>Subject to Change:</b> This list is subject to change due to the side impacts of global supply chain problems. Inventory availability may change depending on supply chain conditions.</li></ol></div>
+      <div class="row" style="align-items:start;">
+        <div style="grid-column: span 2;">
+          <div class="price-summary">
+            <div id="list-price-detail-editor"></div>
+            <div class="price-row" id="list-price-total-row">
+              <span class="price-label">List Price (Total)</span>
+              <span id="list-price-display">$0</span>
+            </div>
+            <div class="price-row">
+              <span class="price-label">Dealer Net (Total)</span>
+              <span id="dnet-display" style="font-weight:600;">$0</span>
+            </div>
+            <div class="price-row" style="align-items:center;">
+              <span class="price-label">
+                Dealer Discount
+                <select id="dealer-discount-select" style="margin-left:8px; padding:2px; font-size:0.8em; width:auto; border:none; background:#eee;">
+                  <option value="Standard">Standard (0%)</option>
+                  <option value="Volume 1">Volume 1 (1.5%)</option>
+                  <option value="Volume 2">Volume 2 (2.5%)</option>
+                  <option value="Government">Government (5%)</option>
+                </select>
+              </span>
+              <span id="dealer-level-amount-display" style="color:var(--info-color);">$0</span>
+            </div>
+            <div class="price-row" style="align-items:center;">
+              <span class="price-label">
+                Additional Discount
+                <div style="display:inline-flex; gap:4px; margin-left:8px;">
+                   <select id="addl-discount-type" style="padding:2px; font-size:0.8em; width:auto; border:none; background:#eee;">
+                     <option value="none">None</option>
+                     <option value="percent">%</option>
+                     <option value="amount">$</option>
+                   </select>
+                   <input type="number" id="addl-discount-value" style="padding:2px; font-size:0.8em; width:60px; border:1px solid #ccc;" value="0">
+                </div>
+              </span>
+              <span id="addl-discount-amount-display" style="color:var(--danger-color);">$0</span>
+            </div>
+            
+            <div id="drf-alert-box" class="drf-alert">
+              <div>
+                <span>⚠️ Additional discount requires approval.</span><br>
+                <span style="font-size:0.75rem; color:#555;">Please submit a Demo Review Form (Demo Review).</span>
+              </div>
+            </div>
+
+            <div class="price-row total" style="margin-top:10px;">
+              <span>Final Dealer Base Cost</span>
+              <span id="final-base-cost-display">$0</span>
+            </div>
+          </div>
+          <div class="note">* Options & Extra Warranty are NOT included in Final Base Cost.</div>
+        </div>
+
+        <div>
+          <img id="product-photo" class="product-photo" src="" alt="Product" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <div id="product-features-container" style="display:none; margin-top:16px; background:#f9fafb; padding:12px; border-radius:var(--radius-md);">
+        <label>Features</label>
+        <div id="product-features-list" style="font-size:0.85rem; color:#555;"></div>
+      </div>
+      
+      <div style="margin-top:20px;">
+        <label>Factory Options (Not in Total)</label>
+        <div id="options-display" class="fixed-box" style="background:white;">No options available.</div>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <h2>Extra Warranty & Notes</h2>
+      <div class="row">
+        <div>
+          <label for="need-extra-warranty">Need Extra Warranty?</label>
+          <select id="need-extra-warranty">
+            <option value="No" selected>No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+        <div>
+          <label for="extra-coverage-type">Type</label>
+          <select id="extra-coverage-type">
+            <option value="N/A" selected>N/A</option>
+            <option value="Power Train">Power Train</option>
+            <option value="Power Train Extended">Power Train Extended</option>
+            <option value="Premier">Premier</option>
+          </select>
+        </div>
+        <div>
+          <label for="extra-months">Months / Hours</label>
+          <div style="display:flex; gap:8px;">
+            <select id="extra-months">
+              <option value="N/A">N/A</option>
+              <option>24</option><option>36</option><option>48</option><option>60</option><option>72</option><option>84</option>
+            </select>
+            <select id="extra-hours">
+              <option value="N/A">N/A</option>
+              <option>2000</option><option>2500</option><option>3000</option><option>3500</option><option>4000</option><option>4500</option><option>5000</option><option>5500</option><option>6000</option><option>6500</option><option>7000</option><option>7500</option><option>8000</option><option>8500</option><option>9000</option><option>9500</option><option>10000</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Warranty Cost (Net)</label>
+          <div class="fixed-box" style="padding:10px; display:flex; justify-content:space-between; align-items:center; background:#fff;">
+             <span id="extra-warranty-note" style="font-size:0.75rem; color:#999;">-</span>
+             <span id="extra-warranty-cost-display" style="font-weight:700;">$0</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <label for="quote-notes">Notes for Dealer</label>
+        <textarea id="quote-notes" rows="3" placeholder="Additional notes..."></textarea>
+      </div>
+
+      <div class="note" style="margin-top:16px; border-left:4px solid var(--accent-color); padding-left:12px; background:#fff; padding:8px 12px; border-radius:0 var(--radius-md) var(--radius-md) 0;">
+        <strong>Important:</strong> All purchase orders are non-cancellable once submitted.
+      </div>
+    </div>
+
+    <div style="position: sticky; bottom: 20px; z-index: 90; display:flex; gap:12px; justify-content:flex-end;">
+      <button id="btn-save-history" class="btn secondary" style="box-shadow: var(--shadow-md);">
+        <span>💾</span> Save
+      </button>
+      <button id="btn-preview" class="btn" style="box-shadow: var(--shadow-md); background:var(--primary-color); border:1px solid #fff;">
+        <span>🖨</span> Preview / PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="tab" id="dealers">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Dealers Master</h2>
+        <div class="action-bar" style="margin:0;">
+          <button id="btn-add-dealer" class="btn small">Add Dealer</button>
+          <button id="btn-template-dealers" class="btn small secondary">Template</button>
+          <button id="btn-export-dealers" class="btn small secondary">Export</button>
+          <label class="btn small secondary" style="cursor:pointer; margin:0;">
+            Import
+            <input type="file" id="import-dealers" accept=".csv" style="display:none;">
+          </label>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="dealers-table">
+          <thead>
+            <tr>
+              <th>Name</th><th>Contact</th><th>Phone</th><th>Email</th><th>Term</th><th>Disc.</th><th>Logo</th><th>Act</th>
+            </tr>
+          </thead>
+          <tbody>
+</tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="products">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Products Master</h2>
+        <div class="action-bar" style="margin:0;">
+          <button id="btn-add-product" class="btn small">Add Product</button>
+          <button id="btn-template-products" class="btn small secondary">Template</button>
+          <button id="btn-export-products" class="btn small secondary">Export</button>
+          <label class="btn small secondary" style="cursor:pointer; margin:0;">
+            Import
+            <input type="file" id="import-products" accept=".csv" style="display:none;">
+          </label>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="products-table">
+          <thead>
+            <tr>
+              <th>Model</th><th>List</th><th>D-Net</th><th>Warranty</th><th>Photo</th><th>Type</th><th>Desc</th><th>Act</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="options">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Options Master</h2>
+        <div class="action-bar" style="margin:0;">
+          <button id="btn-add-option" class="btn small">Add Option</button>
+          <button id="btn-template-options" class="btn small secondary">Template</button>
+          <button id="btn-export-options" class="btn small secondary">Export</button>
+          <label class="btn small secondary" style="cursor:pointer; margin:0;">
+            Import
+            <input type="file" id="import-options" accept=".csv" style="display:none;">
+          </label>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="options-table">
+          <thead>
+            <tr>
+              <th>Model</th><th>Name</th><th>List</th><th>D-Net</th><th>Act</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="extraWarrantyMaster">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Warranty Master</h2>
+        <div class="action-bar" style="margin:0;">
+          <button id="btn-add-ew" class="btn small">Add Row</button>
+          <button id="btn-template-ew" class="btn small secondary">Template</button>
+          <button id="btn-export-ew" class="btn small secondary">Export</button>
+          <label class="btn small secondary" style="cursor:pointer; margin:0;">
+            Import
+            <input type="file" id="import-ew" accept=".csv" style="display:none;">
+          </label>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="ew-table">
+          <thead>
+            <tr>
+              <th>Model</th><th>Type</th><th>Mo</th><th>Hr</th><th>Cost</th><th>Act</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="history">
+    <div class="card">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:16px; gap:16px;">
+        <h2>Quote History</h2>
+        <div style="display:flex; align-items:center; gap:8px; background:#f1f5f9; padding:6px 12px; border-radius:var(--radius-md);">
+          <span style="font-size:1.2em;">⏰</span>
+          <label style="margin:0; font-size:0.8rem;">Alert Days:</label>
+          <input type="number" id="history-alert-days" value="7" min="1" style="width:50px; padding:4px;">
+          <button id="btn-save-settings" class="btn small secondary">Save</button>
+        </div>
+      </div>
+      
+      <div class="action-bar">
+        <button id="btn-export-history" class="btn small secondary">Export CSV</button>
+        <button id="btn-clear-history" class="btn small danger">Clear All</button>
+      </div>
+      
+      <div class="table-container">
+        <table id="history-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Dealer</th><th>Product</th><th>Qty</th><th>Amount</th><th>Date</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="inventory"><div class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h2 style="margin-bottom:4px">Inventory Availability Sheet</h2><div id="inv82-source" style="font-size:.8rem;color:var(--text-secondary)">Loading...</div></div><div class="inv82-toolbar"><span id="inv82-state" class="inv82-state">Loading...</span><button type="button" id="inv82-refresh" class="btn small">↻ Refresh Inventory</button><label class="btn small inv82-upload">📂 Load Excel Manually<input id="inv82-file" type="file" accept=".xlsx,.xls,.xlsm,.xlsb,.csv"></label><button type="button" id="inv82-pdf" class="btn small danger">📄 Full Inventory PDF</button></div></div>
+  <div class="inv82-note"><strong>Important Inventory Notes</strong><ol><li>Inventory Availability may be different at the time of order than it was at the time of quotation. To help secure inventory, we recommend placing your order as soon as possible after receiving the quotation.</li><li><b>Subject to Change:</b> This list is subject to change due to the side impacts of global supply chain problems. Inventory availability may change depending on supply chain conditions.</li></ol></div>
+  <div class="inv82-toolbar" style="margin-bottom:9px"><input id="inv82-search" type="text" placeholder="Search inventory..." style="min-width:280px"><span id="inv82-count" style="font-size:.8rem;color:var(--text-secondary)"></span></div><div class="inv82-wrap"><table class="inv82-table"><thead id="inv82-head"></thead><tbody id="inv82-body"></tbody></table></div></div></div>
+
+<div class="tab" id="changelog">
+    <div class="card">
+      <h2>Memo Quote Sheet changing contents</h2>
+      <div class="table-container">
+        <table id="changelog-table">
+          <thead>
+            <tr>
+              <th style="width:120px;">Date</th>
+              <th style="width:100px;">Version</th>
+              <th>Changing Point</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2026-08-05</td>
+              <td>v0.89.21</td>
+              <td>Kept DX350G and changed the quotation List Price detail format so Description plus Description2 maps to Base Machine List Price, Description3 maps to List Price Description3, Description4 maps to List Price Description4, and Description5 maps to List Price Description5. The same detail format remains visible for Dealer and Partner Demo in Quote Editor and Preview/PDF. DX350G uses DX350 Extra Warranty conditions and rates.</td>
+            </tr>
+            <tr>
+              <td>2026-08-04</td>
+              <td>v0.89.13</td>
+              <td>Restricted Shell Kit models ending in DF, DCF, TF, TCF, TBF, or TBCF, including model names ending in -1, from being displayed or selected when Partner Demo pricing is selected. If a restricted model is already selected when the price type is changed to Partner Demo, the tool automatically switches to the first available model. The restricted models become available again when the price type is changed from Partner Demo.</td>
+            </tr>
+            <tr>
+              <td>2026-07-28</td>
+              <td>v0.89.12</td>
+              <td>Restored the product Description/features list below the machine image in desktop Print/PDF output. The smartphone Preview remains image-only, while desktop Print/PDF explicitly displays description bullet points and keeps the smartphone-like two-column layout and 0.5-inch Letter margins.</td>
+            </tr>
+            <tr>
+              <td>2026-07-28</td>
+              <td>v0.89.11</td>
+              <td>Updated desktop PDF/print output to use a layout similar to the smartphone Preview.</td>
+            </tr>
+            <tr>
+              <td>2026-07-28</td>
+              <td>v0.89</td>
+              <td>Moved PO Number, Terms Request, and Dealer Notes into the quotation body directly below Extra Warranty. Moved the Partner Demo logo into the Prepared For section. Reworked the desktop print/PDF layout with compact Letter-size spacing, tables, image sizing, and page-break controls so standard quotations fit on one page.</td>
+            </tr>
+            <tr>
+              <td>2026-07-28</td>
+              <td>v0.88.1</td>
+              <td>Corrected the smartphone quotation preview so all pricing information fits within one screen width. Removed the inherited 720px minimum table width from quote preview tables; kept Item and Amount together; kept Option, List, and Net together; constrained the product-photo column; prevented horizontal overflow; and moved Print / Close controls into the normal preview flow so they do not cover quotation content.</td>
+            </tr>
+            <tr>
+              <td>2026-07-28</td>
+              <td>v0.88</td>
+              <td>Made the Quote Preview screenshot-friendly on smartphones: the 2-column preview now stacks into a single readable column that fits the phone width (no side scrolling), and all fonts, the machine photo, price table, and Final Dealer Base Machine Cost box were enlarged for easy on-screen reading. Desktop and print layout are unchanged.</td>
+            </tr>
+            <tr>
+              <td>2026-07-17</td>
+              <td>v0.84</td>
+              <td>Changed the automatic Inventory Excel source to <strong>/Inventory/Heavy Equipment Availability.xlsm</strong> and added support for macro-enabled Excel files.</td>
+            </tr>
+            <tr>
+              <td>2026-07-17</td>
+              <td>v0.83</td>
+              <td>Kept DX880 and DX990 series quotation model names without the -1 suffix while allowing Inventory Availability to reference their future -1 successor models.</td>
+            </tr>
+            <tr>
+              <td>2026-07-17</td>
+              <td>v0.82</td>
+              <td>Added model-transition inventory logic. CX500D legacy inventory is referenced under CX500D-1 quotations, with successor inventory support prepared for DX880 and DX990 series.</td>
+            </tr>
+            <tr>
+              <td>2026-07-17</td>
+              <td>v0.81</td>
+              <td>Added automatic WordPress Inventory Excel loading, an Inventory Availability tab, refresh and manual-load controls, full Inventory PDF export, and prominent inventory notes.</td>
+            </tr>
+            <tr>
+              <td>2026-07-16</td>
+              <td>v0.80</td>
+              <td>Integrated Inventory Availability into the Quote Editor, including selected-model stock status, current quantity, monthly availability schedule, and Excel import.</td>
+            </tr>
+            <tr>
+              <td>2026-07-14</td>
+              <td>v0.79</td>
+              <td>Updated Extra Warranty pricing and expanded warranty-hour selections through 10,000 hours.</td>
+            </tr>
+            <tr>
+              <td>2026-07-10</td>
+              <td>v0.78</td>
+              <td>Updated product photos for CX500D-1, CX500T-1, CX500TC-1, CX500TCF-1, and CX500TBCF-1.<br>Dealer Discount remains manually selectable after Dealer selection.<br>Updated TX160 Cocoa Mat Kit price to $1,361.</td>
+            </tr>
+            <tr>
+              <td>2026-05-29</td>
+              <td>v0.77</td>
+              <td>1. Added Suspension Seat for BX240 series.<br>2. Added Non locking DEF Cap.<br>3. Added TX160 option lines, Cocoa Mat pricing TBD.<br>4. Increased price 9% across the board.<br>5. Standardized Telematics AX100-D/T and removed the telematics option from AX100-D/T.<br>6. Added Government discount logic, Quote Name, Dealer Salesman, and PDF output improvements.<br>7. Added separate Dealer vs Partner Demo Price Type selector and improved PDF filename handling using Quote Name.<br>8. Moved Dealer vs Partner Demo Price Type selector directly under Dealer selection.<br>9. When Partner Demo Price Type is selected, Dealer selection is disabled and omitted from quote output.<br>10. Disabled Extra Warranty selection for LE models except CR271.<br>11. For Partner Demo quotes, Quote Name/PDF filename now starts with Partner Demo Customer and Dealer Discount is forced to Standard.<br>12. Changed Partner Demo PDF/print mark to official ARA IRC Logo image.<br>13. Removed Blank from Partner Demo quote output and set Expiry Date automatically to 30 days after Quote Date.<br>14. Shows Extra Warranty is not available for this model for LE models except CR271, and shows Partner Demo logo in Editor when Partner Demo is selected.<br>15. Removed broken/empty dealer-logo image from Partner Demo quote output.<br>16. For Partner Demo quote output, hides List Price/Dealer Net/Dealer Discount rows and changes Final Dealer Base Machine Cost label to Base Machine Cost.<br>17. Shows manually entered PO Number, Terms Request, and Dealer Notes in Quotation output without changing the existing quotation layout.<br>18. Directly fixed Dealer discountLevel pricing and Partner Demo output.<br>19. When Dealer is Blank, Customer Logo and the Blank text are hidden in Editor, Quote output, and Quote History.</td>
+            </tr>
+            <tr>
+              <td>2026-01-30</td>
+              <td>v0.75</td>
+              <td>1. Changed the option name of Asterion Telematics Kit for AX100-D/T and removed “No. ECM. Engine Codes not available”.<br>2. Fixed images of BX240DC, BX240T, BX240TCF, CX500DC, CX500DCF, CX500TB, and CX500TBC.<br>3. Added the Changelog tab.</td>
+            </tr>
+            <tr>
+              <td>2025-12-11</td>
+              <td>v0.74</td>
+              <td>Initial Release / Layout Adjustments.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+  // ============================================================
+  // Modal Utilities
+  // ============================================================
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalMessage = document.getElementById('modal-message');
+  const modalOk = document.getElementById('modal-ok');
+  const modalCancel = document.getElementById('modal-cancel');
+  let onConfirmAction = null;
+
+  function showMessage(msg) {
+    modalMessage.textContent = msg;
+    modalOk.style.display = 'inline-block';
+    modalCancel.style.display = 'none';
+    modalOverlay.style.display = 'flex';
+    onConfirmAction = null;
+    modalOk.onclick = () => { modalOverlay.style.display = 'none'; };
+  }
+
+  function showConfirm(msg, callback) {
+    modalMessage.textContent = msg;
+    modalOk.style.display = 'inline-block';
+    modalCancel.style.display = 'inline-block';
+    modalOverlay.style.display = 'flex';
+    onConfirmAction = callback;
+    modalOk.onclick = () => {
+      if (onConfirmAction) onConfirmAction();
+      modalOverlay.style.display = 'none';
+      onConfirmAction = null;
+    };
+    modalCancel.onclick = () => {
+      modalOverlay.style.display = 'none';
+      onConfirmAction = null;
+    };
+  }
+
+    // ============================================================
+  // 1) Initial Data
+  // ============================================================
+const INITIAL_DEALERS = [
+    {id:"Dealer1",name:"Blue Ridge Equipment Demo",contact:"Alex Sample",phone:"(555) 010-0000",email:"demo@example.invalid",term:"Net 30",discountLevel:"Standard",logoUrl:""},
+    {id:"Dealer2",name:"Northstar Machinery Demo",contact:"Jordan Sample",phone:"(555) 010-0000",email:"demo@example.invalid",term:"Net 30",discountLevel:"Volume 1",logoUrl:""},
+    {id:"Dealer3",name:"Pioneer Rental Demo",contact:"Taylor Sample",phone:"(555) 010-0000",email:"demo@example.invalid",term:"Prepaid",discountLevel:"Volume 2",logoUrl:""}
+  ];
+  const INITIAL_PRODUCTS = [
+    {id:"Product1",model:"AX100-D",list:987654,dealerNet:654321,stdWarranty:"Demo warranty only",photoUrl:"",type:"DEMO",desc1:"Asterion AX100-D Concept Machine",desc2:"Fictional portfolio demonstration model",desc3:"Not a commercial offer",desc4:"",desc5:""},
+    {id:"Product2",model:"BX240-C",list:1234567,dealerNet:765432,stdWarranty:"Demo warranty only",photoUrl:"",type:"DEMO",desc1:"Asterion BX240-C Concept Machine",desc2:"Fictional portfolio demonstration model",desc3:"Not a commercial offer",desc4:"",desc5:""},
+    {id:"Product3",model:"CX500-T",list:2345678,dealerNet:1357913,stdWarranty:"Demo warranty only",photoUrl:"",type:"DEMO",desc1:"Asterion CX500-T Concept Machine",desc2:"Fictional portfolio demonstration model",desc3:"Not a commercial offer",desc4:"",desc5:""}
+  ];
+  const INITIAL_OPTIONS = [
+    {id:"Option1",model:"AX100-D",name:"Demo LED Visibility Package",list:45678,dealerNet:23456},
+    {id:"Option2",model:"AX100-D",name:"Demo Comfort Package",list:67890,dealerNet:34567},
+    {id:"Option3",model:"BX240-C",name:"Demo Weather Package",list:98765,dealerNet:54321},
+    {id:"Option4",model:"CX500-T",name:"Demo Telematics Package",list:123456,dealerNet:65432}
+  ];
+  const INITIAL_EXTRA_WARRANTIES = [
+    {id:"Warranty1",model:"AX100-D",coverageType:"Demo Extended",months:48,hours:2000,cost:24680},
+    {id:"Warranty2",model:"BX240-C",coverageType:"Demo Extended",months:60,hours:3000,cost:35791},
+    {id:"Warranty3",model:"CX500-T",coverageType:"Demo Extended",months:72,hours:4000,cost:46802}
+  ];
+  const salesReps = [
+    {name:"Alex Sample",phone:"(555) 010-0000",email:"demo@example.invalid"},
+    {name:"Jordan Sample",phone:"(555) 010-0000",email:"demo@example.invalid"}
+  ];
+
+
+
+  // ============================================================
+  // 2) Local Storage Management
+  // ============================================================
+  const STORAGE_KEY = "portfolio_quote_demo_original_layout";
+
+  let dealers = [];
+  let products = [];
+  let options = [];
+  let extraWarranties = [];
+  let historyItems = [];
+  let appSettings = { alertDays: 7 };
+
+  function loadAll() {
+    dealers = INITIAL_DEALERS.map(item => ({...item}));
+    products = INITIAL_PRODUCTS.map(item => ({...item}));
+    options = INITIAL_OPTIONS.map(item => ({...item}));
+    extraWarranties = INITIAL_EXTRA_WARRANTIES.map(item => ({...item}));
+
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        historyItems = parsed.history || [];
+        if (parsed.settings) appSettings = parsed.settings;
+      } catch (e) {
+        console.error("Storage parse error", e);
+        historyItems = [];
+      }
+    } else {
+      historyItems = [];
+    }
+
+    products.forEach(p => {
+      if (p.dealerNet == null) {
+        const base = parseFloat(p.list) || 0;
+        p.dealerNet = Math.round(base * 0.75);
+      }
+      for(let i=1;i<=5;i++) if(!p['desc'+i]) p['desc'+i] = "";
+    });
+
+    saveAll();
+  }
+
+  function saveAll() {
+    const dataToSave = {
+      history: historyItems,
+      settings: appSettings
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+  }
+
+  function fmtMoney(n) {
+    if (isNaN(n)) n = 0;
+    return "$" + Math.round(n).toLocaleString("en-US");
+  }
+  function todayISO() {
+    return new Date().toISOString().slice(0,10);
+  }
+  function addDays(dateStr, days) {
+    const d = new Date(dateStr);
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0,10);
+  }
+  
+  function formatDate(isoStr) {
+    if (!isoStr) return "";
+    const parts = isoStr.split('-');
+    if (parts.length !== 3) return isoStr;
+    const y = parts[0];
+    const m = parseInt(parts[1], 10);
+    const d = parts[2];
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if (m < 1 || m > 12) return isoStr;
+    return `${months[m-1]}/${d}/${y}`;
+  }
+
+  // ============================================================
+  // CSV Utilities
+  // ============================================================
+  function exportCSV(filename, rows, headers) {
+    const esc = (v) => {
+      if (v == null) return "";
+      const s = String(v).replace(/"/g, '""');
+      if (s.search(/("|,|\n)/g) >= 0) return `"${s}"`;
+      return s;
+    };
+    const lines = [];
+    if (headers && headers.length) lines.push(headers.map(esc).join(","));
+    rows.forEach(r => lines.push(r.map(esc).join(",")));
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+    if (!lines.length) return [];
+    const rows = [];
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const cols = [];
+      let cur = "";
+      let inQ = false;
+      for (let j = 0; j < line.length; j++) {
+        const c = line[j];
+        if (inQ) {
+          if (c === '"' && line[j+1] === '"') { cur += '"'; j++; }
+          else if (c === '"') inQ = false;
+          else cur += c;
+        } else {
+          if (c === '"') inQ = true;
+          else if (c === ",") { cols.push(cur); cur = ""; }
+          else cur += c;
+        }
+      }
+      cols.push(cur);
+      rows.push(cols);
+    }
+    return rows;
+  }
+
+  // ============================================================
+  // Helper: Discount Logic
+  // ============================================================
+  function getDiscountRates() {
+    const discSelect = document.getElementById("dealer-discount-select");
+    let levelName = discSelect.value;
+    
+    // Safety check for LE products
+    const productId = document.getElementById("editor-product").value;
+    const p = products.find(pp => pp.id === productId);
+    if (p && p.type === "LE") levelName = "Standard";
+
+    let levelRate = 0;
+    const norm = levelName.toLowerCase().replace(/\s+/g,"");
+    if (norm === "volume1") levelRate = 0.015;
+    else if (norm === "volume2") levelRate = 0.025;
+    
+    return { levelRate };
+  }
+
+  // Returns true only for the specifically approved Partner Demo 80% option groups.
+  // Cab Light and other options are intentionally excluded.
+  function isARAIRC80PercentOption(optionRecord) {
+    if (!optionRecord || document.getElementById("quote-price-type")?.value !== "Partner Demo") return false;
+
+    const productId = document.getElementById("editor-product")?.value;
+    const product = products.find(pp => String(pp.id) === String(productId));
+    const model = String(product?.model || optionRecord.model || "").toUpperCase().replace(/\s+/g, "");
+    const optionName = String(optionRecord.name || "").trim().toLowerCase();
+
+    const isCab = optionName === "cab" || optionName.includes("enclosed rops cab");
+    const isBlade = optionName.includes("blade");
+    const isGuardman = optionName.includes("guardman");
+
+    const cabModel = /^(BX240[DT]|CX500[DT]|DX880|DX990)/.test(model);
+    const bladeModel = /^(AX100-T|BX240T|CX500T)/.test(model);
+    const guardmanModel = /^(TX350|TX500|DX350|DX500|DX880|DX990|GX750|R2H-4)/.test(model);
+
+    return (isCab && cabModel) || (isBlade && bladeModel) || (isGuardman && guardmanModel);
+  }
+
+  // Calculates option net based on price type and discount rules.
+  // Partner Demo: approved Cab/Blade/Guardman = 80% of List; every other option = 75% of List.
+  // Dealer: preserve the Options Master Dealer Net.
+  // Then apply Volume and Additional discounts in sequence.
+  function calculateOptionNet(baseNet, optionRecord = null) {
+    const { levelRate } = getDiscountRates();
+    const isARAIRC = document.getElementById("quote-price-type")?.value === "Partner Demo";
+
+    let val;
+    if (isARAIRC && optionRecord) {
+      const araRate = isARAIRC80PercentOption(optionRecord) ? 0.80 : 0.75;
+      val = Number(optionRecord.list || 0) * araRate;
+    } else {
+      val = Number(baseNet || 0);
+    }
+
+    // 1. Volume Discount
+    val = val - (val * levelRate);
+
+    // 2. Additional Discount
+    const addType = document.getElementById("addl-discount-type").value;
+    const addVal = parseFloat(document.getElementById("addl-discount-value").value) || 0;
+
+    if (addVal > 0) {
+      if (addType === "percent") {
+        // Percentage is direct
+        val = val - (val * (addVal / 100));
+      } else if (addType === "amount") {
+        // Amount logic: implied percentage relative to machine Net after volume disc
+        // Need to calculate current Machine Net to get the ratio
+        const productId = document.getElementById("editor-product").value;
+        const p = products.find(pp => pp.id === productId);
+        if (p) {
+          let machineDNet = p.dealerNet != null ? p.dealerNet : Math.round(p.list * 0.75);
+          // Apply Vol Discount to machine base
+          let machineNetAfterVol = machineDNet - (machineDNet * levelRate);
+          
+          if (machineNetAfterVol > 0) {
+             const effectiveRate = addVal / machineNetAfterVol;
+             // Cap at 100% to prevent issues
+             const safeRate = Math.min(effectiveRate, 1);
+             val = val - (val * safeRate);
+          }
+        }
+      }
+    }
+
+    return Math.round(val);
+  }
+
+  // ============================================================
+  // Rendering Logic
+  // ============================================================
+
+  function renderSalesSelect() {
+    const sel = document.getElementById("editor-sales");
+    sel.innerHTML = "";
+    salesReps.forEach(rep => {
+      const opt = document.createElement("option");
+      opt.value = rep.name;
+      opt.textContent = rep.name;
+      sel.appendChild(opt);
+    });
+    sel.value = salesReps[0].name;
+    updateFromContactLine();
+    sel.addEventListener("change", updateFromContactLine);
+  }
+  function updateFromContactLine() {
+    const sel = document.getElementById("editor-sales");
+    const rep = salesReps.find(r => r.name === sel.value);
+    const line = document.getElementById("from-contact-line");
+    if (rep) {
+      line.textContent = `Sales Rep: ${rep.name}  •  ${rep.phone}  •  ${rep.email}`;
+    }
+  }
+
+  function renderDealersMaster() {
+    const tbody = document.querySelector("#dealers-table tbody");
+    tbody.innerHTML = "";
+    dealers.forEach((d, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td contenteditable="true" data-field="name">${d.name}</td>
+        <td contenteditable="true" data-field="contact">${d.contact||""}</td>
+        <td contenteditable="true" data-field="phone">${d.phone||""}</td>
+        <td contenteditable="true" data-field="email">${d.email||""}</td>
+        <td contenteditable="true" data-field="term">${d.term||"Net 30"}</td>
+        <td contenteditable="true" data-field="discountLevel">${d.discountLevel||"Standard"}</td>
+        <td contenteditable="true" data-field="logoUrl" style="max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.logoUrl||""}</td>
+        <td><button class="btn small danger" data-idx="${idx}" data-act="delD">Del</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    attachTableEvents(tbody, dealers, renderDealersMaster, () => { renderDealerSelect(); updatePricePanel(); });
+  }
+
+  function renderDealerSelect() {
+    const sel = document.getElementById("editor-dealer");
+    sel.innerHTML = "";
+    dealers.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.textContent = d.name;
+      sel.appendChild(opt);
+    });
+    if (dealers[0]) sel.value = dealers[0].id;
+  }
+
+  function renderProductsMaster() {
+    const tbody = document.querySelector("#products-table tbody");
+    tbody.innerHTML = "";
+    products.forEach((p, idx) => {
+      const tr = document.createElement("tr");
+      const dNet = p.dealerNet != null ? p.dealerNet : Math.round((p.list||0)*0.75);
+      const descSum = [p.desc1, p.desc2].filter(Boolean).join(", ") + (p.desc3?"...":"");
+      tr.innerHTML = `
+        <td contenteditable="true" data-field="model">${p.model}</td>
+        <td contenteditable="true" data-field="list">${p.list}</td>
+        <td contenteditable="true" data-field="dealerNet">${dNet}</td>
+        <td contenteditable="true" data-field="stdWarranty">${p.stdWarranty}</td>
+        <td contenteditable="true" data-field="photoUrl" style="max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.photoUrl||""}</td>
+        <td contenteditable="true" data-field="type">${p.type}</td>
+        <td style="font-size:0.75rem; color:#666;">${descSum}</td>
+        <td><button class="btn small danger" data-idx="${idx}" data-act="delP">Del</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    attachTableEvents(tbody, products, renderProductsMaster, () => { renderProductSelect(); updatePricePanel(); });
+  }
+
+  function renderProductSelect() {
+    const sel = document.getElementById("editor-product");
+    sel.innerHTML = "";
+    products.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.model;
+      sel.appendChild(opt);
+    });
+    if (products[0]) sel.value = products[0].id;
+    updateProductDependentFields();
+  }
+
+  function renderOptionsMaster() {
+    const tbody = document.querySelector("#options-table tbody");
+    tbody.innerHTML = "";
+    options.forEach((o, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td contenteditable="true" data-field="model">${o.model}</td>
+        <td contenteditable="true" data-field="name">${o.name}</td>
+        <td contenteditable="true" data-field="list">${o.list}</td>
+        <td contenteditable="true" data-field="dealerNet">${o.dealerNet}</td>
+        <td><button class="btn small danger" data-idx="${idx}" data-act="delO">Del</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    attachTableEvents(tbody, options, renderOptionsMaster, updateOptionsDisplay);
+  }
+
+  function renderExtraWarrantyMaster() {
+    const tbody = document.querySelector("#ew-table tbody");
+    tbody.innerHTML = "";
+    extraWarranties.forEach((ew, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td contenteditable="true" data-field="model">${ew.model}</td>
+        <td contenteditable="true" data-field="coverageType">${ew.coverageType}</td>
+        <td contenteditable="true" data-field="months">${ew.months}</td>
+        <td contenteditable="true" data-field="hours">${ew.hours}</td>
+        <td contenteditable="true" data-field="cost">${ew.cost}</td>
+        <td><button class="btn small danger" data-idx="${idx}" data-act="delE">Del</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    attachTableEvents(tbody, extraWarranties, renderExtraWarrantyMaster, updateExtraWarrantyCost);
+  }
+
+  function attachTableEvents(tbody, dataArray, renderFn, callbackFn) {
+    tbody.querySelectorAll("td[contenteditable]").forEach(td => {
+      td.addEventListener("blur", (e) => {
+        const row = e.target.closest("tr");
+        const idx = Array.from(tbody.children).indexOf(row);
+        const field = e.target.dataset.field;
+        let val = e.target.textContent.trim();
+        if (["list","dealerNet","cost","months","hours"].includes(field)) {
+          val = parseFloat(val) || 0;
+        }
+        dataArray[idx][field] = val;
+        saveAll();
+        if (callbackFn) callbackFn();
+      });
+    });
+    tbody.querySelectorAll("button[data-act]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        showConfirm("Delete this item?", () => {
+          dataArray.splice(idx, 1);
+          saveAll();
+          renderFn();
+          if (callbackFn) callbackFn();
+        });
+      });
+    });
+  }
+
+  // ============================================================
+  // History Logic (Enhanced with Restore)
+  // ============================================================
+  function renderHistory() {
+    const tbody = document.querySelector("#history-table tbody");
+    tbody.innerHTML = "";
+    
+    const sorted = [...historyItems].reverse();
+
+    sorted.forEach((h, reverseIdx) => {
+      const originalIdx = historyItems.length - 1 - reverseIdx;
+      
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${historyItems.length - reverseIdx}</td>
+        <td>${h.dealerName || ""}</td>
+        <td>${h.productModel || ""}</td>
+        <td class="text-right">${h.qty || 1}</td>
+        <td class="text-right">${fmtMoney(h.amount || 0)}</td>
+        <td>${formatDate(h.quoteDate)}</td>
+        <td class="text-center">
+          <button class="btn small secondary" onclick="loadHistoryItem(${originalIdx})">📂 Load</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.loadHistoryItem = function(idx) {
+    const h = historyItems[idx];
+    if (!h) return;
+
+    const data = h.restoreData || {};
+
+    let dealerId = data.dealerId;
+    if (!dealerId) {
+      const found = dealers.find(d => d.name === h.dealerName);
+      if (found) dealerId = found.id;
+    }
+    if (dealerId) document.getElementById("editor-dealer").value = dealerId;
+
+    let productId = data.productId;
+    if (!productId) {
+      const found = products.find(p => p.model === h.productModel);
+      if (found) productId = found.id;
+    }
+    if (productId) {
+      document.getElementById("editor-product").value = productId;
+      updateProductDependentFields();
+    }
+
+    document.getElementById("editor-qty").value = data.qty || h.qty || 1;
+    if (data.salesRep) document.getElementById("editor-sales").value = data.salesRep;
+    if (data.quoteDate) document.getElementById("quote-date").value = data.quoteDate;
+    if (data.expiryDate) document.getElementById("expiry-date").value = data.expiryDate;
+    if (data.paymentTerm) document.getElementById("payment-term").value = data.paymentTerm;
+    
+    document.getElementById("addl-discount-type").value = data.addlDiscType || "none";
+    document.getElementById("addl-discount-value").value = data.addlDiscVal || 0;
+    
+    if (data.manualDiscLevel) {
+       document.getElementById("dealer-discount-select").value = data.manualDiscLevel;
+    }
+
+    document.getElementById("need-extra-warranty").value = data.warrantyNeed || "No";
+    document.getElementById("extra-coverage-type").value = data.warrantyType || "N/A";
+    document.getElementById("extra-months").value = data.warrantyMo || "N/A";
+    document.getElementById("extra-hours").value = data.warrantyHr || "N/A";
+    
+    if (data.notes) document.getElementById("quote-notes").value = data.notes;
+
+    updateFromContactLine();
+    updatePricePanel();
+    updateExtraWarrantyCost();
+
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelector('[data-tab="editor"]').classList.add("active");
+    document.getElementById("editor").classList.add("active");
+
+    showMessage("Quote loaded from history.");
+  };
+
+  // ============================================================
+  // Editor & Pricing Logic
+  // ============================================================
+  function updateProductDependentFields() {
+    const productId = document.getElementById("editor-product").value;
+    const p = products.find(pp => pp.id === productId);
+    const stdSel = document.getElementById("std-warranty");
+    const photo = document.getElementById("product-photo");
+    const descContainer = document.getElementById("product-features-container");
+    const descList = document.getElementById("product-features-list");
+    const discSelect = document.getElementById("dealer-discount-select");
+    
+    descList.innerHTML = "";
+    if (p) {
+      // Logic for CR271, PX600, PX800, HX670, RX65, RX75
+      const oneYearModels = ["CR271", "PX600", "PX800", "HX670", "RX65", "RX75" ];
+      if (oneYearModels.includes(p.model)) {
+        stdSel.value = "1/1000";
+      } else {
+        stdSel.value = (p.stdWarranty === "1/1000") ? "1/1000" : "3/3000";
+      }
+
+      photo.src = p.photoUrl || "";
+      photo.style.display = p.photoUrl ? 'block' : 'none';
+
+      let hasDesc = false;
+      for (let i = 1; i <= 5; i++) {
+        if (p['desc' + i]) {
+          const div = document.createElement("div");
+          div.innerHTML = `&bull; ${p['desc' + i]}`;
+          div.style.marginBottom = "4px";
+          descList.appendChild(div);
+          hasDesc = true;
+        }
+      }
+      descContainer.style.display = hasDesc ? "block" : "none";
+      
+      // Dealer Discount must remain manually selectable after a Dealer is selected.
+      // Do not lock this dropdown by product type; contract pricing logic handles its own locks.
+      discSelect.disabled = false;
+      discSelect.style.opacity = "";
+      discSelect.title = "";
+
+    } else {
+      photo.style.display = 'none';
+      descContainer.style.display = "none";
+      discSelect.disabled = false;
+    }
+    updatePricePanel();
+    updateOptionsDisplay();
+    updateExtraWarrantyCost();
+  }
+
+  function updateOptionsDisplay() {
+    const productId = document.getElementById("editor-product").value;
+    const p = products.find(pp => pp.id === productId);
+    const box = document.getElementById("options-display");
+    if (!p) {
+      box.textContent = "No product selected.";
+      return;
+    }
+    const opts = options.filter(o => o.model === p.model);
+    if (!opts.length) {
+      box.textContent = "No options linked to this product.";
+      return;
+    }
+    
+    // Render options with dynamic pricing
+    const lines = opts.map(o => {
+      const discountedNet = calculateOptionNet(o.dealerNet, o);
+      return `
+      <div style="display:grid; grid-template-columns: 1fr auto auto; gap:12px; font-size:0.9rem; padding:6px 0; border-bottom:1px dashed #eee; align-items:center;">
+        <span style="font-weight:500;">+ ${o.name}</span>
+        <span style="color:var(--text-secondary); font-size:0.85em;">List: ${fmtMoney(o.list)}</span>
+        <span style="color:var(--text-main); font-weight:600;">Net: ${fmtMoney(discountedNet)}</span>
+      </div>`;
+    });
+    box.innerHTML = lines.join("");
+  }
+
+  function updatePricePanel() {
+    const productId = document.getElementById("editor-product").value;
+    const p = products.find(pp => pp.id === productId);
+    const qty = parseInt(document.getElementById("editor-qty").value, 10) || 1;
+    
+    const elList = document.getElementById("list-price-display");
+    const elDNet = document.getElementById("dnet-display");
+    const elLevelAmt = document.getElementById("dealer-level-amount-display");
+    const elAddlAmt = document.getElementById("addl-discount-amount-display");
+    const elFinal = document.getElementById("final-base-cost-display");
+    const dealerSel = document.getElementById("editor-dealer");
+    const dealerLogoImg = document.getElementById("editor-dealer-logo");
+    const discSelect = document.getElementById("dealer-discount-select");
+    
+    // Demo Review Alert Logic
+    const drfAlert = document.getElementById("drf-alert-box");
+
+    const dealer = dealers.find(d => d.id === dealerSel.value);
+    const isBlankDealerLogoEditor = dealer && String(dealer.name || "").trim().toLowerCase() === "blank";
+    if (dealer && !isBlankDealerLogoEditor && dealer.logoUrl && String(dealer.logoUrl).trim() !== "0" && dealer.logoUrl.length > 5) {
+      dealerLogoImg.src = dealer.logoUrl;
+      dealerLogoImg.style.display = "block";
+    } else {
+      dealerLogoImg.removeAttribute("src");
+      dealerLogoImg.style.display = "none";
+    }
+
+    if (!p) {
+      elList.textContent = "$0"; elDNet.textContent = "$0"; elFinal.textContent = "$0";
+      const detailEditor = document.getElementById("list-price-detail-editor");
+      if (detailEditor) detailEditor.innerHTML = "";
+      return;
+    }
+
+    const listSingle = p.list || 0;
+    const dnetSingle = (p.dealerNet != null ? p.dealerNet : Math.round(listSingle * 0.75));
+
+    // v0.89.17: render Description and corresponding List Price lines in the editor.
+    const detailEditor = document.getElementById("list-price-detail-editor");
+    const componentPrice = MODEL_LIST_PRICE_COMPONENTS[p.model] || {};
+    if (detailEditor) {
+      const esc = value => String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+      const detailRows = [
+        { label: [p.desc1, p.desc2].filter(Boolean).join(" - "), price: Number(componentPrice.base ?? p.list ?? 0), base: true },
+        { label: p.desc3 || "", price: Number(componentPrice.p3 ?? 0) },
+        { label: p.desc4 || "", price: Number(componentPrice.p4 ?? 0) },
+        { label: p.desc5 || "", price: Number(componentPrice.p5 ?? 0) }
+      ];
+      detailEditor.innerHTML = detailRows
+        .filter(row => row.base || String(row.label).trim() !== "")
+        .map(row => `<div class="price-row"><span class="price-label">${esc(row.label)}</span><span class="list-line-amount">${row.price > 0 ? fmtMoney(row.price * qty) : "Included"}</span></div>`)
+        .join("");
+      detailEditor.style.display = "block";
+    }
+
+    elList.textContent = fmtMoney(listSingle * qty);
+    elDNet.textContent = fmtMoney(dnetSingle * qty);
+
+    let levelName = discSelect.value;
+    let levelRate = 0;
+    
+    if (p.type === "LE") {
+       levelName = "Standard";
+       if(discSelect.value !== "Standard") discSelect.value = "Standard";
+    }
+
+    const norm = levelName.toLowerCase().replace(/\s+/g,"");
+    if (norm === "volume1") levelRate = 0.015;
+    else if (norm === "volume2") levelRate = 0.025;
+    
+    const levelDiscTotal = (dnetSingle * levelRate) * qty;
+    elLevelAmt.textContent = levelDiscTotal > 0 ? "-" + fmtMoney(levelDiscTotal) : "$0";
+
+    const baseNet = (dnetSingle * qty) - levelDiscTotal;
+
+    const addType = document.getElementById("addl-discount-type").value;
+    const addVal = parseFloat(document.getElementById("addl-discount-value").value) || 0;
+    let addDiscTotal = 0;
+    
+    if (addType === "percent") {
+      addDiscTotal = baseNet * (addVal / 100);
+    } else if (addType === "amount") {
+      addDiscTotal = addVal * qty;
+    }
+    elAddlAmt.textContent = addDiscTotal > 0 ? "-" + fmtMoney(addDiscTotal) : "$0";
+
+    // Show/Hide Demo Review Alert
+    if (addDiscTotal > 0) {
+      drfAlert.classList.add("active");
+    } else {
+      drfAlert.classList.remove("active");
+    }
+
+    const finalTotal = baseNet - addDiscTotal;
+    elFinal.textContent = fmtMoney(finalTotal);
+    
+    // Update options too when discount changes
+    updateOptionsDisplay();
+  }
+
+  function updateExtraWarrantyCost() {
+    const need = document.getElementById("need-extra-warranty").value;
+    const coverage = document.getElementById("extra-coverage-type").value;
+    const months = parseFloat(document.getElementById("extra-months").value) || 0;
+    const hours = parseFloat(document.getElementById("extra-hours").value) || 0;
+    const productId = document.getElementById("editor-product").value;
+    const p = products.find(pp => pp.id === productId);
+    
+    const elCost = document.getElementById("extra-warranty-cost-display");
+    const elNote = document.getElementById("extra-warranty-note");
+
+    if (need === "No") {
+      elCost.textContent = "$0";
+      elNote.textContent = "Not selected";
+      return;
+    }
+    if (!p) {
+       elCost.textContent = "$0"; elNote.textContent = "Select product"; return;
+    }
+
+    // DX350G uses exactly the same Extra Warranty conditions and rates as DX350.
+    const warrantyRateModel = p.model === "DX350G" ? "DX350" : p.model;
+    const match = extraWarranties.find(ew => 
+      ew.model === warrantyRateModel && ew.coverageType === coverage && 
+      Number(ew.months) === months && Number(ew.hours) === hours
+    );
+
+    if (match) {
+      elCost.textContent = fmtMoney(match.cost);
+      elNote.textContent = "Rate applied";
+    } else {
+      elCost.textContent = "$0";
+      elNote.textContent = "Rate not found";
+    }
+  }
+
+  // ============================================================
+  // Fast startup: render large administration tables only on demand
+  // ============================================================
+  const renderedAdminTabs = new Set();
+  function renderTabOnDemand(tabId) {
+    if (renderedAdminTabs.has(tabId)) return;
+    if (tabId === "dealers") renderDealersMaster();
+    else if (tabId === "products") renderProductsMaster();
+    else if (tabId === "options") renderOptionsMaster();
+    else if (tabId === "extraWarrantyMaster") renderExtraWarrantyMaster();
+    else if (tabId === "history") renderHistory();
+    renderedAdminTabs.add(tabId);
+  }
+
+  // ============================================================
+  // Initialization & Event Listeners
+  // ============================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    loadAll();
+
+    // Tab Navigation
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+        // Defer large table construction until the selected tab is actually opened.
+        requestAnimationFrame(() => renderTabOnDemand(btn.dataset.tab));
+      });
+    });
+
+    // Dates
+    const qDate = document.getElementById("quote-date");
+    const eDate = document.getElementById("expiry-date");
+    qDate.value = todayISO();
+    eDate.value = addDays(todayISO(), 30);
+    qDate.addEventListener("change", () => { eDate.value = addDays(qDate.value, 30); });
+
+    // Render Initial Controls
+    // Only render controls required by the Quote Editor during startup.
+    renderSalesSelect();
+    renderDealerSelect();
+    renderProductSelect();
+    // Dealers, Products, Options, Warranty and History tables are rendered lazily.
+    requestAnimationFrame(() => document.body.classList.add("quote-tool-ready"));
+
+    // Editor Change Events
+    document.getElementById("editor-product").addEventListener("change", updateProductDependentFields);
+    document.getElementById("editor-qty").addEventListener("input", () => { updatePricePanel(); updateExtraWarrantyCost(); });
+    
+    // DEALER CHANGE: Sync Discount Level Automatically
+    document.getElementById("editor-dealer").addEventListener("change", () => {
+       const dealerId = document.getElementById("editor-dealer").value;
+       const dealer = dealers.find(d => d.id === dealerId);
+       if(dealer) {
+          // Normalize string
+          let level = dealer.discountLevel || "Standard";
+          if(level.toLowerCase().includes("volume 1")) level = "Volume 1";
+          if(level.toLowerCase().includes("volume 2")) level = "Volume 2";
+          
+          const discSelect = document.getElementById("dealer-discount-select");
+          if(!discSelect.disabled) {
+             discSelect.value = level;
+          }
+       }
+       updatePricePanel();
+    });
+
+    // MANUAL DISCOUNT CHANGE
+    document.getElementById("dealer-discount-select").addEventListener("change", updatePricePanel);
+
+    document.getElementById("addl-discount-type").addEventListener("change", updatePricePanel);
+    document.getElementById("addl-discount-value").addEventListener("input", updatePricePanel);
+    
+    document.getElementById("payment-term").addEventListener("change", (e) => {
+      const w = document.getElementById("payment-warning");
+      w.style.display = (e.target.value !== "Net 30" && e.target.value !== "6M Floor") ? "block" : "none";
+    });
+
+    // Extra Warranty Logic
+    document.getElementById("need-extra-warranty").addEventListener("change", (e) => {
+      const isNo = e.target.value === "No";
+      if (isNo) {
+        document.getElementById("extra-coverage-type").value = "N/A";
+        document.getElementById("extra-months").value = "N/A";
+        document.getElementById("extra-hours").value = "N/A";
+      }
+      updateExtraWarrantyCost();
+    });
+    ["extra-coverage-type", "extra-months", "extra-hours"].forEach(id => {
+      document.getElementById(id).addEventListener("change", updateExtraWarrantyCost);
+    });
+
+    // History Settings Save
+    document.getElementById("btn-save-settings").addEventListener("click", () => {
+      const val = parseInt(document.getElementById("history-alert-days").value) || 7;
+      appSettings.alertDays = val;
+      saveAll();
+      renderHistory();
+      showMessage(`Saved. Alerts: ${val} days before expiry.`);
+    });
+
+    // Save Quote to History (ENHANCED)
+    document.getElementById("btn-save-history").addEventListener("click", () => {
+      const dealer = dealers.find(d => d.id === document.getElementById("editor-dealer").value);
+      const product = products.find(p => p.id === document.getElementById("editor-product").value);
+      const qty = parseInt(document.getElementById("editor-qty").value)||1;
+      const amtStr = document.getElementById("final-base-cost-display").textContent.replace(/[^0-9.]/g,"");
+      
+      const restoreData = {
+        dealerId: dealer ? dealer.id : "",
+        productId: product ? product.id : "",
+        salesRep: document.getElementById("editor-sales").value,
+        qty: qty,
+        quoteDate: document.getElementById("quote-date").value,
+        expiryDate: document.getElementById("expiry-date").value,
+        paymentTerm: document.getElementById("payment-term").value,
+        addlDiscType: document.getElementById("addl-discount-type").value,
+        addlDiscVal: document.getElementById("addl-discount-value").value,
+        manualDiscLevel: document.getElementById("dealer-discount-select").value,
+        warrantyNeed: document.getElementById("need-extra-warranty").value,
+        warrantyType: document.getElementById("extra-coverage-type").value,
+        warrantyMo: document.getElementById("extra-months").value,
+        warrantyHr: document.getElementById("extra-hours").value,
+        notes: document.getElementById("quote-notes").value
+      };
+
+      historyItems.push({
+        dealerName: dealer && String(dealer.name || "").trim().toLowerCase() !== "blank" ? dealer.name : "",
+        productModel: product ? product.model : "Unknown",
+        qty,
+        amount: parseFloat(amtStr)||0,
+        quoteDate: document.getElementById("quote-date").value,
+        expiryDate: document.getElementById("expiry-date").value,
+        restoreData: restoreData
+      });
+      saveAll();
+      renderHistory();
+      showMessage("Quote saved to History.");
+    });
+
+    // Clear History
+    document.getElementById("btn-clear-history").addEventListener("click", () => {
+      showConfirm("Are you sure you want to clear all history?", () => {
+        historyItems = [];
+        saveAll();
+        renderHistory();
+      });
+    });
+
+    // Add Item Buttons
+    document.getElementById("btn-add-dealer").onclick = () => { dealers.push({ id:"D"+Date.now(), name:"New Dealer", term:"Net 30", discountLevel:"Standard" }); saveAll(); renderDealersMaster(); renderDealerSelect(); };
+    document.getElementById("btn-add-product").onclick = () => { products.push({ id:"P"+Date.now(), model:"NEW-MODEL", list:0, dealerNet:0, stdWarranty:"3/3000", type:"HE" }); saveAll(); renderProductsMaster(); renderProductSelect(); };
+    document.getElementById("btn-add-option").onclick = () => { options.push({ id:"O"+Date.now(), model: products[0]?.model||"", name:"Option", list:0, dealerNet:0 }); saveAll(); renderOptionsMaster(); };
+    document.getElementById("btn-add-ew").onclick = () => { extraWarranties.push({ id:"E"+Date.now(), model: products[0]?.model||"", coverageType:"Power Train", months:24, hours:2000, cost:0 }); saveAll(); renderExtraWarrantyMaster(); };
+
+    // =========================================
+    // CSV EXPORT / IMPORT LOGIC
+    // =========================================
+    document.getElementById("btn-template-dealers").onclick = () => exportCSV("dealers_template.csv", [], ["id","name","contact","phone","email","term","discountLevel","logoUrl"]);
+    document.getElementById("btn-export-dealers").onclick = () => {
+      const rows = dealers.map(d => [d.id, d.name, d.contact, d.phone, d.email, d.term, d.discountLevel, d.logoUrl]);
+      exportCSV("dealers.csv", rows, ["id","name","contact","phone","email","term","discountLevel","logoUrl"]);
+    };
+    document.getElementById("import-dealers").onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rows = parseCSV(reader.result);
+        if(!rows.length) return;
+        const hRaw = rows[0].map(h=>h.trim().toLowerCase());
+        const dataRows = rows.slice(1);
+        const val = (r,n) => { const i = hRaw.indexOf(n); return i>=0 ? r[i] : ""; };
+        const newD = [];
+        dataRows.forEach(r => {
+          if(!val(r,"name")) return;
+          newD.push({
+            id: val(r,"id") || ("D"+Date.now()+Math.random()),
+            name: val(r,"name"),
+            contact: val(r,"contact"),
+            phone: val(r,"phone"),
+            email: val(r,"email"),
+            term: val(r,"term")||"Net 30",
+            discountLevel: val(r,"discountlevel")||"Standard",
+            logoUrl: val(r,"logourl")
+          });
+        });
+        dealers = newD; saveAll(); renderDealersMaster(); renderDealerSelect(); updatePricePanel();
+      };
+      reader.readAsText(file); e.target.value="";
+    };
+
+    document.getElementById("btn-template-products").onclick = () => exportCSV("products_template.csv", [], ["id","model","list","dealerNet","stdWarranty","photoUrl","type","desc1","desc2","desc3","desc4","desc5"]);
+    document.getElementById("btn-export-products").onclick = () => {
+      const rows = products.map(p => [p.id, p.model, p.list, p.dealerNet, p.stdWarranty, p.photoUrl, p.type, p.desc1, p.desc2, p.desc3, p.desc4, p.desc5]);
+      exportCSV("products.csv", rows, ["id","model","list","dealerNet","stdWarranty","photoUrl","type","desc1","desc2","desc3","desc4","desc5"]);
+    };
+    document.getElementById("import-products").onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rows = parseCSV(reader.result);
+        if(!rows.length) return;
+        const hRaw = rows[0].map(h=>h.trim().toLowerCase());
+        const dataRows = rows.slice(1);
+        const val = (r,n) => { const i = hRaw.indexOf(n); return i>=0 ? r[i] : ""; };
+        const newP = [];
+        dataRows.forEach(r => {
+          if(!val(r,"model")) return;
+          const list = parseFloat(val(r,"list"))||0;
+          let dNet = val(r,"dealernet");
+          dNet = dNet!=="" ? (parseFloat(dNet)||0) : Math.round(list*0.75);
+          newP.push({
+            id: val(r,"id") || ("P"+Date.now()+Math.random()),
+            model: val(r,"model"),
+            list, dealerNet: dNet,
+            stdWarranty: val(r,"stdwarranty")||"3/3000",
+            photoUrl: val(r,"photourl"),
+            type: val(r,"type")||"HE",
+            desc1: val(r,"desc1"), desc2: val(r,"desc2"), desc3: val(r,"desc3"), desc4: val(r,"desc4"), desc5: val(r,"desc5")
+          });
+        });
+        products = newP; saveAll(); renderProductsMaster(); renderProductSelect(); updatePricePanel();
+      };
+      reader.readAsText(file); e.target.value="";
+    };
+
+    document.getElementById("btn-template-options").onclick = () => exportCSV("options_template.csv", [], ["id","model","name","list","dealerNet"]);
+    document.getElementById("btn-export-options").onclick = () => {
+      const rows = options.map(o => [o.id, o.model, o.name, o.list, o.dealerNet]);
+      exportCSV("options.csv", rows, ["id","model","name","list","dealerNet"]);
+    };
+    document.getElementById("import-options").onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rows = parseCSV(reader.result);
+        if(!rows.length) return;
+        const hRaw = rows[0].map(h=>h.trim().toLowerCase());
+        const dataRows = rows.slice(1);
+        const val = (r,n) => { const i = hRaw.indexOf(n); return i>=0 ? r[i] : ""; };
+        const newO = [];
+        dataRows.forEach(r => {
+          if(!val(r,"name")) return;
+          const list = parseFloat(val(r,"list"))||0;
+          let dNet = val(r,"dealernet");
+          dNet = dNet!=="" ? (parseFloat(dNet)||0) : Math.round(list*0.75);
+          newO.push({
+            id: val(r,"id") || ("O"+Date.now()+Math.random()),
+            model: val(r,"model"), name: val(r,"name"), list, dealerNet: dNet
+          });
+        });
+        options = newO; saveAll(); renderOptionsMaster(); updateOptionsDisplay();
+      };
+      reader.readAsText(file); e.target.value="";
+    };
+
+    document.getElementById("btn-template-ew").onclick = () => exportCSV("extra_warranty_template.csv", [], ["id","model","coverageType","months","hours","cost"]);
+    document.getElementById("btn-export-ew").onclick = () => {
+      const rows = extraWarranties.map(e => [e.id, e.model, e.coverageType, e.months, e.hours, e.cost]);
+      exportCSV("extra_warranty.csv", rows, ["id","model","coverageType","months","hours","cost"]);
+    };
+    document.getElementById("import-ew").onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rows = parseCSV(reader.result);
+        if(!rows.length) return;
+        const hRaw = rows[0].map(h=>h.trim().toLowerCase());
+        const dataRows = rows.slice(1);
+        const val = (r,n) => { const i = hRaw.indexOf(n); return i>=0 ? r[i] : ""; };
+        const newE = [];
+        dataRows.forEach(r => {
+          if(!val(r,"model")) return;
+          newE.push({
+            id: val(r,"id") || ("E"+Date.now()+Math.random()),
+            model: val(r,"model"),
+            coverageType: val(r,"coveragetype")||"Power Train",
+            months: parseFloat(val(r,"months"))||0,
+            hours: parseFloat(val(r,"hours"))||0,
+            cost: parseFloat(val(r,"cost"))||0
+          });
+        });
+        extraWarranties = newE; saveAll(); renderExtraWarrantyMaster(); updateExtraWarrantyCost();
+      };
+      reader.readAsText(file); e.target.value="";
+    };
+
+    document.getElementById("btn-export-history").onclick = () => {
+      const rows = historyItems.map((h, idx) => [
+        idx + 1, h.dealerName, h.productModel, h.qty, h.amount, h.quoteDate, h.expiryDate, h.dealStatus
+      ]);
+      exportCSV("history.csv", rows, ["#","Dealer","Product","Qty","Amount","Quoted","Expiry","Status"]);
+    };
+
+    // ============================================================
+    // PREMIUM PREVIEW / PRINT LOGIC (Mobile Friendly Overlay)
+    // ============================================================
+    window.closePreview = function() {
+      document.body.classList.remove('showing-preview');
+      document.getElementById("print-area").innerHTML = ""; 
+    };
+
+    document.getElementById("btn-preview").addEventListener("click", () => {
+      // Gather Data
+      const dealer = dealers.find(d => d.id === document.getElementById("editor-dealer").value);
+      const product = products.find(p => p.id === document.getElementById("editor-product").value);
+      const qty = document.getElementById("editor-qty").value;
+      const rep = salesReps.find(r => r.name === document.getElementById("editor-sales").value);
+      const qDate = formatDate(document.getElementById("quote-date").value);
+      const eDate = formatDate(document.getElementById("expiry-date").value);
+      const payTerm = document.getElementById("payment-term").value;
+      const listP = document.getElementById("list-price-display").textContent;
+      const dNetP = document.getElementById("dnet-display").textContent;
+      const levelAmt = document.getElementById("dealer-level-amount-display").textContent;
+      const addlAmt = document.getElementById("addl-discount-amount-display").textContent;
+      const finalCost = document.getElementById("final-base-cost-display").textContent;
+      const stdW = document.getElementById("std-warranty").value === "3/3000" ? "3 Years / 3,000 Hours" : "1 Year / 1,000 Hours";
+      const notes = document.getElementById("quote-notes").value;
+      
+      const sakaiLogo = "";
+      const isBlankDealerLogo = dealer && String(dealer.name || "").trim().toLowerCase() === "blank";
+      const hasValidDealerLogo = dealer && !isBlankDealerLogo && dealer.logoUrl && String(dealer.logoUrl).trim() !== "0" && String(dealer.logoUrl).trim().length > 5;
+      const dealerLogo = hasValidDealerLogo ? `<img src="${dealer.logoUrl}" style="max-height:35px; margin-bottom:4px;">` : "";
+      const dealerDisplayName = (dealer && !isBlankDealerLogo) ? dealer.name : "";
+      const prodPhoto = (product && product.photoUrl) ? `<img src="${product.photoUrl}" style="width:100%; border-radius:4px;">` : "";
+
+      let featuresHtml = "";
+      if (product) {
+        for(let i=1; i<=5; i++) {
+          if (product['desc'+i]) featuresHtml += `<li style="margin-bottom:1px;">${product['desc'+i]}</li>`;
+        }
+      }
+
+      // v0.89.17: use the same per-line Description/List Price data in Preview/PDF.
+      const quoteQty = Math.max(1, Number(qty) || 1);
+      let listPriceDetailRows = "";
+      if (product) {
+        const componentPrice = MODEL_LIST_PRICE_COMPONENTS[product.model] || {};
+        const detailRows = [
+          { label: [product.desc1, product.desc2].filter(Boolean).join(" - "), price: Number(componentPrice.base ?? product.list ?? 0), base: true },
+          { label: product.desc3 || "", price: Number(componentPrice.p3 ?? 0) },
+          { label: product.desc4 || "", price: Number(componentPrice.p4 ?? 0) },
+          { label: product.desc5 || "", price: Number(componentPrice.p5 ?? 0) }
+        ];
+        listPriceDetailRows = detailRows.filter(row => row.base || String(row.label).trim() !== "").map(row => {
+          const safeLabel = String(row.label).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+          return `<tr class="pw-list-detail"><td>${safeLabel}</td><td class="amount">${row.price > 0 ? fmtMoney(row.price * quoteQty) : "Included"}</td></tr>`;
+        }).join("");
+      }
+
+      const opts = options.filter(o => product && o.model === product.model);
+      const optsHtml = opts.length 
+        ? opts.map(o => `<tr><td>${o.name}</td><td style="text-align:right;">${fmtMoney(o.list)}</td><td style="text-align:right; color:#047857; font-weight:600;">${fmtMoney(calculateOptionNet(o.dealerNet, o))}</td></tr>`).join("")
+        : "<tr><td colspan='3' style='color:#777; font-style:italic;'>No factory options selected.</td></tr>";
+
+      const ewNeed = document.getElementById("need-extra-warranty").value;
+      const ewCost = document.getElementById("extra-warranty-cost-display").textContent;
+      let ewHtml = "Not Requested";
+      if (ewNeed === "Yes") {
+        ewHtml = `<strong>${document.getElementById("extra-coverage-type").value}</strong><br>${document.getElementById("extra-months").value} Mo / ${document.getElementById("extra-hours").value} Hr<br>Cost: <span style="color:#047857; font-weight:700;">${ewCost}</span>`;
+      }
+
+      // Generate Print Content - ULTRA COMPACT LAYOUT with BUTTON SPACER
+      const printContent = `
+          <style>
+      /* --- PREVIEW SPECIFIC STYLES (Desktop Base) --- */
+      .pw {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1f2937;
+        padding: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+        background: #fff;
+        line-height: 1.5;
+        box-sizing: border-box;
+      }
+      
+      .pw-header {
+        background-color: #111; color: white; padding: 16px 24px;
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 6px solid #fecb00; margin-bottom: 24px;
+        border-radius: 8px 8px 0 0;
+      }
+      .pw-header img { height: 40px; object-fit: contain; }
+      .pw-title { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+      
+      .pw-info-grid { display: flex; justify-content: space-between; gap: 24px; margin-bottom: 20px; }
+      .pw-info-box { flex: 1; }
+      .pw-info-box.right { text-align: right; }
+      .pw-info-box h3 {
+        font-size: 13px; color: #111; background: #fecb00;
+        padding: 4px 10px; margin: 0 0 8px 0; text-transform: uppercase; font-weight: 800;
+        display: inline-block; border-radius: 4px;
+      }
+      .pw-info-text { font-size: 15px; color: #374151; }
+      
+      .pw-ref {
+        background: #f8fafc; border-left: 6px solid #111;
+        padding: 12px 20px; margin-bottom: 24px; display: flex; justify-content: space-between;
+        font-size: 15px; font-weight: 600; color: #1f2937; border-radius: 0 8px 8px 0;
+      }
+      
+      .pw-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; }
+      
+      .pw-model { font-size: 22px; font-weight: 800; border-bottom: 4px solid #fecb00; display: inline-block; margin-bottom: 16px; padding-bottom: 4px; }
+      
+      /* Tables */
+      .pw-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+      .pw-table th { background: #1f2937; color: #fff; text-align: left; padding: 10px 12px; font-size: 14px; font-weight: 700; }
+      .pw-table td { padding: 12px; font-size: 16px; border-bottom: 1px solid #e5e7eb; }
+      .pw-table th.amount, .pw-table td.amount { text-align: right; }
+      .pw-table td.amount { font-weight: 600; }
+      .pw-table td.net { color: #047857; font-weight: 800; }
+      
+      .pw-total {
+        background: #111; color: #fff; padding: 20px 24px; margin-top: 16px;
+        border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+        border-left: 6px solid #10b981;
+      }
+      .pw-total-lbl { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+      .pw-total-val { font-size: 32px; font-weight: 900; color: #4ade80; }
+      .pw-valid { font-size: 13px; opacity: 0.8; }
+      .pw-excl { font-size: 12px; color: #6b7280; text-align: right; margin-top: 6px; margin-bottom: 20px; }
+      
+      .pw-card {
+        border: 2px solid #e5e7eb; padding: 16px; border-radius: 12px;
+        background: #fff; text-align: center; margin-bottom: 20px;
+        display: flex; flex-direction: column; align-items: center;
+      }
+      .pw-card img { max-height: 250px; width: 100%; object-fit: contain; border-radius: 6px; }
+      
+      .pw-features { text-align: left; margin-top: 16px; font-size: 15px; color: #4b5563; padding-left: 24px; line-height: 1.6; width: 100%; }
+      
+      .pw-h4 { font-size: 18px; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin: 24px 0 12px 0; color: #111; font-weight: 800; }
+      
+      .pw-box { padding: 12px 16px; font-size: 15px; border-radius: 6px; margin-bottom: 12px; line-height: 1.5; }
+      .pw-box.std { background: #f8fafc; border-left: 4px solid #475569; }
+      .pw-box.ext { background: #fff7ed; border-left: 4px solid #f97316; }
+      .pw-box.note { background: #fefce8; border: 1px solid #fde047; color: #854d0e; }
+      
+      .pw-footer { margin-top: 40px; border-top: 2px solid #e5e7eb; padding-top: 16px; font-size: 13px; color: #6b7280; text-align: center; font-weight: 600; }
+      .spacer-for-buttons { height: 100px; }
+
+      /* ============================================================
+         SMARTPHONE OPTIMIZATION (Fit onto ONE Single Screen)
+         ============================================================ */
+      @media screen and (max-width: 768px) {
+        /* Restrict container to exactly the viewport height */
+        .pw {
+          padding: 8px !important;
+          width: 100%;
+          height: 100dvh; 
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto; /* Allow scroll only if absolutely necessary */
+          box-sizing: border-box;
+        }
+
+        /* Compress Header */
+        .pw-header { padding: 8px 12px; border-bottom-width: 3px; margin: 0 0 8px 0; border-radius: 6px; flex-shrink: 0; }
+        .pw-header img { height: 20px; }
+        .pw-title { font-size: 16px; }
+
+        /* Side-by-side dense info */
+        .pw-info-grid { flex-direction: row; gap: 8px; margin-bottom: 8px; flex-shrink: 0; }
+        .pw-info-box.right { text-align: right; }
+        .pw-info-box h3 { font-size: 9px; padding: 2px 5px; margin-bottom: 3px; }
+        .pw-info-text { font-size: 10px; line-height: 1.25; }
+        .pw-info-text img { max-height: 22px !important; margin-bottom: 2px; }
+
+        /* Compact reference bar */
+        .pw-ref { flex-direction: row; justify-content: space-between; gap: 12px; font-size: 10px; padding: 6px 10px; border-radius: 4px; border-left-width: 3px; margin-bottom: 8px; flex-shrink: 0; }
+        
+        /* MAGIC GRID: Rearrange DOM dynamically to save vertical space */
+        .pw-content {
+          flex-grow: 1;
+          display: grid;
+          grid-template-columns: 1fr 100px; /* Price on left, thumbnail on right */
+          grid-template-rows: auto auto auto auto 1fr;
+          grid-template-areas:
+            "model photo"
+            "price photo"
+            "total total"
+            "options warranty"
+            "notes notes";
+          gap: 6px 12px;
+          min-height: 0; 
+        }
+        
+        /* Semantically ignore column wrappers so items join the Grid */
+        .col-left, .col-right { display: contents; }
+        
+        .pw-model-wrap { grid-area: model; }
+        .pw-price-wrap { grid-area: price; }
+        .pw-total-wrap { grid-area: total; }
+        .pw-options-wrap { grid-area: options; }
+        .pw-photo-wrap { grid-area: photo; }
+        .pw-warranty-wrap { grid-area: warranty; }
+        .pw-notes-wrap { grid-area: notes; }
+
+        .pw-model { font-size: 14px; margin-bottom: 2px; border-bottom-width: 2px; padding-bottom: 2px; }
+
+        /* Super compact tables */
+        .pw-table th { font-size: 9px; padding: 4px; }
+        .pw-table td { font-size: 10px; padding: 4px; }
+        .pw-table { margin-bottom: 0; }
+        
+        /* Total bar inline */
+        .pw-total { padding: 8px 10px; margin-top: 0; flex-direction: row; align-items: center; justify-content: space-between; border-left-width: 4px; border-radius: 6px; }
+        .pw-total-lbl { font-size: 11px; margin-bottom: 2px; }
+        .pw-valid { font-size: 9px; }
+        .pw-total-val { font-size: 18px; line-height: 1; margin-top: 0; }
+        .pw-excl { font-size: 9px; margin-top: 4px; margin-bottom: 6px; }
+
+        /* Thumbnail photo */
+        .pw-card { padding: 4px; border-width: 1px; border-radius: 6px; margin-bottom: 0; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .pw-card img { max-height: 75px; width: auto; max-width: 100%; border-radius: 4px; }
+        .pw-features { display: none; } /* Hide bullet points to save screen space */
+
+        /* Compress blocks */
+        .pw-h4 { font-size: 11px; margin: 0 0 4px 0; border-bottom-width: 1px; padding-bottom: 2px; }
+        .pw-box { font-size: 10px; padding: 6px; border-width: 1px !important; border-left-width: 3px !important; margin-bottom: 4px; line-height: 1.3; border-radius: 4px; }
+        
+        .pw-footer { font-size: 9px; margin-top: 0; padding-top: 6px; padding-bottom: 0; flex-shrink: 0; border-top-width: 1px; }
+        
+        /* Integrate buttons into the scroll flow instead of floating */
+        .spacer-for-buttons { display: none; }
+        .preview-controls {
+          position: static;
+          display: flex !important;
+          flex-direction: row;
+          margin-top: 8px;
+          gap: 8px;
+          flex-shrink: 0;
+        }
+        .preview-btn { width: 50%; padding: 10px; font-size: 14px; border-radius: 6px; min-width: 0; box-shadow: none; border: 1px solid rgba(0,0,0,0.1); }
+      }
+    
+
+      /* ============================================================
+         v0.88.1 iPhone price-area width correction
+         Overrides the application's global mobile table min-width.
+         Keeps Item + Amount and Option + List + Net in one viewport.
+         ============================================================ */
+      @media screen and (max-width: 768px) {
+        html, body, #print-area, .pw {
+          width: 100% !important;
+          max-width: 100% !important;
+          overflow-x: hidden !important;
+          -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+        }
+
+        .pw {
+          height: auto !important;
+          min-height: 100dvh;
+        }
+
+        .pw-content {
+          width: 100% !important;
+          max-width: 100% !important;
+          grid-template-columns: minmax(0, 1fr) 100px !important;
+        }
+
+        .pw-content,
+        .col-left,
+        .col-right,
+        .pw-model-wrap,
+        .pw-price-wrap,
+        .pw-total-wrap,
+        .pw-options-wrap,
+        .pw-photo-wrap,
+        .pw-warranty-wrap,
+        .pw-notes-wrap {
+          min-width: 0 !important;
+          max-width: 100% !important;
+        }
+
+        /* Critical correction: the main app sets table { min-width:720px } on mobile. */
+        .pw table.pw-table,
+        #print-area .pw table.pw-table {
+          display: table !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: 100% !important;
+          table-layout: fixed !important;
+          margin: 0 !important;
+        }
+
+        .pw-price-wrap .pw-table th:first-child,
+        .pw-price-wrap .pw-table td:first-child {
+          width: 62% !important;
+          position: static !important;
+        }
+        .pw-price-wrap .pw-table th.amount,
+        .pw-price-wrap .pw-table td.amount {
+          width: 38% !important;
+          position: static !important;
+          text-align: right !important;
+          white-space: nowrap !important;
+        }
+
+        .pw-options-wrap .pw-table th:first-child,
+        .pw-options-wrap .pw-table td:first-child {
+          width: 52% !important;
+          position: static !important;
+          white-space: normal !important;
+          overflow-wrap: anywhere;
+        }
+        .pw-options-wrap .pw-table th:nth-child(2),
+        .pw-options-wrap .pw-table td:nth-child(2),
+        .pw-options-wrap .pw-table th:nth-child(3),
+        .pw-options-wrap .pw-table td:nth-child(3) {
+          width: 24% !important;
+          position: static !important;
+          text-align: right !important;
+          white-space: nowrap !important;
+        }
+
+        .pw-table th,
+        .pw-table td {
+          box-sizing: border-box !important;
+          overflow: hidden;
+          text-overflow: clip;
+        }
+
+        .pw-total {
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        .pw-total-lbl { max-width: 62%; }
+        .pw-total-val { flex: 0 0 auto; }
+
+        .pw-card {
+          width: 100% !important;
+          min-width: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /* Buttons no longer cover the price/option rows. */
+        .pw .preview-controls {
+          position: static !important;
+          left: auto !important;
+          right: auto !important;
+          bottom: auto !important;
+          width: 100% !important;
+        }
+      }
+
+      @media screen and (max-width: 390px) {
+        .pw-content {
+          grid-template-columns: minmax(0, 1fr) 84px !important;
+          gap: 5px 8px !important;
+        }
+        .pw-price-wrap .pw-table th,
+        .pw-price-wrap .pw-table td,
+        .pw-options-wrap .pw-table th,
+        .pw-options-wrap .pw-table td {
+          font-size: 9px !important;
+          padding: 3px !important;
+        }
+        .pw-total-lbl { font-size: 10px !important; }
+        .pw-total-val { font-size: 17px !important; }
+      }
+
+
+      /* ============================================================
+         v0.89 Quotation placement + desktop one-page PDF
+         ============================================================ */
+      .manual-dealer-response-print-block > div + div { margin-top: 3px; }
+      .pw-info-box.right .partner-demo-quote-logo {
+        display: block !important;
+        max-width: 155px !important;
+        width: 155px !important;
+        height: auto !important;
+        margin: 0 0 6px auto !important;
+        object-fit: contain;
+      }
+
+      @media print {
+        @page { size: Letter portrait; margin: 0.5in; }
+        html, body { width: 100%; height: auto; margin: 0 !important; padding: 0 !important; }
+        body.showing-preview #print-area,
+        #print-area {
+          position: static !important;
+          width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
+          background: #fff !important;
+        }
+        .pw {
+          width: 100% !important;
+          max-width: none !important;
+          min-height: 0 !important;
+          height: auto !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          line-height: 1.22 !important;
+          font-size: 8.5pt !important;
+          display: block !important;
+          overflow: visible !important;
+        }
+        .pw-header {
+          padding: 7px 12px !important;
+          margin-bottom: 7px !important;
+          border-bottom-width: 3px !important;
+          border-radius: 0 !important;
+        }
+        .pw-header img { height: 24px !important; }
+        .pw-title { font-size: 16pt !important; letter-spacing: 1px !important; }
+        .pw-info-grid { gap: 12px !important; margin-bottom: 6px !important; }
+        .pw-info-box h3 { font-size: 7pt !important; padding: 2px 5px !important; margin-bottom: 2px !important; }
+        .pw-info-text { font-size: 8pt !important; line-height: 1.18 !important; }
+        .pw-info-text img { max-height: 28px !important; }
+        .pw-info-box.right .partner-demo-quote-logo { width: 125px !important; max-width: 125px !important; margin-bottom: 3px !important; }
+        .pw-ref { padding: 4px 8px !important; margin-bottom: 7px !important; font-size: 8pt !important; border-left-width: 3px !important; }
+        .pw-content {
+          display: grid !important;
+          grid-template-columns: 1.32fr 1fr !important;
+          grid-template-areas: none !important;
+          gap: 10px !important;
+        }
+        .col-left, .col-right { display: block !important; min-width: 0 !important; }
+        .pw-model { font-size: 11pt !important; border-bottom-width: 2px !important; margin-bottom: 4px !important; padding-bottom: 2px !important; }
+        .pw-table { width: 100% !important; min-width: 0 !important; table-layout: fixed !important; margin-bottom: 3px !important; }
+        .pw-table th { font-size: 7pt !important; padding: 3px 5px !important; }
+        .pw-table td { font-size: 7.5pt !important; padding: 3px 5px !important; line-height: 1.18 !important; }
+        .pw-total { padding: 5px 8px !important; margin-top: 4px !important; border-left-width: 3px !important; }
+        .pw-total-lbl { font-size: 7.5pt !important; }
+        .pw-total-val { font-size: 15pt !important; }
+        .pw-valid, .pw-excl { font-size: 6pt !important; }
+        .pw-excl { margin: 2px 0 5px !important; }
+        .pw-h4 { font-size: 9pt !important; margin: 6px 0 3px !important; padding-bottom: 2px !important; }
+        .pw-card { padding: 4px !important; margin-bottom: 5px !important; border-width: 1px !important; }
+        .pw-card img { max-height: 125px !important; width: auto !important; max-width: 100% !important; }
+        .pw-features { font-size: 7pt !important; line-height: 1.2 !important; margin-top: 3px !important; padding-left: 13px !important; }
+        .pw-box { font-size: 7.5pt !important; padding: 4px 6px !important; margin-bottom: 3px !important; line-height: 1.2 !important; }
+        .manual-dealer-response-print-block {
+          font-size: 7pt !important;
+          line-height: 1.2 !important;
+          margin: 4px 0 0 !important;
+          padding: 4px 6px !important;
+          border-left-width: 3px !important;
+          break-inside: avoid !important;
+        }
+        .manual-dealer-response-print-block > div + div { margin-top: 1px !important; }
+        .pw-footer { margin-top: 6px !important; padding-top: 4px !important; font-size: 6.5pt !important; }
+        .pw-header, .pw-info-grid, .pw-ref, .pw-total, .pw-card,
+        .pw-warranty-wrap, .manual-dealer-response-print-block, tr {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+        .preview-controls, .spacer-for-buttons { display: none !important; }
+      }
+
+      /* ============================================================
+         v0.89.12 desktop PDF: smartphone-like grid + description restored
+         ============================================================ */
+      @media screen and (max-width: 768px), print {
+        .pw-content {
+          display: grid !important;
+          grid-template-columns: minmax(0, 1fr) 42% !important;
+          grid-template-rows: auto auto auto auto auto !important;
+          grid-template-areas:
+            "model photo"
+            "price photo"
+            "total photo"
+            "options warranty"
+            "notes notes" !important;
+          align-items: start !important;
+          align-content: start !important;
+          row-gap: 0 !important;
+          column-gap: 7px !important;
+        }
+        .col-left, .col-right { display: contents !important; }
+        .pw-model-wrap { grid-area: model !important; margin: 0 !important; padding: 0 !important; }
+        .pw-price-wrap { grid-area: price !important; margin: 0 !important; padding: 0 !important; align-self: start !important; }
+        .pw-total-wrap { grid-area: total !important; margin: 0 !important; padding: 0 !important; width: 100% !important; align-self: start !important; }
+        .pw-options-wrap { grid-area: options !important; margin: 0 !important; padding: 0 !important; align-self: start !important; }
+        .pw-photo-wrap { grid-area: photo !important; min-width: 0 !important; align-self: stretch !important; }
+        .pw-warranty-wrap { grid-area: warranty !important; margin: 0 !important; padding: 0 !important; align-self: start !important; }
+        .pw-notes-wrap { grid-area: notes !important; }
+        .pw-model { margin: 0 0 2px !important; padding-bottom: 2px !important; }
+        .pw-price-wrap .pw-table,
+        .pw-options-wrap .pw-table { margin: 0 !important; border-collapse: collapse !important; border-spacing: 0 !important; table-layout: fixed !important; min-width: 0 !important; width: 100% !important; }
+        .pw-price-wrap .pw-table th { padding: 3px 5px !important; line-height: 1 !important; }
+        .pw-price-wrap .pw-table td { padding: 2px 5px !important; line-height: 1.05 !important; height: auto !important; vertical-align: middle !important; }
+        .pw-total { width: 100% !important; max-width: 100% !important; margin: 2px 0 0 !important; display: grid !important; grid-template-columns: 62% 38% !important; align-items: center !important; column-gap: 0 !important; padding: 5px 6px !important; min-height: 0 !important; line-height: 1 !important; text-align: left !important; }
+        .pw-total > div:first-child { min-width: 0 !important; text-align: left !important; }
+        .pw-total-lbl { margin: 0 !important; max-width: 100% !important; line-height: 1 !important; white-space: normal !important; text-align: left !important; }
+        .pw-valid { margin: 1px 0 0 !important; line-height: 1 !important; text-align: left !important; }
+        .pw-total-val { margin: 0 !important; padding: 0 !important; line-height: 1 !important; white-space: nowrap !important; text-align: right !important; justify-self: end !important; }
+        .pw-excl { margin: 1px 0 2px !important; padding: 0 !important; line-height: 1 !important; text-align: left !important; }
+        .pw-card { width: 100% !important; height: auto !important; min-height: 0 !important; padding: 5px !important; margin: 0 !important; overflow: visible !important; justify-content: flex-start !important; }
+        .pw-card img { display: block !important; width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 150px !important; object-fit: contain !important; transform: none !important; }
+        .pw-options-wrap .pw-h4, .pw-warranty-wrap .pw-h4 { margin: 0 0 2px !important; padding: 0 0 2px !important; line-height: 1 !important; }
+        .pw-options-wrap .pw-table th { padding: 2px 4px !important; line-height: 1 !important; }
+        .pw-options-wrap .pw-table td { padding: 1px 4px !important; line-height: 1.05 !important; vertical-align: middle !important; }
+        .pw-warranty-wrap .pw-box { margin: 0 0 4px !important; padding: 6px !important; }
+      }
+
+      /* Smartphone keeps the image-only card. */
+      @media screen and (max-width: 768px) {
+        .pw-features { display: none !important; }
+        .pw-price-wrap .pw-table th, .pw-options-wrap .pw-table th { font-size: 8.5px !important; }
+        .pw-price-wrap .pw-table td, .pw-options-wrap .pw-table td { font-size: 8.5px !important; }
+        .pw-total-lbl { font-size: 8.5px !important; }
+        .pw-valid, .pw-excl { font-size: 7px !important; }
+        .pw-total-val { font-size: 15px !important; }
+      }
+
+      /* Desktop Print/PDF must show the product Description under the machine image. */
+      @media print {
+        @page { size: Letter portrait; margin: 0.5in; }
+        html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+        *, *::before, *::after { box-sizing: border-box !important; }
+        #print-area { display: block !important; position: static !important; width: 100% !important; overflow: visible !important; background: #fff !important; }
+        .pw { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 12px !important; font-size: 8.5pt !important; line-height: 1.2 !important; overflow: visible !important; }
+        .pw-header { padding: 9px 14px !important; margin-bottom: 10px !important; }
+        .pw-header img { height: 27px !important; }
+        .pw-title { font-size: 18pt !important; }
+        .pw-info-grid { margin-bottom: 8px !important; }
+        .pw-ref { margin-bottom: 8px !important; padding: 6px 10px !important; }
+        .pw-model { font-size: 13pt !important; }
+        .pw-table th { font-size: 7.5pt !important; }
+        .pw-table td { font-size: 8pt !important; }
+        .pw-list-detail td { font-size: 7pt !important; line-height: 1.15 !important; padding-top: 3px !important; padding-bottom: 3px !important; }
+        .pw-list-total td { border-top: 1.5px solid #9ca3af !important; background: #f8fafc !important; }
+        .pw-total-lbl { font-size: 7.5pt !important; }
+        .pw-valid, .pw-excl { font-size: 6.5pt !important; }
+        .pw-total-val { font-size: 16pt !important; }
+        .pw-h4 { font-size: 10pt !important; }
+        .pw-box { font-size: 8pt !important; line-height: 1.15 !important; }
+
+        .pw-card .pw-features,
+        .pw-photo-wrap .pw-features,
+        #print-area .pw-features {
+          display: block !important;
+          visibility: visible !important;
+          width: 100% !important;
+          height: auto !important;
+          margin: 5px 0 0 !important;
+          padding: 0 0 0 17px !important;
+          color: #374151 !important;
+          font-size: 7.5pt !important;
+          line-height: 1.15 !important;
+          text-align: left !important;
+          list-style-position: outside !important;
+          overflow: visible !important;
+        }
+        .pw-features li {
+          display: list-item !important;
+          visibility: visible !important;
+          margin: 0 0 2px !important;
+          padding: 0 !important;
+          text-align: left !important;
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+        .pw-card img { max-height: 135px !important; }
+        .pw-footer { margin-top: 8px !important; padding-top: 5px !important; font-size: 6.5pt !important; }
+        .preview-controls, .spacer-for-buttons { display: none !important; }
+        .pw-header, .pw-info-grid, .pw-ref, .pw-total, .pw-card, .pw-warranty-wrap, tr { break-inside: avoid !important; page-break-inside: avoid !important; }
+      }
+</style>
+
+          <div class="pw">
+          <div class="pw-header"><img src="${sakaiLogo}" alt="Asterion"><div class="pw-title">Quotation</div></div>
+          
+          <div class="pw-info-grid">
+            <div class="pw-info-box">
+              <h3>From</h3>
+              <div class="pw-info-text">
+                <strong>Asterion Demo Works</strong><br>
+                90 International Pkwy<br>
+                Demo City, ZZ 00000<br>
+                <strong>Rep:</strong> ${rep ? rep.name : "N/A"}<br>
+                ${rep ? rep.phone : ""}
+              </div>
+            </div>
+            <div class="pw-info-box right">
+              <h3>Prepared For</h3>
+              <div class="pw-info-text">
+                ${dealerLogo}<br>
+                ${dealerDisplayName ? `<strong>${dealerDisplayName}</strong>` : ""}
+              </div>
+            </div>
+          </div>
+            
+          <div class="pw-ref">
+            <div><strong>Date:</strong> ${qDate}</div>
+            <div><strong>Terms:</strong> ${payTerm}</div>
+          </div>
+
+          <div class="pw-content">
+            <div class="col-left">
+              <div class="pw-model-wrap"><div class="pw-model" style="font-size:11pt; font-weight:800; border-bottom:3px solid #fecb00; display:inline-block; margin-bottom:6px;">${product ? product.model : "Machine"}</div></div>
+              <div class="pw-price-wrap">
+              
+              <table class="pw-table">
+                <thead><tr><th>Item</th><th class="amount">Amount</th></tr></thead>
+                <tbody>
+                  ${listPriceDetailRows}
+                  <tr class="pw-list-total"><td><strong>List Price (Total, Qty: ${qty})</strong></td><td class="amount"><strong>${listP}</strong></td></tr>
+                  <tr><td>Dealer Net</td><td class="amount net">${dNetP}</td></tr>
+                  <tr><td>Dealer Disc.</td><td class="amount" style="color:#1976d2;">${levelAmt}</td></tr>
+                  <tr><td>Addl Disc.</td><td class="amount" style="color:#d32f2f;">${addlAmt}</td></tr>
+                </tbody>
+              </table>
+              </div>
+
+              <div class="pw-total-wrap">
+              <div class="pw-total">
+                <div>
+                  <div class="pw-total-lbl" style="font-size:8pt; font-weight:700;">Final Dealer Base Machine Cost</div>
+                  <div class="pw-valid" style="font-size:6.5pt; opacity:0.8;">Valid: <strong>${eDate}</strong></div>
+                </div>
+                <div class="pw-total-val">${finalCost}</div>
+              </div>
+              <div class="pw-excl" style="font-size:6.5pt; text-align:right; margin-top:2px; margin-bottom:10px;">* Excludes Options & Extra Warranty</div>
+              </div>
+
+              <div class="pw-options-wrap">
+              <div class="pw-h4">Factory Options</div>
+              <table class="pw-table">
+                <thead><tr><th style="width:50%">Option</th><th class="amount">List</th><th class="amount">Net</th></tr></thead>
+                <tbody>${optsHtml}</tbody>
+              </table>
+              </div>
+            </div>
+
+            <div class="col-right">
+              <div class="pw-photo-wrap"><div class="pw-card">
+                 ${prodPhoto}
+                 <ul class="pw-features">${featuresHtml}</ul>
+              </div></div>
+              
+              <div class="pw-warranty-wrap"><div class="pw-h4">Warranty</div>
+              <div class="pw-box std">
+                <strong>Standard:</strong> ${stdW}
+              </div>
+              ${ewNeed === "Yes" ? `<div class="pw-box ext"><strong>Extended:</strong><br>${ewHtml}</div>` : ""}
+
+              </div>
+              <div class="pw-notes-wrap">${notes ? `<div class="pw-h4">Notes</div><div class="pw-box note" style="background:#fff9c4; padding:4px; font-size:7.5pt; border-radius:3px; border:1px solid #fbc02d;">${notes.replace(/\n/g,"<br>")}</div>` : ""}</div>
+            </div>
+          </div>
+
+          <div class="pw-footer">
+            Prices subject to change. POs non-cancellable.<br>
+            <strong>Asterion Demo Works - Public Portfolio Demo</strong>
+          </div>
+
+          <div class="spacer-for-buttons"></div>
+
+          <div class="preview-controls">
+            <button onclick="window.print()" class="preview-btn"><span>🖨</span> Print</button>
+            <button onclick="closePreview()" class="preview-btn close-btn"><span>✕</span> Close</button>
+          </div>
+        </div>
+      `;
+
+      // Inject content
+      const printArea = document.getElementById("print-area");
+      printArea.innerHTML = printContent;
+      document.body.classList.add('showing-preview');
+
+      setTimeout(() => {
+        try { window.print(); } catch(e) {}
+      }, 500);
+    });
+  });
+
+
+/* ============================================================
+   ASTERION Online Quote Integrated Updates - v0.77.13
+   Partner Demo quote hides List/Net/Discount rows and renames total label to Base Machine Cost.
+   ============================================================ */
+(function applySakaiQuoteV07713(){
+  const LE_ARA = new Set(["PX600","PX800","RX65","RX75","HX670","CR271"]);
+  const LE_NO_EW = new Set(["PX600","PX800","RX65","RX75","HX670"]);
+  const BASE_TITLE = "Online Quotation Tool v0.77";
+  const PARTNER_DEMO_LOGO_URL = "";
+
+  window.formatDate = function(isoStr){
+    if(!isoStr) return "";
+    const p = isoStr.split("-");
+    if(p.length !== 3) return isoStr;
+    return `${p[1]}/${p[2]}/${p[0]}`;
+  };
+
+  function fileSafe(v){ return String(v || "Quote").replace(/[\\/:*?"<>|]+/g,"-").replace(/\s+/g," ").trim() || "Quote"; }
+  function compactDate(v){ const p=(v||"").split("-"); return p.length===3 ? `${p[1]}${p[2]}${p[0].slice(-2)}` : (v||"").replace(/\D/g,""); }
+  function addDaysIso(iso, days){
+    if(!iso) return "";
+    const p=iso.split("-");
+    if(p.length!==3) return "";
+    const d=new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+    if(isNaN(d.getTime())) return "";
+    d.setDate(d.getDate()+days);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  }
+  function syncExpiryDate(){
+    const q=document.getElementById("quote-date"), e=document.getElementById("expiry-date");
+    if(q && e && q.value) e.value=addDaysIso(q.value,30);
+  }
+  function qty(){ return Math.max(1, parseFloat(document.getElementById("editor-qty")?.value) || 1); }
+  function product(){ return products.find(p => p.id === document.getElementById("editor-product")?.value) || null; }
+  function dealer(){ return dealers.find(d => d.id === document.getElementById("editor-dealer")?.value) || null; }
+  function priceType(){ return document.getElementById("quote-price-type")?.value || "Dealer"; }
+  function isARA(){ return priceType()==="Partner Demo"; }
+  function dealerName(d){ return (!d || !d.name || d.name.trim().toLowerCase()==="blank" || isARA()) ? "" : d.name.trim(); }
+  function blankDealerId(){ const b=dealers.find(d=>(d.name||"").trim().toLowerCase()==="blank"); return b ? b.id : ""; }
+  function isEWBlocked(){ const p=product(); return !!(p && LE_NO_EW.has(p.model)); }
+
+  function ensureControls(){
+    const dd=document.getElementById("dealer-discount-select");
+    if(dd){
+      Array.from(dd.options).filter(o=>o.value==="Partner Demo").forEach(o=>o.remove());
+      if(!Array.from(dd.options).some(o=>o.value==="Government")) dd.insertAdjacentHTML("beforeend",`<option value="Government">Government</option>`);
+    }
+    if(!document.getElementById("quote-price-type")){
+      const holder=document.getElementById("editor-dealer-logo")?.parentElement;
+      if(holder) holder.insertAdjacentHTML("afterend",`<div style="margin-top:8px;"><label for="quote-price-type" style="margin-bottom:4px;">Price Type</label><select id="quote-price-type" style="font-size:0.9rem;"><option value="Dealer" selected>Dealer</option><option value="Partner Demo">Partner Demo</option></select><div id="quote-price-type-note" class="note">Dealer pricing</div><img id="partner-demo-editor-logo" src="${PARTNER_DEMO_LOGO_URL}" alt="Partner Demo" style="display:none; margin-top:8px; max-width:155px; height:auto; object-fit:contain;" /></div>`);
+    }
+    if(!document.getElementById("partner-demo-editor-logo")){
+      const note=document.getElementById("quote-price-type-note");
+      if(note) note.insertAdjacentHTML("afterend",`<img id="partner-demo-editor-logo" src="${PARTNER_DEMO_LOGO_URL}" alt="Partner Demo" style="display:none; margin-top:8px; max-width:155px; height:auto; object-fit:contain;" />`);
+    }
+    if(!document.getElementById("quote-name-auto")){
+      const row=document.getElementById("expiry-date")?.closest(".row");
+      if(row) row.insertAdjacentHTML("beforeend",`<div><label for="quote-name-auto">Quote Name</label><input type="text" id="quote-name-auto" readonly style="background:#f8fafc;font-weight:600;" /><input type="text" id="quote-name-custom" placeholder="Optional suffix / custom name" style="margin-top:8px;font-size:0.85rem;" /><input type="text" id="quote-name-final" placeholder="Final Quote Name" style="margin-top:8px;font-size:0.85rem;font-weight:600;" /></div><div><label for="dealer-salesman-name">Dealer Salesman</label><input type="text" id="dealer-salesman-name" placeholder="Dealer salesman name" /></div>`);
+    }
+    ensureEWUnavailableMessage();
+  }
+
+  function ensureEWUnavailableMessage(){
+    if(document.getElementById("extra-warranty-unavailable-msg")) return;
+    const card=document.getElementById("need-extra-warranty")?.closest(".card");
+    const h2=card?.querySelector("h2");
+    if(card && h2){
+      h2.insertAdjacentHTML("afterend",`<div id="extra-warranty-unavailable-msg" style="display:none; margin:-8px 0 16px 0; padding:10px 12px; border:1px solid var(--danger-border); background:var(--danger-bg); color:#991b1b; border-radius:var(--radius-md); font-weight:600; font-size:0.85rem;">Extra Warranty is not available for this model</div>`);
+    }
+  }
+
+  function syncEditorARALogo(){
+    const logo=document.getElementById("partner-demo-editor-logo");
+    if(logo) logo.style.display=isARA()?"block":"none";
+  }
+
+  function syncDealerAndDiscount(){
+    const sel=document.getElementById("editor-dealer"), logo=document.getElementById("editor-dealer-logo"), salesman=document.getElementById("dealer-salesman-name"), dd=document.getElementById("dealer-discount-select");
+    if(isARA()){
+      if(sel){ if(!sel.dataset.previousDealer && sel.value) sel.dataset.previousDealer=sel.value; const b=blankDealerId(); if(b) sel.value=b; sel.disabled=true; sel.style.opacity="0.65"; sel.title="Dealer selection is not used for Partner Demo pricing."; }
+      if(logo) logo.style.display="none";
+      if(salesman){ salesman.value=""; salesman.disabled=true; salesman.placeholder="Not used for Partner Demo"; }
+      if(dd){ dd.value="Standard"; dd.disabled=true; dd.style.opacity="0.65"; dd.title="Partner Demo uses Standard price only. Volume/Government discount is not applied."; }
+    } else {
+      if(sel){ sel.disabled=false; sel.style.opacity=""; sel.title=""; if(sel.dataset.previousDealer){ sel.value=sel.dataset.previousDealer; delete sel.dataset.previousDealer; } }
+      if(salesman){ salesman.disabled=false; salesman.placeholder="Dealer salesman name"; }
+      if(dd){
+        dd.disabled=false; dd.style.opacity=""; dd.title="";
+        Array.from(dd.options).forEach(opt => { opt.disabled = false; opt.hidden = false; });
+        const d = dealers.find(x => x.id === sel?.value);
+        const level = String(d?.discountLevel || "Standard").trim();
+        const validLevel = ["Standard","Volume 1","Volume 2","Government"].includes(level) ? level : "Standard";
+        const dealerKey = sel?.value || "";
+        // Apply Dealer master default only when Dealer changes. After that, allow manual dropdown changes.
+        if(dd.dataset.lastDealerDefaultApplied !== dealerKey){
+          dd.value = validLevel;
+          dd.dataset.lastDealerDefaultApplied = dealerKey;
+        }
+      }
+    }
+    syncEditorARALogo();
+  }
+
+  function syncEW(){
+    ensureEWUnavailableMessage();
+    const blocked=isEWBlocked();
+    const msg=document.getElementById("extra-warranty-unavailable-msg");
+    if(msg) msg.style.display=blocked?"block":"none";
+    const need=document.getElementById("need-extra-warranty"), type=document.getElementById("extra-coverage-type"), mo=document.getElementById("extra-months"), hr=document.getElementById("extra-hours"), cost=document.getElementById("extra-warranty-cost-display"), note=document.getElementById("extra-warranty-note");
+    [need,type,mo,hr].forEach(el=>{ if(el){ el.disabled=blocked; el.style.opacity=blocked ? "0.65" : ""; } });
+    if(blocked){ if(need) need.value="No"; if(type) type.value="N/A"; if(mo) mo.value="N/A"; if(hr) hr.value="N/A"; if(cost) cost.textContent="$0"; if(note) note.textContent="Not available for this LE model"; }
+    else if(note && note.textContent==="Not available for this LE model") note.textContent="Not selected";
+  }
+
+  function updateQuoteName(force=false){
+    const d=dealer(), p=product(), date=document.getElementById("quote-date")?.value || "";
+    const auto=[isARA() ? "Partner Demo Customer" : dealerName(d), p?.model || "", compactDate(date)].filter(Boolean).join("-");
+    const a=document.getElementById("quote-name-auto"), c=document.getElementById("quote-name-custom"), f=document.getElementById("quote-name-final");
+    if(a) a.value=auto;
+    const final=[auto,(c?.value||"").trim()].filter(Boolean).join("-");
+    if(f && (force || !f.dataset.userEdited)) f.value=final;
+    document.title=fileSafe(f?.value || final || BASE_TITLE);
+  }
+
+  function refreshPricing(){
+    ensureControls(); syncDealerAndDiscount(); syncEW(); syncExpiryDate();
+    const p=product(); if(!p) return;
+    const q=qty(), listUnit=(parseFloat(p.list)||0), netUnit=(parseFloat(p.dealerNet)||Math.round(listUnit*0.75));
+    const list=listUnit*q, std=netUnit*q;
+    const dd=document.getElementById("dealer-discount-select");
+    const addTypeEl=document.getElementById("addl-discount-type"), addValEl=document.getElementById("addl-discount-value");
+    const addRow=addTypeEl?.closest(".price-row");
+    let base=std, disc=0, addl=0, note="Dealer pricing";
+    if(isARA()){
+      if(dd) dd.value="Standard";
+      const isLE=LE_ARA.has(p.model), factor=isLE?0.75:0.80;
+      const unit=listUnit*factor; base=unit*q; disc=list-base;
+      note=isLE?"Partner Demo: Unit Price = 25% off List":"Partner Demo: Unit Price = 20% off List";
+      if(addRow) addRow.style.display="none"; if(addTypeEl) addTypeEl.value="none"; if(addValEl) addValEl.value="0";
+      document.getElementById("drf-alert-box")?.classList.remove("active");
+    } else {
+      if(addRow) addRow.style.display="";
+      const level=dd?.value || "Standard"; let rate=0;
+      if(level==="Volume 1") rate=0.015; else if(level==="Volume 2") rate=0.025; else if(level==="Government") rate=0.05;
+      disc=std*rate; base=std-disc;
+      if(level==="Volume 1") note="Dealer default: Volume 1 / 1.5% off Dealer Net";
+      else if(level==="Volume 2") note="Dealer default: Volume 2 / 2.5% off Dealer Net";
+      else if(level==="Government") note="Government: 5% off Dealer Net";
+      const t=addTypeEl?.value||"none", v=parseFloat(addValEl?.value)||0;
+      addl=t==="percent" ? base*v/100 : (t==="amount" ? v*q : 0);
+    }
+    const n=document.getElementById("quote-price-type-note"); if(n) n.textContent=note;
+    const dnet=document.getElementById("dnet-display"), lvl=document.getElementById("dealer-level-amount-display"), add=document.getElementById("addl-discount-amount-display"), fin=document.getElementById("final-base-cost-display");
+    if(dnet) dnet.textContent=fmtMoney(isARA()?base:std); if(lvl) lvl.textContent=disc>0?"-"+fmtMoney(disc):"$0"; if(add) add.textContent=addl>0?"-"+fmtMoney(addl):"$0"; if(fin) fin.textContent=fmtMoney(Math.max(0,base-addl));
+  }
+
+  function adjustARAIRCQuoteOutput(){
+    const area=document.getElementById("print-area"); if(!area || !isARA()) return;
+    const p=product(); if(!p) return;
+    const q=qty(), listUnit=parseFloat(p.list)||0, factor=LE_ARA.has(p.model)?0.75:0.80, unit=listUnit*factor, total=unit*q;
+    const prepared=area.querySelector(".pw-info-grid .pw-info-box:nth-child(2) .pw-info-text"); if(prepared) prepared.innerHTML="";
+    const existing=area.querySelector(".partner-demo-quote-logo"); if(existing) existing.remove();
+    const img=document.createElement("img"); img.className="partner-demo-quote-logo"; img.src=PARTNER_DEMO_LOGO_URL; img.alt="Partner Demo"; img.onerror=function(){ this.style.display="none"; }; img.setAttribute("style","max-width:155px;width:155px;height:auto;display:block;margin:0 0 6px auto;object-fit:contain;");
+    if(prepared) prepared.appendChild(img); else { const ref=area.querySelector(".pw-ref"); if(ref) ref.insertAdjacentElement("beforebegin",img); else area.insertBefore(img,area.firstChild); }
+    const tbody=area.querySelector(".pw-price-wrap .pw-table tbody");
+    if(tbody){
+      tbody.querySelectorAll(".ara-unit-qty-row-v07730").forEach(r=>r.remove());
+      Array.from(tbody.querySelectorAll("tr")).forEach(tr=>{ const label=(tr.querySelector("td")?.textContent||"").trim().toLowerCase(); if(label.startsWith("list price") || label.includes("dealer net") || label.includes("dealer disc") || label.includes("addl disc") || label.includes("additional discount") || label.includes("ara / irc")) tr.remove(); });
+      const unitRow=document.createElement("tr"); unitRow.className="ara-unit-qty-row-v07730"; unitRow.innerHTML=`<td>Unit Price</td><td class="amount" style="text-align:right;font-weight:700;">${fmtMoney(unit)}</td>`;
+      const qtyRow=document.createElement("tr"); qtyRow.className="ara-unit-qty-row-v07730"; qtyRow.innerHTML=`<td>Qty</td><td class="amount" style="text-align:right;font-weight:700;">${q}</td>`;
+      tbody.insertBefore(qtyRow,tbody.firstChild); tbody.insertBefore(unitRow,tbody.firstChild);
+    }
+    const totalLabel=area.querySelector(".pw-total .pw-total-lbl") || area.querySelector(".pw-total div:first-child"); if(totalLabel) totalLabel.textContent="Base Machine Cost";
+    const totalAmount=area.querySelector(".pw-total .pw-total-val") || area.querySelector(".pw-total div:last-child"); if(totalAmount) totalAmount.textContent=fmtMoney(total);
+  }
+
+  function init(){
+    ensureControls(); syncDealerAndDiscount(); syncEW(); syncExpiryDate(); updateQuoteName(true); refreshPricing();
+    ["editor-dealer","editor-product","quote-date","quote-name-custom","quote-name-final","editor-qty","dealer-discount-select","quote-price-type","addl-discount-type","addl-discount-value","need-extra-warranty","extra-coverage-type","extra-months","extra-hours"].forEach(id=>{
+      const el=document.getElementById(id); if(el) ["change","input"].forEach(evt=>el.addEventListener(evt,()=>{ syncDealerAndDiscount(); syncEW(); syncExpiryDate(); updateQuoteName(); setTimeout(refreshPricing,0); }));
+    });
+    document.getElementById("quote-name-final")?.addEventListener("input",e=>{ e.target.dataset.userEdited="1"; document.title=fileSafe(e.target.value||BASE_TITLE); });
+    const btn=document.getElementById("btn-preview");
+    if(btn && !btn.dataset.sakaiV07713){
+      btn.dataset.sakaiV07713="1";
+      btn.addEventListener("click",()=>{ syncExpiryDate(); updateQuoteName(true); refreshPricing(); setTimeout(adjustARAIRCQuoteOutput,80); }, true);
+    }
+    setInterval(()=>{ ensureControls(); syncDealerAndDiscount(); syncEW(); syncExpiryDate(); updateQuoteName(); refreshPricing(); },800);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+})();
+
+
+
+/* ============================================================
+   ASTERION Quote Tool Complete Hotfix - v0.77.23
+   Shows manual Dealer Response fields in Quotation without changing the existing layout.
+   Fields:
+   - PO Number:      #dealer-response-po
+   - Terms Request:  #dealer-response-terms
+   - Dealer Notes:   #dealer-response-notes
+   ============================================================ */
+(function applyDealerResponseToQuotationV07723(){
+  function byId(id){ return document.getElementById(id); }
+  function val(id){ return (byId(id)?.value || '').trim(); }
+  function esc(s){
+    return String(s || '').replace(/[&<>"]/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+    }).replace(/\n/g, '<br>');
+  }
+  function addDealerResponseToQuotation(){
+    const area = byId('print-area');
+    if(!area) return;
+    const po = val('dealer-response-po');
+    const terms = val('dealer-response-terms');
+    const notes = val('dealer-response-notes');
+    area.querySelector('.manual-dealer-response-print-block')?.remove();
+    if(!po && !terms && !notes) return;
+    const block = document.createElement('div');
+    block.className = 'manual-dealer-response-print-block';
+    block.setAttribute('style', 'margin:8px 0 0; padding:8px 10px; font-size:11px; line-height:1.35; background:#f8fafc; border-left:4px solid #475569; border-radius:6px; overflow-wrap:anywhere;');
+    const items = [];
+    if(po) items.push(`<div><strong>PO Number:</strong> ${esc(po)}</div>`);
+    if(terms) items.push(`<div><strong>Terms Request:</strong> ${esc(terms)}</div>`);
+    if(notes) items.push(`<div><strong>Dealer Notes:</strong> ${esc(notes)}</div>`);
+    block.innerHTML = items.join('');
+    const warrantyWrap = area.querySelector('.pw-warranty-wrap');
+    if(warrantyWrap) warrantyWrap.appendChild(block);
+    else {
+      const notesWrap = area.querySelector('.pw-notes-wrap');
+      if(notesWrap) notesWrap.insertAdjacentElement('beforebegin', block);
+      else area.querySelector('.pw')?.appendChild(block);
+    }
+  }
+  function hookPreviewButton(){
+    const btn = byId('btn-preview');
+    if(btn && !btn.dataset.dealerResponseQuotationV07723){
+      btn.dataset.dealerResponseQuotationV07723 = '1';
+      btn.addEventListener('click', function(){
+        setTimeout(addDealerResponseToQuotation, 120);
+        setTimeout(addDealerResponseToQuotation, 450);
+      }, true);
+    }
+  }
+  function init(){ hookPreviewButton(); setInterval(hookPreviewButton, 800); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+
+
+/* v0.78 hotfix: keep Dealer Discount manually selectable after Dealer selection */
+(function sakaiDealerDiscountManualSelect_v078(){
+  function byId(id){ return document.getElementById(id); }
+  function bind(){
+    const dd = byId('dealer-discount-select');
+    const dealer = byId('editor-dealer');
+    const priceType = byId('quote-price-type');
+    if(!dd || dd.dataset.v078ManualSelectBound) return;
+    dd.dataset.v078ManualSelectBound = '1';
+    dd.addEventListener('change', function(){
+      if(priceType && priceType.value === 'Dealer'){
+        dd.disabled = false;
+        dd.style.opacity = '';
+        dd.title = '';
+        if(dealer) dd.dataset.lastDealerDefaultApplied = dealer.value || '';
+      }
+      if(typeof refreshPricing === 'function') refreshPricing();
+      else if(typeof updatePricePanel === 'function') updatePricePanel();
+    }, true);
+  }
+  function unlockForDealer(){
+    const dd = byId('dealer-discount-select');
+    const priceType = byId('quote-price-type');
+    if(dd && (!priceType || priceType.value === 'Dealer')){
+      dd.disabled = false;
+      dd.style.opacity = '';
+      dd.title = '';
+      Array.from(dd.options).forEach(opt => { opt.disabled = false; opt.hidden = false; });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ bind(); unlockForDealer(); });
+  else { bind(); unlockForDealer(); }
+  setInterval(function(){ bind(); unlockForDealer(); }, 1000);
+})();
+
+
+/* v0.84 turbo optimized: lazy admin tables, fast master cloning, non-blocking live inventory */
+(function(){
+ const INVENTORY_URL=window.SAKAI_INVENTORY_EXCEL_URL||'/Inventory/Heavy%20Equipment%20Availability.xlsm';
+ const XLSX_LIB='';
+ const JSPDF_LIB='';
+ const AUTOTABLE_LIB='';
+ let inventoryFingerprint='', inventoryLoading=false;
+ function loadScriptOnce(url,test){if(test())return Promise.resolve();return new Promise((resolve,reject)=>{const old=document.querySelector('script[data-dynamic-src="'+url+'"]');if(old){old.addEventListener('load',resolve,{once:true});old.addEventListener('error',reject,{once:true});return;}const sc=document.createElement('script');sc.src=url;sc.async=true;sc.dataset.dynamicSrc=url;sc.onload=resolve;sc.onerror=()=>reject(new Error('Library load failed: '+url));document.head.appendChild(sc);});}
+ function ensureXLSX(){return loadScriptOnce(XLSX_LIB,()=>!!window.XLSX);}
+ async function ensurePDF(){await loadScriptOnce(JSPDF_LIB,()=>!!window.jspdf);await loadScriptOnce(AUTOTABLE_LIB,()=>!!(window.jspdf&&window.jspdf.jsPDF&&window.jspdf.jsPDF.API.autoTable));}
+
+ const LEGACY={"CX500D-1":"CX500D"};
+ const SUCCESSOR={"DX880":"DX880-1","DX880G":"DX880G-1","DX880ND":"DX880ND-1","DX880NDG":"DX880NDG-1","DX990":"DX990-1","DX990G":"DX990G-1","DX990ND":"DX990ND-1","DX990NDG":"DX990NDG-1"};
+ let db={"headers":["📷","Model Name","Origin","Inventory Status","Current Available Machine","Jul\n2026","Aug\n2026","Sep\n2026","Oct\n2026","Nov\n2026","Dec\n2026","Jan\n2027","Feb\n2027","Mar\n2027","Apr\n2027","May\n2027","Jun\n2027"],"body":[{"data":["AX100-D","USA","Nov 2026","0","","","","","2","","","","","4","",""],"image":null},{"data":["AX100-T","USA","Apr 2027","0","","","","","","","","","","4","4",""],"image":null},{"data":["BX240D","USA","Jan 2027","0","","","","","","","3","","","","","2"],"image":null},{"data":["BX240DC","USA","Nov 2026","0","","","","","2","","","4","","","4",""],"image":null},{"data":["BX240T","USA","Dec 2026","0","","","","","","3","","","4","","",""],"image":null},{"data":["BX240TC","USA","Oct 2026","0","","","","1","","","","","","2","","4"],"image":null},{"data":["BX240TB","USA","Aug 2026","0","","1","","","","","","","","","",""],"image":null},{"data":["BX240TBC","USA","TBD","0","","","","","","","","","","","",""],"image":null},{"data":["BX240ND","USA","In Stock","4","","","","","","","","2","","","",""],"image":null},{"data":["CX500D","USA","In Stock","2","","","","","","","","","","","",""],"image":null},{"data":["CX500DC","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["CX500T","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["CX500TB","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["CX500TBC","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["CX500TC","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["CX500D-1","USA","Sep 2026","0","","","2","4","4","","4","4","","","2","2"],"image":null},{"data":["CX500DC-1","USA","Oct 2026","0","","","","2","","","6","","4","","","4"],"image":null},{"data":["CX500T-1","USA","Aug 2026","0","","8","2","","4","4","","","4","4","4",""],"image":null},{"data":["CX500TB-1","USA","Aug 2026","0","","1","","","","","","2","","","",""],"image":null},{"data":["CX500TBC-1","USA","Jan 2027","0","","","","","","","2","","","","",""],"image":null},{"data":["CX500TC-1","USA","May 2027","0","","","","","","","","","","","3","4"],"image":null},{"data":["CR271","Japan","Jul 2026","0","2","","","","5","5","","","5","","5",""],"image":null},{"data":["DX350","Japan","In Stock","3","4","","4","4","4","8","4","","4","4","4","4"],"image":null},{"data":["DX350G","Japan","In Stock","2","","","","","","","","","2","","",""],"image":null},{"data":["DX350W","Japan","In Stock","1","","","","","","","","2","","","2","2"],"image":null},{"data":["TX160","Japan","In Stock","1","","","","4","","","","4","","4","","4"],"image":null},{"data":["TX350","Japan","In Stock","10","","","","","","","2","","2","","","4"],"image":null},{"data":["TX500","Japan","In Stock","4","","","","","3","3","","3","","","","3"],"image":null},{"data":["TX500G","Japan","In Stock","2","","","","","","","","3","","","",""],"image":null},{"data":["DX500","Japan","Sep 2026","0","","","3","","","","","","3","","","3"],"image":null},{"data":["DX500G","Japan","In Stock","3","","","","3","","","","","","","",""],"image":null},{"data":["DX500W","Japan","In Stock","6","","","","","","","","","3","","3","3"],"image":null},{"data":["DX500WG","Japan","In Stock","2","","","","","","","3","","","","",""],"image":null},{"data":["SW654","Japan","In Stock","6","","","","","","2","","","2","","2","2"],"image":null},{"data":["SW654ND","Japan","Sep 2026","0","","","2","","2","","2","","","","2",""],"image":null},{"data":["SW654B","Japan","In Stock","2","","","","","","","","","","","",""],"image":null},{"data":["DX770","USA","In Stock","1","","","","","","","2","2","","","2","2"],"image":null},{"data":["DX770ND","USA","In Stock","5","","","","","3","","","","2","","",""],"image":null},{"data":["DX880","USA","In Stock","2","","","2","","3","4","","","","","",""],"image":null},{"data":["DX880G","USA","In Stock","6","","","","","","","","","","","",""],"image":null},{"data":["DX880ND","USA","In Stock","7","","","","2","","","","","","","",""],"image":null},{"data":["DX880NDG","USA","In Stock","4","","","","","","","","","","","",""],"image":null},{"data":["DX990","USA","In Stock","4","","","","","","","","","","","",""],"image":null},{"data":["DX990G","USA","Converted to -1","0","","","","","","","","","","","",""],"image":null},{"data":["DX990ND","USA","In Stock","1","","","2","","","","","","","","",""],"image":null},{"data":["DX990NDG","USA","Sep 2026","0","","","2","","","","","","","","",""],"image":null},{"data":["DX880-1","USA","Jan 2027","0","","","","","","","2","","","4","","2"],"image":null},{"data":["DX880G-1","USA","TBD","0","","","","","","","","","","","",""],"image":null},{"data":["DX880ND-1","USA","Feb 2027","0","","","","","","","","2","2","","2","2"],"image":null},{"data":["DX880NDG-1","USA","Feb 2027","0","","","","","","","","2","","","",""],"image":null},{"data":["DX990-1","USA","Mar 2027","0","","","","","","","","","2","","",""],"image":null},{"data":["DX990G-1","USA","TBD","0","","","","","","","","","","","",""],"image":null},{"data":["DX990ND-1","USA","TBD","0","","","","","","","","","","","",""],"image":null},{"data":["DX990NDG-1","USA","TBD","0","","","","","","","","","","","",""],"image":null},{"data":["GX750","Japan","In Stock","4","","","","","","","","","","","","4"],"image":null},{"data":["GX750G","Japan","In Stock","1","","","","","","","","2","","","",""],"image":null},{"data":["R2H-4","Japan","In Stock","10","","","","","","","","","","","",""],"image":null},{"data":["R2H-4G","Japan","In Stock","1","","","","","","","","","","","",""],"image":null},{"data":["Smooth Shell kit for AX100-T",null,"TBD","","","","","","","","","","","","",""],"image":null},{"data":["Smooth Shell kit for BX240T",null,"In Stock","3","5","","","","","","","","","","",""],"image":null},{"data":["Smooth Shell kit for CX500T",null,"Nov 2026","","","","","","11","4","8","","","","",""],"image":null},{"data":["Padfoot Shell kit for CX500D",null,"In Stock","3","","","4","","7","2","2","","","","",""],"image":null},{"data":["Blade Option for AX100-T",null,"Jan 2027","0","","","","","","","1","2","","","",""],"image":null},{"data":["Cab for DX880/994 series",null,"Dec 2026","0","","","","","","2","","","","","",""],"image":null},{"data":["HX670","Japan","In Stock","6","6","","","","","","","","3","","",""],"image":null},{"data":["PX600","Japan","In Stock","14","6","","","","","8","","8","","","",""],"image":null},{"data":["PX800","Japan","In Stock","8","24","","","","12","30","20","20","16","","20","12"],"image":null},{"data":["RX65","Japan","Jul 2026","0","31","20","","30","20","20","20","24","24","","24","20"],"image":null},{"data":["RX75","Japan","In Stock","6","","",null,null,"","","10","","","","",""],"image":null}]},source='Embedded inventory dated Jul 13, 2026';
+ const $=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function ix(){const h=db.headers||[];return{m:h.findIndex(x=>/model|product|name/i.test(String(x)))-1,s:h.findIndex(x=>/inventory status|status/i.test(String(x)))-1,q:h.findIndex(x=>/current.*available|available.*machine/i.test(String(x)))-1};}
+ const norm=v=>String(v||'').trim().toUpperCase().replace(/[^A-Z0-9-]/g,'');
+ function row(name){const x=ix();return(db.body||[]).find(r=>norm(r.data?.[x.m])===norm(name));}
+ function num(v){const n=Number(String(v??0).replace(/,/g,''));return isNaN(n)?0:n;}
+ function selected(){const s=$('editor-product');if(!s)return'';if(typeof products!=='undefined'){const p=products.find(x=>x.id===s.value);if(p?.model)return p.model;}return s.options[s.selectedIndex]?.textContent||'';}
+ function parse(rows){let n=rows.findIndex((r,i)=>i<30&&r.some(c=>/model|product name/i.test(String(c))));if(n<0)throw Error('Model Name header was not found');let h=rows[n].map(String);if(h[0]!=='📷')h.unshift('📷');return{headers:h,body:rows.slice(n+1).filter(r=>r.some(c=>String(c).trim())).map(r=>({data:r,image:null}))};}
+ function state(t,kind){[$('inv82-state'),$('inv82-editor-state')].forEach(e=>{if(e){e.textContent=t;e.className='inv82-state '+(kind||'');}});}
+ async function loadServer(force=false){
+  if(inventoryLoading)return;
+  inventoryLoading=true;state('Checking WordPress...','');
+  try{
+    await ensureXLSX();
+    const u=INVENTORY_URL+(INVENTORY_URL.includes('?')?'&':'?')+'v='+Date.now();
+    const r=await fetch(u,{cache:'no-store',credentials:'same-origin'});
+    if(!r.ok)throw Error('HTTP '+r.status);
+    inventoryFingerprint=r.headers.get('ETag')||r.headers.get('Last-Modified')||'';
+    const wb=XLSX.read(await r.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];
+    db=parse(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}));
+    source='WordPress: '+INVENTORY_URL+' | '+new Date().toLocaleString();
+    state('Live inventory loaded','ok');all();
+  }catch(e){source='Automatic load failed; using embedded inventory. '+e.message;state('Using embedded inventory','err');all();}
+  finally{inventoryLoading=false;}
+ }
+ async function checkInventoryUpdate(){
+  if(inventoryLoading||document.hidden)return;
+  try{const r=await fetch(INVENTORY_URL,{method:'HEAD',cache:'no-store',credentials:'same-origin'});if(!r.ok)return;const fp=r.headers.get('ETag')||r.headers.get('Last-Modified')||'';if(fp&&fp!==inventoryFingerprint)await loadServer(true);}catch(e){}
+ }
+ async function loadFile(f){await ensureXLSX();const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];db=parse(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}));source='Manual file: '+f.name+' | '+new Date().toLocaleString();state('Manual inventory loaded','ok');all();}catch(x){alert('Inventory file could not be read: '+x.message)}};rd.readAsArrayBuffer(f);}
+ /* v0.85 Inventory lookup mapping for BX240 / CX500 F-specification models. */
+ function inventoryLookupModel(quotationModel){
+  const model=norm(quotationModel);
+  const explicit={
+   'AX100-TF':'AX100-T',
+   'BX240TF':'BX240T','BX240TCF':'BX240TC','BX240TBF':'BX240TB','BX240TBCF':'BX240TBC',
+   'CX500DF-1':'CX500D-1','CX500DCF-1':'CX500DC-1','CX500TF-1':'CX500T-1','CX500TBF-1':'CX500TB-1','CX500TCF-1':'CX500TC-1','CX500TBCF-1':'CX500TBC-1'
+  };
+  if(explicit[model])return explicit[model];
+  if(/^BX240[DT][A-Z]*F$/.test(model))return model.replace(/F$/,'');
+  if(/^CX500[DT][A-Z]*F-1$/.test(model))return model.replace(/F-1$/,'-1');
+  return model;
+ }
+ function requiredShellKit(quotationModel){
+  const model=norm(quotationModel);
+  if(model==='AX100-TF')return 'Smooth Shell kit for AX100-T';
+  if(/^BX240T[A-Z]*F$/.test(model))return 'Smooth Shell kit for BX240T';
+  if(/^CX500T[A-Z]*F(?:-1)?$/.test(model))return 'Smooth Shell kit for CX500T';
+  if(/^CX500D[A-Z]*F(?:-1)?$/.test(model))return 'Padfoot Shell kit for CX500D';
+  return '';
+ }
+ function ensureShellPanel(){
+  let p=$('inv82-shell-panel');if(p)return p;
+  const card=$('inv82-months')?.closest('.inv82-card');if(!card)return null;
+  p=document.createElement('div');p.id='inv82-shell-panel';p.style.cssText='display:none;margin-top:12px;padding:12px;border:1px solid #f0c36d;border-left:6px solid #f9ab00;border-radius:7px;background:#fffaf0';
+  p.innerHTML='<div style="margin-bottom:9px;color:#7a4d00;font-size:14px;font-weight:700">Required Shell Kit Inventory</div><div class="inv82-grid"><div class="inv82-stat"><label>Required Option</label><strong id="inv82-shell-name">-</strong></div><div class="inv82-stat"><label>Inventory Status</label><strong id="inv82-shell-status" class="inv82-muted">-</strong></div><div class="inv82-stat"><label>Total Current Available</label><strong id="inv82-shell-qty" class="inv82-muted">-</strong></div></div><div id="inv82-shell-message" class="inv82-transition" style="display:block;margin-top:8px;background:#fff1cc;color:#7a4d00"></div><div id="inv82-shell-months" class="inv82-months"></div>';
+  card.appendChild(p);return p;
+ }
+ function renderShellKit(model,x){
+  const panel=ensureShellPanel(),name=requiredShellKit(model);if(!panel)return;
+  if(!name){panel.style.display='none';return;}panel.style.display='block';
+  const r=row(name),nameEl=$('inv82-shell-name'),statusEl=$('inv82-shell-status'),qtyEl=$('inv82-shell-qty'),msg=$('inv82-shell-message'),months=$('inv82-shell-months');
+  nameEl.textContent=name;months.innerHTML='';
+  if(!r){statusEl.textContent='Not listed';statusEl.className='inv82-muted';qtyEl.textContent='0';qtyEl.className='inv82-bad';msg.textContent=name+' was not found in the current Inventory Availability file.';return;}
+  const q=num(r.data[x.q]),status=r.data[x.s]||'Not listed';
+  statusEl.textContent=status;qtyEl.textContent=q;statusEl.className=q>0?'inv82-good':'inv82-muted';qtyEl.className=q>0?'inv82-good':'inv82-bad';
+  msg.textContent=model+' requires '+name+'. Machine and Shell Kit availability are shown separately.';
+  db.headers.forEach((h,i)=>{if(i&&/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\s\n]+20\d{2}$/i.test(String(h))){const v=r.data[i-1];if(num(v)>0){const d=document.createElement('div');d.className='inv82-month';d.innerHTML='<span>'+esc(String(h).replace(/\n/g,' '))+'</span><b>'+esc(v)+'</b>';months.appendChild(d)}}});
+ }
+ function renderSelected(){
+  if(!$('inv82-model'))return;
+  const model=selected(),lookupModel=inventoryLookupModel(model),x=ix(),legacyName=LEGACY[lookupModel],successorName=SUCCESSOR[lookupModel];
+  const quoteRow=row(lookupModel),legacyRow=legacyName?row(legacyName):null,successorRow=successorName?row(successorName):null;
+  const quoteQty=quoteRow?num(quoteRow.data[x.q]):0,legacyQty=legacyRow?num(legacyRow.data[x.q]):0,successorQty=successorRow?num(successorRow.data[x.q]):0,total=quoteQty+legacyQty+successorQty;
+  $('inv82-model').textContent=model||'-';$('inv82-qty').textContent=total;$('inv82-qty').className=total>0?'inv82-good':'inv82-bad';
+  const tr=$('inv82-transition'),mapped=model&&norm(model)!==lookupModel;
+  if(successorName){$('inv82-status').textContent=quoteRow?.data[x.s]||'Not listed';tr.style.display='block';tr.textContent=(mapped?'Quotation remains '+model+'. Inventory reference model is '+lookupModel+'. ':'Quotation remains '+model+'. ')+'Inventory availability also references successor model '+successorName+'. Current available: '+lookupModel+' ('+quoteQty+') + '+successorName+' ('+successorQty+').';}
+  else if(legacyName){$('inv82-status').textContent=legacyQty>0?(legacyName+' legacy inventory available'):(quoteRow?.data[x.s]||'Not listed');tr.style.display='block';tr.textContent=(mapped?'Quotation remains '+model+'. Inventory reference model is '+lookupModel+'. ':'Quotation is issued as '+model+'. ')+'Available quantity includes remaining '+legacyName+' inventory ('+legacyQty+') plus '+lookupModel+' inventory ('+quoteQty+').';}
+  else if(mapped){$('inv82-status').textContent=quoteRow?.data[x.s]||'Not listed';tr.style.display='block';tr.textContent='Quotation remains '+model+'. Inventory Availability references '+lookupModel+'. Current available: '+lookupModel+' ('+quoteQty+').';}
+  else{$('inv82-status').textContent=quoteRow?.data[x.s]||'Not listed';tr.style.display='none';}
+  $('inv82-status').className=total>0?'inv82-good':'inv82-muted';
+  const mo=$('inv82-months');mo.innerHTML='';const scheduleRow=successorRow||quoteRow;
+  if(scheduleRow)db.headers.forEach((h,i)=>{if(i&&/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\s\n]+20\d{2}$/i.test(String(h))){const v=scheduleRow.data[i-1];if(num(v)>0){const d=document.createElement('div');d.className='inv82-month';d.innerHTML='<span>'+esc(String(h).replace(/\n/g,' '))+'</span><b>'+esc(v)+'</b>';mo.appendChild(d)}}});
+  renderShellKit(model,x);
+ }
+ function category(m){m=String(m||'').toUpperCase();if(m.includes('SHELL KIT')||m.includes('BLADE')||m.includes('CAB FOR'))return'Options';if(/^SV/.test(m))return'Heavy Equipment - Soil';if(/^(SW|TW|GW|CR|R2H|TS)/.test(m))return'Heavy Equipment - Asphalt';if(/^(PC|RS|HS)/.test(m))return'Light Equipment';return'Other';}
+ function table(){if(!$('inv82-head'))return;const h=db.headers||[],x=ix(),term=($('inv82-search')?.value||'').toLowerCase(),cols=h.map((v,i)=>({l:String(v).replace(/\n/g,' '),i})).filter(c=>c.i>0&&!/image|photo|youtube|catalog/i.test(c.l));$('inv82-head').innerHTML='<tr>'+cols.map(c=>'<th>'+esc(c.l)+'</th>').join('')+'</tr>';$('inv82-body').innerHTML='';let count=0,last='';(db.body||[]).forEach(r=>{if(term&&!(r.data||[]).join(' ').toLowerCase().includes(term))return;const m=r.data?.[x.m];if(!m)return;const cat=category(m);if(cat!==last){const g=document.createElement('tr');g.className='inv82-group';g.innerHTML='<td colspan="'+cols.length+'">'+esc(cat)+'</td>';$('inv82-body').appendChild(g);last=cat}const tr=document.createElement('tr');cols.forEach(c=>{const td=document.createElement('td'),v=r.data[c.i-1]??'';td.textContent=v;if(/current.*available/i.test(c.l)){if(num(v)>0)td.className='inv82-stock';else td.className='inv82-zero'}if(/inventory status/i.test(c.l)&&String(v).toLowerCase().includes('in stock'))td.className='inv82-stock';tr.appendChild(td)});$('inv82-body').appendChild(tr);count++});$('inv82-count').textContent=count+' items';$('inv82-source').textContent=source;}
+ async function pdf(){try{await ensurePDF();}catch(e){alert('PDF library could not be loaded.');return}if(!window.jspdf){alert('PDF library is not available');return}const b=$('inv82-pdf'),old=b.textContent;b.disabled=true;b.textContent='Generating...';try{const {jsPDF}=window.jspdf,doc=new jsPDF({orientation:'landscape',unit:'mm',format:'letter'}),h=db.headers||[],x=ix(),cols=h.map((v,i)=>({l:String(v).replace(/\n/g,' '),i})).filter(c=>c.i>0&&!/image|photo|youtube|catalog|origin/i.test(c.l)),groups={};(db.body||[]).forEach(r=>{const m=r.data[x.m];if(m)(groups[category(m)]??=[]).push(r)});const rows=[];Object.entries(groups).forEach(([g,a])=>{rows.push([{content:g,colSpan:cols.length,styles:{fillColor:[55,65,81],textColor:255,fontStyle:'bold',halign:'left'}}]);a.forEach(r=>rows.push(cols.map(c=>r.data[c.i-1]??'')))});doc.setFontSize(14);doc.text('ASTERION Inventory Availability Sheet',7,9);doc.setFontSize(7);doc.text(source.slice(0,150),7,14);doc.autoTable({startY:17,head:[cols.map(c=>c.l)],body:rows,theme:'grid',styles:{fontSize:5.1,cellPadding:.8,halign:'center'},headStyles:{fillColor:[35,35,35]},columnStyles:{0:{halign:'left',cellWidth:29}},margin:{left:5,right:5,bottom:19},didDrawPage:()=>{const y=doc.internal.pageSize.height-9;doc.setFontSize(5.4);doc.setTextColor(90);doc.text('1. Inventory Availability may differ at order time. Place orders promptly to help secure inventory.',6,y);doc.text('2. Subject to Change: Availability may change depending on global supply chain conditions.',6,y+3)}});doc.save('SAKAI_Inventory_Availability_'+new Date().toISOString().slice(0,10)+'.pdf')}catch(e){alert('PDF generation failed: '+e.message)}finally{b.disabled=false;b.textContent=old}}
+ function all(){table();renderSelected();if($('inv82-source'))$('inv82-source').textContent=source}
+ function bind(){const p=$('editor-product'),se=$('inv82-search'),rf=$('inv82-refresh'),fi=$('inv82-file'),pb=$('inv82-pdf');if(p&&!p.dataset.inv82){p.dataset.inv82='1';p.addEventListener('change',renderSelected)}if(se)se.addEventListener('input',table);if(rf)rf.addEventListener('click',loadServer);if(fi)fi.addEventListener('change',e=>e.target.files[0]&&loadFile(e.target.files[0]));if(pb)pb.addEventListener('click',pdf);all();setTimeout(()=>loadServer(),350);setInterval(checkInventoryUpdate,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkInventoryUpdate();})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,100));else setTimeout(bind,100);
+})();
+
+
+
+/* Mobile usability: keep the selected tab visible in the horizontal tab bar. */
+(function enableMobileTabAutoScroll(){
+  function centerActiveTab(button) {
+    if (window.matchMedia('(max-width: 768px)').matches && button) {
+      window.requestAnimationFrame(function(){
+        button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
+    }
+  }
+  function bind() {
+    document.querySelectorAll('.tab-btn').forEach(function(button){
+      if (button.dataset.mobileScrollBound) return;
+      button.dataset.mobileScrollBound = '1';
+      button.addEventListener('click', function(){ centerActiveTab(button); });
+    });
+    centerActiveTab(document.querySelector('.tab-btn.active'));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+})();
+
+</script>
+
+<script id="rsm-release-consistency-sync">
+(function () {
+    'use strict';
+
+    var version = "DEMO";
+    var build = "PUBLIC";
+    var releaseLabel = "Public Portfolio Demo";
+
+    document.documentElement.setAttribute('data-quote-version', version);
+    document.documentElement.setAttribute('data-quote-build', build);
+
+    window.RSM_QUOTE_VERSION = version;
+    window.RSM_QUOTE_BUILD = build;
+    window.RSM_QUOTE_RELEASE_LABEL = releaseLabel;
+
+    var screenRelease = document.getElementById('rsm-screen-release');
+    if (screenRelease) {
+        screenRelease.textContent = releaseLabel;
+        screenRelease.setAttribute('data-version', version);
+        screenRelease.setAttribute('data-build', build);
+    }
+
+    var buildBadge = document.getElementById('rsm-build-badge');
+    if (buildBadge) {
+        buildBadge.textContent = 'v' + version + ' / Build ' + build;
+        buildBadge.setAttribute('data-version', version);
+        buildBadge.setAttribute('data-build', build);
+    }
+
+    var buildLabels = document.querySelectorAll(
+        '#print-area .rsm-quote-build-output'
+    );
+
+    buildLabels.forEach(function (label) {
+        label.textContent = 'Quote Tool v' + version + ' / Build ' + build;
+        label.setAttribute('data-version', version);
+        label.setAttribute('data-build', build);
+    });
+})();
+</script>
+
+<script>
+/* ============================================================
+   Partner Demo model restriction hotfix - v0.89.13
+   Shell Kit models ending in DF / DCF / TF / TCF / TBF / TBCF
+   are unavailable while Partner Demo pricing is selected.
+   ============================================================ */
+(function sakaiARAIRCModelRestriction_v08913(){
+  const BLOCKED_SUFFIX_RE = /(?:TBCF|TBF|TCF|DCF|TF|DF)(?:-1)?$/i;
+
+  function isARAIRC(){
+    return document.getElementById('quote-price-type')?.value === 'Partner Demo';
+  }
+
+  function isBlockedModel(model){
+    return BLOCKED_SUFFIX_RE.test(String(model || '').trim());
+  }
+
+  function syncARAIRCModelOptions(){
+    const select = document.getElementById('editor-product');
+    if(!select) return;
+
+    const partnerDemo = isARAIRC();
+    let selectedBecameBlocked = false;
+
+    Array.from(select.options).forEach(function(option){
+      const productRecord = (typeof products !== 'undefined' && Array.isArray(products))
+        ? products.find(function(p){ return String(p.id) === String(option.value); })
+        : null;
+      const model = productRecord?.model || option.textContent || '';
+      const blocked = partnerDemo && isBlockedModel(model);
+
+      option.disabled = blocked;
+      option.hidden = blocked;
+      if(option.selected && blocked) selectedBecameBlocked = true;
+    });
+
+    if(selectedBecameBlocked){
+      const firstAllowed = Array.from(select.options).find(function(option){
+        return !option.disabled && !option.hidden;
+      });
+      if(firstAllowed){
+        select.value = firstAllowed.value;
+        select.dispatchEvent(new Event('change', { bubbles:true }));
+      } else {
+        select.value = '';
+      }
+    }
+
+    select.title = partnerDemo
+      ? 'Shell Kit models (DF / DCF / TF / TCF / TBF / TBCF) are not available for Partner Demo pricing.'
+      : '';
+  }
+
+  function bind(){
+    const priceType = document.getElementById('quote-price-type');
+    const productSelect = document.getElementById('editor-product');
+
+    if(priceType && !priceType.dataset.araModelRestrictionBound){
+      priceType.dataset.araModelRestrictionBound = '1';
+      priceType.addEventListener('change', syncARAIRCModelOptions, true);
+    }
+    if(productSelect && !productSelect.dataset.araModelRestrictionBound){
+      productSelect.dataset.araModelRestrictionBound = '1';
+      productSelect.addEventListener('focus', syncARAIRCModelOptions, true);
+      productSelect.addEventListener('change', syncARAIRCModelOptions, true);
+    }
+    syncARAIRCModelOptions();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+
+  // Re-apply after Products Master import/edit or any existing select rebuild.
+  setInterval(bind, 800);
+})();
+</script>
+
+
+</body>
+</html>
