@@ -3,6 +3,14 @@ name: Update Garmin Running Data
 on:
   workflow_dispatch:
 
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/garmin-update.yml"
+      - "journey-route.js"
+      - "scripts/update_index_journey.py"
+
   schedule:
     # 1日4回：米国東部時間のおおよそ
     - cron: "15 3,9,15,21 * * *"
@@ -38,9 +46,12 @@ jobs:
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_garmin.py
 
+      - name: Update journey page integration
+        run: python scripts/update_index_journey.py
+
       - name: Commit updated running data
         run: |
-          git add data/latest_run.json data/journey_data.json
+          git add data/latest_run.json data/journey_data.json index.html
 
           if git diff --cached --quiet; then
             echo "No new running data."
