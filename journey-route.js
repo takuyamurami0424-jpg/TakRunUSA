@@ -161,4 +161,38 @@
         bounds.extend([journey.next.lat, journey.next.lng]);
         map.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 });
     };
+
+    // Running Logs card: link directly to the public Strava profile.
+    function updateRunningLogsCard() {
+        const stravaProfileUrl = 'https://www.strava.com/athletes/146407804';
+        const cards = document.querySelectorAll('#works .card');
+
+        for (const card of cards) {
+            const heading = card.querySelector('h3');
+            if (!heading || heading.textContent.trim() !== 'Running Logs') continue;
+
+            const description = card.querySelector('p');
+            if (description) {
+                description.textContent = 'View my latest running activities and training history on Strava.';
+            }
+
+            const link = card.querySelector('a.btn-outline');
+            if (link) {
+                link.href = stravaProfileUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.removeAttribute('download');
+                link.innerHTML = '<i class="fa-brands fa-strava"></i> Open Strava';
+                link.setAttribute('aria-label', 'Open Takuya Murami Strava profile');
+            }
+
+            break;
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateRunningLogsCard, { once: true });
+    } else {
+        updateRunningLogsCard();
+    }
 })();
