@@ -10,6 +10,8 @@ on:
       - ".github/workflows/garmin-update.yml"
       - "journey-route.js"
       - "scripts/update_index_journey.py"
+      - "scripts/update_run_logs.py"
+      - "run-logs.html"
 
   schedule:
     # 1日4回：米国東部時間のおおよそ
@@ -46,12 +48,18 @@ jobs:
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_garmin.py
 
+      - name: Update Garmin running history
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+        run: python scripts/update_run_logs.py
+
       - name: Update journey page integration
         run: python scripts/update_index_journey.py
 
       - name: Commit updated running data
         run: |
-          git add data/latest_run.json data/journey_data.json index.html
+          git add -- data/latest_run.json data/journey_data.json data/run_logs.json index.html
 
           if git diff --cached --quiet; then
             echo "No new running data."
