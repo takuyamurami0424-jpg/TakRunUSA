@@ -3,9 +3,12 @@ from pathlib import Path
 INDEX_FILE = Path("index.html")
 JOURNEY_SCRIPT_TAG = '    <script src="journey-route.js"></script>\n'
 DASHBOARD_SCRIPT_TAG = '    <script src="dashboard.js"></script>\n'
+BLOG_SCRIPT_TAG = '    <script src="blog.js"></script>\n'
 DASHBOARD_CSS_TAG = '    <link rel="stylesheet" href="dashboard.css">\n'
+BLOG_CSS_TAG = '    <link rel="stylesheet" href="blog.css">\n'
 GARMIN_MARKER = '<!-- 🏃 GARMIN DATA SCRIPT -->'
 JOURNEY_MARKER = '    <!-- 🗺️ JOURNEY MAP SECTION (Running Log) -->'
+WORKS_MARKER = '    <!-- Works -->'
 HEAD_MARKER = '</head>'
 
 OLD_DESCRIPTION = (
@@ -123,6 +126,29 @@ DASHBOARD_SECTION = '''    <!-- 📊 GARMIN RUNNING DASHBOARD -->
     </section>
 '''
 
+BLOG_SECTION = '''    <!-- ✍️ NOTE BLOG -->
+    <section id="blog-section">
+        <div class="section-header" style="margin-bottom: 35px;">
+            <span class="section-subtitle">Latest From My Blog</span>
+            <h2 class="section-title">Official Note Blog</h2>
+            <p style="color: var(--text-sub);">
+                Supply Chain、アメリカ生活、ランニングについて書いています。
+            </p>
+        </div>
+
+        <div class="blog-toolbar">
+            <div style="color: var(--text-sub);">最新3記事を自動表示</div>
+            <a id="blog-profile-link" class="blog-profile-link" href="https://note.com/tak0424" target="_blank" rel="noopener noreferrer">
+                View all on note <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </div>
+
+        <div id="blog-loading" class="blog-loading">最新記事を読み込んでいます...</div>
+        <div id="blog-error" class="blog-error hidden">ブログ記事を読み込めませんでした。</div>
+        <div id="blog-grid" class="blog-grid hidden"></div>
+    </section>
+'''
+
 
 def main() -> None:
     text = INDEX_FILE.read_text(encoding="utf-8")
@@ -132,10 +158,16 @@ def main() -> None:
         text = text.replace(OLD_DESCRIPTION, NEW_DESCRIPTION, 1)
         changed = True
 
+    css_tags = ""
     if 'href="dashboard.css"' not in text:
+        css_tags += DASHBOARD_CSS_TAG
+    if 'href="blog.css"' not in text:
+        css_tags += BLOG_CSS_TAG
+
+    if css_tags:
         if HEAD_MARKER not in text:
             raise RuntimeError("</head> was not found in index.html")
-        text = text.replace(HEAD_MARKER, DASHBOARD_CSS_TAG + HEAD_MARKER, 1)
+        text = text.replace(HEAD_MARKER, css_tags + HEAD_MARKER, 1)
         changed = True
 
     if 'id="running-dashboard"' not in text:
@@ -144,11 +176,19 @@ def main() -> None:
         text = text.replace(JOURNEY_MARKER, DASHBOARD_SECTION + JOURNEY_MARKER, 1)
         changed = True
 
+    if 'id="blog-section"' not in text:
+        if WORKS_MARKER not in text:
+            raise RuntimeError("Works section marker was not found in index.html")
+        text = text.replace(WORKS_MARKER, BLOG_SECTION + WORKS_MARKER, 1)
+        changed = True
+
     script_tags = ""
     if 'src="journey-route.js"' not in text:
         script_tags += JOURNEY_SCRIPT_TAG
     if 'src="dashboard.js"' not in text:
         script_tags += DASHBOARD_SCRIPT_TAG
+    if 'src="blog.js"' not in text:
+        script_tags += BLOG_SCRIPT_TAG
 
     if script_tags:
         if GARMIN_MARKER not in text:
@@ -162,9 +202,9 @@ def main() -> None:
 
     if changed:
         INDEX_FILE.write_text(text, encoding="utf-8")
-        print("index.htmlをGarmin Dashboard/Journey連携に更新しました。")
+        print("index.htmlをGarmin Dashboard/Journey/Blog連携に更新しました。")
     else:
-        print("index.htmlはすでにGarmin Dashboard/Journey連携済みです。")
+        print("index.htmlはすでにGarmin Dashboard/Journey/Blog連携済みです。")
 
 
 if __name__ == "__main__":
