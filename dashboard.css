@@ -1,0 +1,191 @@
+#running-dashboard {
+    padding: 90px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.dashboard-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.dashboard-kicker {
+    color: var(--text-sub);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+}
+
+.dashboard-value {
+    color: var(--accent);
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.dashboard-unit {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    margin-left: 4px;
+}
+
+.pb-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.pb-card {
+    position: relative;
+    min-height: 150px;
+}
+
+.pb-time {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 6px;
+}
+
+.pb-date {
+    color: var(--text-sub);
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+.pb-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #edf2f7;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.pb-badge.new-pb {
+    background: #fff5f5;
+    color: #c53030;
+}
+
+.mileage-card {
+    margin-bottom: 28px;
+}
+
+.mileage-chart {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: end;
+    gap: 10px;
+    height: 260px;
+    margin-top: 24px;
+    padding-top: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.mileage-column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 0;
+}
+
+.mileage-value {
+    font-size: 0.72rem;
+    color: var(--text-sub);
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.mileage-bar-wrap {
+    height: 190px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.mileage-bar {
+    width: min(34px, 72%);
+    min-height: 2px;
+    background: var(--accent-light);
+    border-radius: 7px 7px 0 0;
+    transition: height 0.4s ease;
+}
+
+.mileage-column.current .mileage-bar {
+    background: var(--accent);
+}
+
+.mileage-label {
+    font-size: 0.72rem;
+    color: var(--text-sub);
+    margin-top: 7px;
+    white-space: nowrap;
+}
+
+.next-race-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+.next-race-days {
+    text-align: center;
+    min-width: 150px;
+}
+
+.next-race-days .dashboard-value {
+    font-size: 2.5rem;
+}
+
+.dashboard-loading,
+.dashboard-error {
+    text-align: center;
+    color: var(--text-sub);
+    padding: 20px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid,
+    .pb-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mileage-chart {
+        overflow-x: auto;
+        grid-template-columns: repeat(12, 54px);
+    }
+}
+
+@media (max-width: 520px) {
+    .dashboard-grid,
+    .pb-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .next-race-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .next-race-days {
+        text-align: left;
+    }
+}
