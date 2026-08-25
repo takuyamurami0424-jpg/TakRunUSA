@@ -11,12 +11,9 @@ on:
       - "journey-route.js"
       - "dashboard.js"
       - "dashboard.css"
-      - "blog.js"
-      - "blog.css"
       - "scripts/update_index_journey.py"
       - "scripts/update_run_logs.py"
       - "scripts/update_dashboard.py"
-      - "scripts/update_blog.py"
       - "run-logs.html"
 
   schedule:
@@ -37,6 +34,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -66,22 +65,22 @@ jobs:
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_dashboard.py
 
-      - name: Update note blog feed
-        run: python scripts/update_blog.py
-
-      - name: Update journey, dashboard and blog page integration
+      - name: Update journey and dashboard page integration
         run: python scripts/update_index_journey.py
 
-      - name: Commit updated site data
+      - name: Commit updated running data
         run: |
-          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json data/blog.json index.html
+          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json index.html
 
           if git diff --cached --quiet; then
-            echo "No new site data."
+            echo "No new running data."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Update Garmin and blog data"
-          git push
+          git commit -m "Update Garmin running data"
+
+          # 実行中に main が更新されていた場合も、最新変更を取り込んでから保存する
+          git pull --rebase origin main
+          git push origin HEAD:main
