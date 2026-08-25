@@ -9,8 +9,11 @@ on:
     paths:
       - ".github/workflows/garmin-update.yml"
       - "journey-route.js"
+      - "dashboard.js"
+      - "dashboard.css"
       - "scripts/update_index_journey.py"
       - "scripts/update_run_logs.py"
+      - "scripts/update_dashboard.py"
       - "run-logs.html"
 
   schedule:
@@ -54,12 +57,18 @@ jobs:
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_run_logs.py
 
-      - name: Update journey page integration
+      - name: Update Garmin running dashboard
+        env:
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+        run: python scripts/update_dashboard.py
+
+      - name: Update journey and dashboard page integration
         run: python scripts/update_index_journey.py
 
       - name: Commit updated running data
         run: |
-          git add -- data/latest_run.json data/journey_data.json data/run_logs.json index.html
+          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json index.html
 
           if git diff --cached --quiet; then
             echo "No new running data."
