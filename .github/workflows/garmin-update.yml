@@ -11,9 +11,12 @@ on:
       - "journey-route.js"
       - "dashboard.js"
       - "dashboard.css"
+      - "blog.js"
+      - "blog.css"
       - "scripts/update_index_journey.py"
       - "scripts/update_run_logs.py"
       - "scripts/update_dashboard.py"
+      - "scripts/update_blog.py"
       - "run-logs.html"
 
   schedule:
@@ -63,19 +66,22 @@ jobs:
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_dashboard.py
 
-      - name: Update journey and dashboard page integration
+      - name: Update note blog feed
+        run: python scripts/update_blog.py
+
+      - name: Update journey, dashboard and blog page integration
         run: python scripts/update_index_journey.py
 
-      - name: Commit updated running data
+      - name: Commit updated site data
         run: |
-          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json index.html
+          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json data/blog.json index.html
 
           if git diff --cached --quiet; then
-            echo "No new running data."
+            echo "No new site data."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Update Garmin running data"
+          git commit -m "Update Garmin and blog data"
           git push
