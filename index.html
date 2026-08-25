@@ -381,6 +381,7 @@
         }
     </style>
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="blog.css">
 </head>
 <body>
 
@@ -707,6 +708,27 @@
         </div>
     </section>
 
+    <!-- ✍️ NOTE BLOG -->
+    <section id="blog-section">
+        <div class="section-header" style="margin-bottom: 35px;">
+            <span class="section-subtitle">Latest From My Blog</span>
+            <h2 class="section-title">Official Note Blog</h2>
+            <p style="color: var(--text-sub);">
+                Supply Chain、アメリカ生活、ランニングについて書いています。
+            </p>
+        </div>
+
+        <div class="blog-toolbar">
+            <div style="color: var(--text-sub);">最新3記事を自動表示</div>
+            <a id="blog-profile-link" class="blog-profile-link" href="https://note.com/tak0424" target="_blank" rel="noopener noreferrer">
+                View all on note <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </div>
+
+        <div id="blog-loading" class="blog-loading">最新記事を読み込んでいます...</div>
+        <div id="blog-error" class="blog-error hidden">ブログ記事を読み込めませんでした。</div>
+        <div id="blog-grid" class="blog-grid hidden"></div>
+    </section>
     <!-- Works -->
     <section id="works">
         <div class="section-header">
@@ -1118,6 +1140,7 @@
     </script>
     <script src="journey-route.js"></script>
     <script src="dashboard.js"></script>
+    <script src="blog.js"></script>
 <!-- 🏃 GARMIN DATA SCRIPT -->
 <script>
     async function loadLatestRun() {
