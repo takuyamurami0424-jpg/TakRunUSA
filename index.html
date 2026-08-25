@@ -380,6 +380,7 @@
             canvas { height: 250px; }
         }
     </style>
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
@@ -554,6 +555,90 @@
         </div>
     </div>
 </section>
+    <!-- 📊 GARMIN RUNNING DASHBOARD -->
+    <section id="running-dashboard">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <span class="section-subtitle">Garmin Performance Data</span>
+            <h2 class="section-title">Running Dashboard</h2>
+            <p style="color: var(--text-sub);">
+                Garminのランニング履歴から、走行距離・Personal Best・月別Mileageを自動集計。
+            </p>
+        </div>
+
+        <div id="dashboard-loading" class="dashboard-loading">Running dashboardを読み込んでいます...</div>
+        <div id="dashboard-error" class="dashboard-error hidden">Running dashboardを読み込めませんでした。</div>
+
+        <div id="dashboard-content" class="hidden">
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="dashboard-kicker">This Month</div>
+                    <div><span id="dash-month" class="dashboard-value">--</span><span class="dashboard-unit">km</span></div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-kicker">This Year</div>
+                    <div><span id="dash-year" class="dashboard-value">--</span><span class="dashboard-unit">km</span></div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-kicker">Last 7 Days</div>
+                    <div><span id="dash-week" class="dashboard-value">--</span><span class="dashboard-unit">km</span></div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-kicker">Total Since Jul 2024</div>
+                    <div><span id="dash-total" class="dashboard-value">--</span><span class="dashboard-unit">km</span></div>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin: 45px 0 25px;">
+                <span class="section-subtitle">Personal Best</span>
+                <h3 class="section-title" style="font-size: 1.7rem;">Garmin PBs</h3>
+            </div>
+
+            <div class="pb-grid">
+                <div class="dashboard-card pb-card">
+                    <div class="dashboard-kicker">5K</div>
+                    <div id="pb-5k-time" class="pb-time">--</div>
+                    <div id="pb-5k-date" class="pb-date">--</div>
+                    <span id="pb-5k-badge" class="pb-badge">Waiting for data</span>
+                </div>
+                <div class="dashboard-card pb-card">
+                    <div class="dashboard-kicker">10K</div>
+                    <div id="pb-10k-time" class="pb-time">--</div>
+                    <div id="pb-10k-date" class="pb-date">--</div>
+                    <span id="pb-10k-badge" class="pb-badge">Waiting for data</span>
+                </div>
+                <div class="dashboard-card pb-card">
+                    <div class="dashboard-kicker">Half Marathon</div>
+                    <div id="pb-half-time" class="pb-time">--</div>
+                    <div id="pb-half-date" class="pb-date">--</div>
+                    <span id="pb-half-badge" class="pb-badge">Waiting for data</span>
+                </div>
+                <div class="dashboard-card pb-card">
+                    <div class="dashboard-kicker">Marathon</div>
+                    <div id="pb-marathon-time" class="pb-time">--</div>
+                    <div id="pb-marathon-date" class="pb-date">--</div>
+                    <span id="pb-marathon-badge" class="pb-badge">Waiting for data</span>
+                </div>
+            </div>
+
+            <div class="dashboard-card mileage-card">
+                <div class="dashboard-kicker">Last 12 Months</div>
+                <h3 style="font-size: 1.35rem;">Monthly Mileage</h3>
+                <div id="mileage-chart" class="mileage-chart" aria-label="Monthly running mileage chart"></div>
+            </div>
+
+            <div class="dashboard-card next-race-card">
+                <div>
+                    <div class="dashboard-kicker">Next Race</div>
+                    <h3 id="next-race-name" style="font-size: 1.4rem;">Next race not set</h3>
+                    <p id="next-race-meta" style="margin: 7px 0 0; color: var(--text-sub);">Add the next confirmed race when you are ready.</p>
+                </div>
+                <div class="next-race-days">
+                    <div><span id="next-race-days" class="dashboard-value">—</span></div>
+                    <div class="dashboard-kicker" style="margin-top: 4px;">Days To Go</div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- 🗺️ JOURNEY MAP SECTION (Running Log) -->
     <section id="journey">
         <div class="section-header" style="margin-bottom: 40px;">
@@ -1032,6 +1117,7 @@
 
     </script>
     <script src="journey-route.js"></script>
+    <script src="dashboard.js"></script>
 <!-- 🏃 GARMIN DATA SCRIPT -->
 <script>
     async function loadLatestRun() {

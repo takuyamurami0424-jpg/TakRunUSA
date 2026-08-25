@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-08-24T21:45:21.285321+00:00",
+  "generated_at": "2026-08-25T18:06:27.120708+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24113019004,
+      "activity_name": "Adairsville - Interval 400m x 4 ",
+      "activity_name_en": "Adairsville - Interval 400m x 4",
+      "date": "2026-08-25 12:22:05",
+      "distance_km": 8.87,
+      "duration_minutes": 44.6,
+      "pace_per_km": "5:02",
+      "average_hr": 150,
+      "maximum_hr": 173,
+      "elevation_m": 54,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24100146720,
       "activity_name": "Adairsville ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "安定した有酸素トレーニングと推定されます。",
       "comment_en": "This appears to be a steady and controlled aerobic training run."
-    },
-    {
-      "activity_id": 23228064065,
-      "activity_name": "Kennesaw Running",
-      "activity_name_en": "Kennesaw Running",
-      "date": "2026-06-12 18:49:50",
-      "distance_km": 4.91,
-      "duration_minutes": 39.5,
-      "pace_per_km": "8:03",
-      "average_hr": 123,
-      "maximum_hr": 138,
-      "elevation_m": 44,
-      "estimated_run_type": "Recovery Run",
-      "score": 90,
-      "grade": "A",
-      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
-      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
     }
   ]
 }
