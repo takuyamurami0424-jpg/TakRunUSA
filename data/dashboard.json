@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-25T18:06:37.220553+00:00",
+  "generated_at": "2026-08-26T04:04:42.133033+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
-    "this_month_km": 131.4,
-    "this_year_km": 1483.4,
-    "last_7_days_km": 48.4,
-    "total_km": 4055.8,
-    "activity_count": 580
+    "this_month_km": 135.5,
+    "this_year_km": 1487.5,
+    "last_7_days_km": 50.1,
+    "total_km": 4059.9,
+    "activity_count": 583
   },
   "monthly_mileage": [
     {
@@ -90,7 +90,7 @@
       "key": "2026-08",
       "label": "Aug",
       "year": 2026,
-      "distance_km": 131.4,
+      "distance_km": 135.5,
       "is_current": true
     }
   ],
