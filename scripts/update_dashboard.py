@@ -44,6 +44,20 @@ def format_duration(seconds: float) -> str:
     return f"{minutes}:{secs:02d}"
 
 
+def format_pace(seconds_per_km: float | None) -> str | None:
+    if seconds_per_km is None or seconds_per_km <= 0:
+        return None
+
+    minutes = int(seconds_per_km // 60)
+    seconds = int(round(seconds_per_km % 60))
+
+    if seconds == 60:
+        minutes += 1
+        seconds = 0
+
+    return f"{minutes}:{seconds:02d}"
+
+
 def month_key(dt: datetime) -> str:
     return f"{dt.year:04d}-{dt.month:02d}"
 
@@ -62,6 +76,105 @@ def previous_months(now: datetime, count: int = 12) -> list[tuple[int, int]]:
 
     months.reverse()
     return months
+
+
+def summarize_runs(runs: list[dict]) -> dict:
+    total_distance = sum(run["distance_km"] for run in runs)
+    total_duration = sum(run["duration_seconds"] for run in runs)
+
+    hr_runs = [run for run in runs if run["average_hr"] is not None]
+    hr_duration = sum(run["duration_seconds"] for run in hr_runs)
+    weighted_hr = (
+        sum(run["average_hr"] * run["duration_seconds"] for run in hr_runs) / hr_duration
+        if hr_duration > 0
+        else None
+    )
+
+    avg_pace_seconds = (
+        total_duration / total_distance
+        if total_distance > 0
+        else None
+    )
+
+    return {
+        "distance_km": round(total_distance, 1),
+        "run_count": len(runs),
+        "duration_hours": round(total_duration / 3600, 1),
+        "avg_pace_per_km": format_pace(avg_pace_seconds),
+        "avg_hr": round(weighted_hr) if weighted_hr is not None else None,
+        "longest_run_km": round(max((run["distance_km"] for run in runs), default=0), 1),
+    }
+
+
+def build_training_trend(unique_runs: list[dict], now: datetime) -> dict:
+    current_start = now - timedelta(days=28)
+    previous_start = now - timedelta(days=56)
+
+    current_runs = [
+        run for run in unique_runs
+        if current_start <= run["date"] <= now
+    ]
+    previous_runs = [
+        run for run in unique_runs
+        if previous_start <= run["date"] < current_start
+    ]
+
+    current = summarize_runs(current_runs)
+    previous = summarize_runs(previous_runs)
+
+    if previous["distance_km"] > 0:
+        distance_change_pct = round(
+            (current["distance_km"] - previous["distance_km"])
+            / previous["distance_km"]
+            * 100,
+            1,
+        )
+    else:
+        distance_change_pct = None
+
+    if distance_change_pct is None:
+        direction = "no-baseline"
+    elif distance_change_pct > 2:
+        direction = "up"
+    elif distance_change_pct < -2:
+        direction = "down"
+    else:
+        direction = "steady"
+
+    weekly = []
+
+    for index in range(4):
+        start = now - timedelta(days=7 * (4 - index))
+        end = now - timedelta(days=7 * (3 - index))
+
+        week_runs = [
+            run for run in unique_runs
+            if start <= run["date"] < end
+        ]
+
+        week_summary = summarize_runs(week_runs)
+
+        weekly.append(
+            {
+                "label": f"W{index + 1}",
+                "date_range": (
+                    f"{start.strftime('%b %d')}–"
+                    f"{(end - timedelta(days=1)).strftime('%b %d')}"
+                ),
+                "distance_km": week_summary["distance_km"],
+                "run_count": week_summary["run_count"],
+                "avg_pace_per_km": week_summary["avg_pace_per_km"],
+            }
+        )
+
+    return {
+        "period_days": 28,
+        "current": current,
+        "previous": previous,
+        "distance_change_pct": distance_change_pct,
+        "direction": direction,
+        "weekly": weekly,
+    }
 
 
 def build_dashboard(activities: list[dict]) -> dict:
@@ -92,6 +205,13 @@ def build_dashboard(activities: list[dict]) -> dict:
         if activity_id:
             seen_ids.add(activity_id)
 
+        average_hr_value = activity.get("averageHR")
+        average_hr = (
+            float(average_hr_value)
+            if average_hr_value is not None
+            else None
+        )
+
         unique_runs.append(
             {
                 "activity_id": activity.get("activityId"),
@@ -99,6 +219,7 @@ def build_dashboard(activities: list[dict]) -> dict:
                 "date": dt,
                 "distance_km": distance_km,
                 "duration_seconds": duration_seconds,
+                "average_hr": average_hr,
             }
         )
 
@@ -164,6 +285,7 @@ def build_dashboard(activities: list[dict]) -> dict:
             "total_km": round(total_distance, 1),
             "activity_count": len(unique_runs),
         },
+        "training_trend": build_training_trend(unique_runs, now),
         "monthly_mileage": monthly,
         "pbs": pbs,
     }
@@ -210,11 +332,14 @@ def main() -> None:
     write_if_changed(dashboard)
 
     summary = dashboard["summary"]
+    trend = dashboard["training_trend"]["current"]
+
     print(
         "Dashboard: "
         f"month={summary['this_month_km']:.1f} km, "
         f"year={summary['this_year_km']:.1f} km, "
-        f"total={summary['total_km']:.1f} km"
+        f"total={summary['total_km']:.1f} km, "
+        f"last28={trend['distance_km']:.1f} km"
     )
 
 

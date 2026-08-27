@@ -150,6 +150,60 @@ BLOG_SECTION = '''    <!-- ✍️ NOTE BLOG -->
 '''
 
 
+TRAINING_TREND_SECTION = '''            <div id="training-trend" class="dashboard-card training-trend-card">
+                <div class="training-trend-header">
+                    <div>
+                        <div class="dashboard-kicker">Last 4 Weeks</div>
+                        <h3 style="font-size: 1.35rem;">Training Trend</h3>
+                        <p style="margin: 6px 0 0; color: var(--text-sub);">
+                            Garminの直近28日間を、その前の28日間と比較します。
+                        </p>
+                    </div>
+                    <span id="trend-change" class="trend-change">Calculating...</span>
+                </div>
+
+                <div class="trend-grid">
+                    <div class="trend-metric"><div class="dashboard-kicker">Distance</div><div id="trend-distance" class="trend-value">--</div></div>
+                    <div class="trend-metric"><div class="dashboard-kicker">Runs</div><div id="trend-runs" class="trend-value">--</div></div>
+                    <div class="trend-metric"><div class="dashboard-kicker">Avg Pace</div><div id="trend-pace" class="trend-value">--</div></div>
+                    <div class="trend-metric"><div class="dashboard-kicker">Avg HR</div><div id="trend-hr" class="trend-value">--</div></div>
+                    <div class="trend-metric"><div class="dashboard-kicker">Longest Run</div><div id="trend-longest" class="trend-value">--</div></div>
+                </div>
+
+                <div class="trend-weekly-heading">Weekly mileage · 直近4週間</div>
+                <div id="trend-weekly-chart" class="trend-weekly-chart" aria-label="Last four weeks running mileage"></div>
+            </div>
+
+'''
+
+OLD_NEXT_RACE_CARD = '''            <div class="dashboard-card next-race-card">
+                <div>
+                    <div class="dashboard-kicker">Next Race</div>
+                    <h3 id="next-race-name" style="font-size: 1.4rem;">Next race not set</h3>
+                    <p id="next-race-meta" style="margin: 7px 0 0; color: var(--text-sub);">Add the next confirmed race when you are ready.</p>
+                </div>
+                <div class="next-race-days">
+                    <div><span id="next-race-days" class="dashboard-value">—</span></div>
+                    <div class="dashboard-kicker" style="margin-top: 4px;">Days To Go</div>
+                </div>
+            </div>'''
+
+NEW_NEXT_RACE_CARD = '''            <div class="dashboard-card next-race-card">
+                <div class="next-race-main">
+                    <div class="dashboard-kicker">Next Race & Goal</div>
+                    <h3 id="next-race-name" style="font-size: 1.4rem;">Next race not set</h3>
+                    <p id="next-race-meta" style="margin: 7px 0 0; color: var(--text-sub);">
+                        Add the next confirmed race when you are ready.
+                    </p>
+                    <span id="next-race-goal" class="race-goal-pill">Goal not set</span>
+                </div>
+                <div class="next-race-days">
+                    <div><span id="next-race-days" class="dashboard-value">—</span></div>
+                    <div class="dashboard-kicker" style="margin-top: 4px;">Days To Go</div>
+                </div>
+            </div>'''
+
+
 def main() -> None:
     text = INDEX_FILE.read_text(encoding="utf-8")
     changed = False
@@ -182,6 +236,17 @@ def main() -> None:
         text = text.replace(WORKS_MARKER, BLOG_SECTION + WORKS_MARKER, 1)
         changed = True
 
+    if 'id="training-trend"' not in text:
+        race_marker = '            <div class="dashboard-card next-race-card">'
+        if race_marker not in text:
+            raise RuntimeError("Next Race card marker was not found in index.html")
+        text = text.replace(race_marker, TRAINING_TREND_SECTION + race_marker, 1)
+        changed = True
+
+    if 'id="next-race-goal"' not in text and OLD_NEXT_RACE_CARD in text:
+        text = text.replace(OLD_NEXT_RACE_CARD, NEW_NEXT_RACE_CARD, 1)
+        changed = True
+
     script_tags = ""
     if 'src="journey-route.js"' not in text:
         script_tags += JOURNEY_SCRIPT_TAG
@@ -202,9 +267,9 @@ def main() -> None:
 
     if changed:
         INDEX_FILE.write_text(text, encoding="utf-8")
-        print("index.htmlをGarmin Dashboard/Journey/Blog連携に更新しました。")
+        print("index.htmlをGarmin Dashboard/Training Trend/Journey/Blog連携に更新しました。")
     else:
-        print("index.htmlはすでにGarmin Dashboard/Journey/Blog連携済みです。")
+        print("index.htmlはすでにGarmin Dashboard/Training Trend/Journey/Blog連携済みです。")
 
 
 if __name__ == "__main__":

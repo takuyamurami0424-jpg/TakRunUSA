@@ -139,11 +139,149 @@
     white-space: nowrap;
 }
 
+.training-trend-card {
+    margin-bottom: 28px;
+}
+
+.training-trend-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 22px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.trend-change {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: #edf2f7;
+    color: var(--text-sub);
+    font-size: 0.76rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.trend-change.trend-up {
+    background: #f0fff4;
+    color: #2f855a;
+}
+
+.trend-change.trend-down {
+    background: #fff5f5;
+    color: #c53030;
+}
+
+.trend-change.trend-steady {
+    background: #ebf8ff;
+    color: #2b6cb0;
+}
+
+.trend-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.trend-metric {
+    background: #f7fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.trend-value {
+    color: var(--ink);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.trend-weekly-heading {
+    margin-top: 26px;
+    color: var(--text-sub);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+}
+
+.trend-weekly-chart {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    height: 190px;
+    margin-top: 14px;
+    align-items: end;
+}
+
+.trend-week {
+    height: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.trend-week-value {
+    color: var(--text-sub);
+    font-size: 0.76rem;
+    margin-bottom: 6px;
+}
+
+.trend-week-bar-wrap {
+    width: 100%;
+    height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--border);
+}
+
+.trend-week-bar {
+    width: min(64px, 58%);
+    min-height: 4px;
+    background: var(--accent);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.4s ease;
+}
+
+.trend-week-label {
+    margin-top: 7px;
+    text-align: center;
+    color: var(--text-sub);
+    font-size: 0.72rem;
+    line-height: 1.35;
+}
+
+.trend-week-label strong,
+.trend-week-label span {
+    display: block;
+}
+
 .next-race-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 24px;
+}
+
+.next-race-main {
+    min-width: 0;
+}
+
+.race-goal-pill {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: #edf2f7;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
 }
 
 .next-race-days {
@@ -168,15 +306,38 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .trend-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .mileage-chart {
         overflow-x: auto;
         grid-template-columns: repeat(12, 54px);
     }
 }
 
+@media (max-width: 650px) {
+    .training-trend-header {
+        flex-direction: column;
+    }
+
+    .trend-weekly-chart {
+        gap: 10px;
+    }
+
+    .trend-week-bar {
+        width: 65%;
+    }
+
+    .trend-week-label span {
+        display: none;
+    }
+}
+
 @media (max-width: 520px) {
     .dashboard-grid,
-    .pb-grid {
+    .pb-grid,
+    .trend-grid {
         grid-template-columns: 1fr;
     }
 
