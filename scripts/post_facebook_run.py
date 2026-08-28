@@ -9,8 +9,8 @@ from pathlib import Path
 LATEST_RUN_FILE = Path("data/latest_run.json")
 STATE_FILE = Path("data/facebook_state.json")
 
-DEFAULT_PAGE_ID = "61593663700963"
-DEFAULT_API_VERSION = "v25.0"
+DEFAULT_PAGE_ID = "1196272093578743"
+DEFAULT_API_VERSION = "v26.0"
 RUN_LOG_URL = "https://takuyamurami0424-jpg.github.io/TakRunUSA/run-logs.html"
 
 
