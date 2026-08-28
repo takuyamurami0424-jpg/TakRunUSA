@@ -14,6 +14,7 @@ on:
       - "scripts/update_index_journey.py"
       - "scripts/update_run_logs.py"
       - "scripts/update_dashboard.py"
+      - "scripts/post_facebook_run.py"
       - "run-logs.html"
 
   schedule:
@@ -87,8 +88,8 @@ jobs:
       - name: Post new Garmin run to Facebook Page
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
-          FACEBOOK_PAGE_ID: "61593663700963"
-          FACEBOOK_GRAPH_API_VERSION: "v25.0"
+          FACEBOOK_PAGE_ID: "1196272093578743"
+          FACEBOOK_GRAPH_API_VERSION: "v26.0"
         run: python scripts/post_facebook_run.py
         continue-on-error: true
 
