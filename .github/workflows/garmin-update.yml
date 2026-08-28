@@ -85,6 +85,7 @@ jobs:
             git push origin HEAD:main
           fi
 
+      # One-time connectivity test trigger: current Garmin run may post once when state is reset.
       - name: Post new Garmin run to Facebook Page
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
