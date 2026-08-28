@@ -74,13 +74,40 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No new running data."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update Garmin running data"
+
+            # 実行中に main が更新されていた場合も、最新変更を取り込んでから保存する
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+
+      - name: Post new Garmin run to Facebook Page
+        env:
+          FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+          FACEBOOK_PAGE_ID: "61593663700963"
+          FACEBOOK_GRAPH_API_VERSION: "v25.0"
+        run: python scripts/post_facebook_run.py
+        continue-on-error: true
+
+      - name: Save Facebook posting state
+        run: |
+          if [ ! -f data/facebook_state.json ]; then
+            echo "No Facebook state file."
+            exit 0
+          fi
+
+          git add -- data/facebook_state.json
+
+          if git diff --cached --quiet; then
+            echo "No Facebook posting state change."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Update Garmin running data"
-
-          # 実行中に main が更新されていた場合も、最新変更を取り込んでから保存する
+          git commit -m "Update Facebook posting state"
           git pull --rebase origin main
           git push origin HEAD:main
