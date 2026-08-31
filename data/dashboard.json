@@ -1,61 +1,61 @@
 {
-  "generated_at": "2026-08-31T09:48:55.620847+00:00",
+  "generated_at": "2026-08-31T20:51:42.174333+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
     "this_month_km": 155.2,
     "this_year_km": 1507.2,
-    "last_7_days_km": 40.7,
+    "last_7_days_km": 32.7,
     "total_km": 4079.6,
     "activity_count": 585
   },
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 155.2,
-      "run_count": 20,
-      "duration_hours": 12.4,
-      "avg_pace_per_km": "4:48",
+      "distance_km": 145.1,
+      "run_count": 19,
+      "duration_hours": 11.6,
+      "avg_pace_per_km": "4:49",
       "avg_hr": 154,
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 114.9,
-      "run_count": 14,
-      "duration_hours": 9.6,
-      "avg_pace_per_km": "5:01",
+      "distance_km": 124.9,
+      "run_count": 15,
+      "duration_hours": 10.4,
+      "avg_pace_per_km": "4:59",
       "avg_hr": 156,
       "longest_run_km": 21.2
     },
-    "distance_change_pct": 35.1,
+    "distance_change_pct": 16.2,
     "direction": "up",
     "weekly": [
       {
         "label": "W1",
         "date_range": "Aug 03–Aug 09",
-        "distance_km": 41.2,
+        "distance_km": 42.2,
         "run_count": 4,
-        "avg_pace_per_km": "4:34"
+        "avg_pace_per_km": "4:37"
       },
       {
         "label": "W2",
         "date_range": "Aug 10–Aug 16",
-        "distance_km": 32.6,
+        "distance_km": 30.7,
         "run_count": 4,
-        "avg_pace_per_km": "5:01"
+        "avg_pace_per_km": "5:18"
       },
       {
         "label": "W3",
         "date_range": "Aug 17–Aug 23",
-        "distance_km": 40.7,
+        "distance_km": 39.6,
         "run_count": 5,
-        "avg_pace_per_km": "4:51"
+        "avg_pace_per_km": "4:32"
       },
       {
         "label": "W4",
         "date_range": "Aug 24–Aug 30",
-        "distance_km": 40.7,
-        "run_count": 7,
-        "avg_pace_per_km": "4:48"
+        "distance_km": 32.7,
+        "run_count": 6,
+        "avg_pace_per_km": "4:57"
       }
     ]
   },
