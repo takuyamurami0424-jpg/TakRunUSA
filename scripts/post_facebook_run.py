@@ -1,13 +1,13 @@
 import json
 import os
-import urllib.error
-import urllib.parse
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+import requests
+
 LATEST_RUN_FILE = Path("data/latest_run.json")
 STATE_FILE = Path("data/facebook_state.json")
+CARD_FILE = Path("assets/latest_run_card.png")
 
 DEFAULT_PAGE_ID = "1196272093578743"
 DEFAULT_API_VERSION = "v26.0"
@@ -27,12 +27,9 @@ def format_message(run: dict) -> str:
     duration = run.get("duration_minutes")
     pace = run.get("pace_per_km")
     avg_hr = run.get("average_hr")
-    elevation = run.get("elevation_m")
     score = run.get("score")
     grade = run.get("grade")
     run_type = run.get("estimated_run_type")
-    comment_en = str(run.get("comment_en") or "").strip()
-    comment_ja = str(run.get("comment") or "").strip()
 
     lines = ["🏃 New Garmin Run | Garminラン更新", "", name]
 
@@ -46,8 +43,6 @@ def format_message(run: dict) -> str:
         lines.append(f"⚡ {pace}/km")
     if avg_hr is not None:
         lines.append(f"❤️ Avg HR {avg_hr} bpm")
-    if elevation is not None:
-        lines.append(f"⛰ Elevation +{elevation} m")
     if score is not None:
         score_text = f"⭐ Run Score {score}/100"
         if grade:
@@ -56,54 +51,41 @@ def format_message(run: dict) -> str:
     if run_type:
         lines.append(f"🎯 {run_type}")
 
-    if comment_en or comment_ja:
-        lines.append("")
-    if comment_en:
-        lines.append(comment_en)
-    if comment_ja:
-        lines.append(comment_ja)
-
-    lines.extend(
-        [
-            "",
-            "Full running log / ランニングログはこちら:",
-            RUN_LOG_URL,
-        ]
-    )
-
+    lines.extend(["", "Full running log / ランニングログ:", RUN_LOG_URL])
     return "\n".join(lines)
 
 
-def post_to_facebook(page_id: str, token: str, api_version: str, run: dict) -> str:
-    url = f"https://graph.facebook.com/{api_version}/{page_id}/feed"
-    payload = urllib.parse.urlencode(
-        {
-            "message": format_message(run),
-            "link": RUN_LOG_URL,
-            "access_token": token,
-        }
-    ).encode("utf-8")
+def post_photo(page_id: str, token: str, api_version: str, run: dict) -> str:
+    if not CARD_FILE.exists():
+        raise RuntimeError(f"Run card image was not found: {CARD_FILE}")
 
-    request = urllib.request.Request(
-        url,
-        data=payload,
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": "TakRunUSA-GitHub-Actions/1.0",
-        },
-        method="POST",
-    )
+    url = f"https://graph.facebook.com/{api_version}/{page_id}/photos"
+
+    with CARD_FILE.open("rb") as image_file:
+        response = requests.post(
+            url,
+            data={
+                "caption": format_message(run),
+                "published": "true",
+                "access_token": token,
+            },
+            files={"source": (CARD_FILE.name, image_file, "image/png")},
+            timeout=60,
+        )
 
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
+        result = response.json()
+    except ValueError as exc:
         raise RuntimeError(
-            f"Facebook Graph API returned HTTP {exc.code}: {body}"
+            f"Facebook Graph API returned non-JSON HTTP {response.status_code}: {response.text}"
         ) from exc
 
-    post_id = result.get("id")
+    if not response.ok:
+        raise RuntimeError(
+            f"Facebook Graph API returned HTTP {response.status_code}: {result}"
+        )
+
+    post_id = result.get("post_id") or result.get("id")
     if not post_id:
         raise RuntimeError(f"Facebook Graph API response did not include a post id: {result}")
 
@@ -113,10 +95,7 @@ def post_to_facebook(page_id: str, token: str, api_version: str, run: dict) -> s
 def main() -> None:
     token = os.environ.get("FACEBOOK_PAGE_ACCESS_TOKEN", "").strip()
     page_id = os.environ.get("FACEBOOK_PAGE_ID", DEFAULT_PAGE_ID).strip()
-    api_version = os.environ.get(
-        "FACEBOOK_GRAPH_API_VERSION",
-        DEFAULT_API_VERSION,
-    ).strip()
+    api_version = os.environ.get("FACEBOOK_GRAPH_API_VERSION", DEFAULT_API_VERSION).strip()
 
     if not token:
         print(
@@ -138,13 +117,14 @@ def main() -> None:
         print(f"Garmin activity {activity_id} has already been posted to Facebook.")
         return
 
-    post_id = post_to_facebook(page_id, token, api_version, run)
+    post_id = post_photo(page_id, token, api_version, run)
 
     state = {
         "last_posted_activity_id": run.get("activity_id"),
         "last_facebook_post_id": post_id,
         "last_posted_at": datetime.now(timezone.utc).isoformat(),
         "page_id": page_id,
+        "post_format": "image_card",
     }
 
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -154,7 +134,7 @@ def main() -> None:
     )
 
     print(
-        f"Posted Garmin activity {activity_id} to Facebook Page. "
+        f"Posted Garmin activity {activity_id} with run card to Facebook Page. "
         f"Facebook post id: {post_id}"
     )
 

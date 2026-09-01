@@ -1,0 +1,62 @@
+#latest-run-card-section {
+    padding: 90px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.latest-run-image-shell {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+}
+
+.latest-run-image-shell img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+}
+
+.latest-run-image-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-top: 14px;
+    color: var(--text-sub);
+    font-size: 0.82rem;
+}
+
+.latest-run-image-meta a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.latest-run-image-meta a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 650px) {
+    #latest-run-card-section {
+        padding: 65px 5%;
+    }
+
+    .latest-run-image-shell {
+        padding: 10px;
+        border-radius: 18px;
+    }
+
+    .latest-run-image-shell img {
+        border-radius: 12px;
+    }
+
+    .latest-run-image-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

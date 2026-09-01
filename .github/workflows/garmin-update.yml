@@ -11,11 +11,16 @@ on:
       - "journey-route.js"
       - "dashboard.js"
       - "dashboard.css"
+      - "run-card.css"
+      - "run-card.js"
       - "scripts/update_index_journey.py"
       - "scripts/update_run_logs.py"
       - "scripts/update_dashboard.py"
+      - "scripts/generate_run_card.py"
+      - "scripts/update_index_run_card.py"
       - "scripts/post_facebook_run.py"
       - "run-logs.html"
+      - "requirements.txt"
 
   schedule:
     # 1日4回：米国東部時間のおおよそ
@@ -48,11 +53,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Japanese font for run card
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+
       - name: Get and evaluate Garmin running data
         env:
           GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
           GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
         run: python scripts/update_garmin.py
+
+      - name: Generate latest Garmin run card
+        run: python scripts/generate_run_card.py
 
       - name: Update Garmin running history
         env:
@@ -69,9 +82,12 @@ jobs:
       - name: Update journey and dashboard page integration
         run: python scripts/update_index_journey.py
 
+      - name: Update latest run card page integration
+        run: python scripts/update_index_run_card.py
+
       - name: Commit updated running data
         run: |
-          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json index.html
+          git add -- data/latest_run.json data/journey_data.json data/run_logs.json data/dashboard.json assets/latest_run_card.png index.html
 
           if git diff --cached --quiet; then
             echo "No new running data."
