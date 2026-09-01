@@ -382,6 +382,7 @@
     </style>
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="blog.css">
+    <link rel="stylesheet" href="run-card.css">
 </head>
 <body>
 
@@ -556,6 +557,31 @@
         </div>
     </div>
 </section>
+    <!-- 🖼️ AUTO-GENERATED GARMIN RUN CARD -->
+    <section id="latest-run-card-section">
+        <div class="section-header" style="margin-bottom: 35px;">
+            <span class="section-subtitle">Auto-Generated Run Card</span>
+            <h2 class="section-title">Latest Garmin Run Card</h2>
+            <p style="color: var(--text-sub);">
+                Garminの最新トレーニングから自動生成。ホームページとFacebook投稿に同じカードを使用します。
+            </p>
+        </div>
+
+        <div class="latest-run-image-shell">
+            <img
+                id="latest-run-card-image"
+                src="assets/latest_run_card.png"
+                alt="Latest Garmin run performance card"
+                loading="lazy"
+            >
+            <div class="latest-run-image-meta">
+                <span id="latest-run-card-updated">Updated automatically from Garmin</span>
+                <a href="run-logs.html" target="_blank" rel="noopener">
+                    View full running log <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+    </section>
     <!-- 📊 GARMIN RUNNING DASHBOARD -->
     <section id="running-dashboard">
         <div class="section-header" style="margin-bottom: 40px;">
@@ -1183,6 +1209,7 @@
     <script src="journey-route.js"></script>
     <script src="dashboard.js"></script>
     <script src="blog.js"></script>
+    <script src="run-card.js"></script>
 <!-- 🏃 GARMIN DATA SCRIPT -->
 <script>
     async function loadLatestRun() {
