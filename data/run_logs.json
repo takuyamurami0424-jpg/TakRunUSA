@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-08-29T03:11:18.655769+00:00",
+  "generated_at": "2026-09-02T18:45:18.586302+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24213357560,
+      "activity_name": "Adairsville ラン",
+      "activity_name_en": "Adairsville Run",
+      "date": "2026-09-02 12:17:13",
+      "distance_km": 6.01,
+      "duration_minutes": 27.7,
+      "pace_per_km": "4:37",
+      "average_hr": 155,
+      "maximum_hr": 170,
+      "elevation_m": 43,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24151099417,
       "activity_name": "Adairsville ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "安定した有酸素トレーニングと推定されます。",
       "comment_en": "This appears to be a steady and controlled aerobic training run."
-    },
-    {
-      "activity_id": 23311181253,
-      "activity_name": "Kennesaw Running",
-      "activity_name_en": "Kennesaw Running",
-      "date": "2026-06-19 18:45:46",
-      "distance_km": 4.85,
-      "duration_minutes": 38.4,
-      "pace_per_km": "7:55",
-      "average_hr": 117,
-      "maximum_hr": 149,
-      "elevation_m": 51,
-      "estimated_run_type": "Recovery Run",
-      "score": 90,
-      "grade": "A",
-      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
-      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
     }
   ]
 }
