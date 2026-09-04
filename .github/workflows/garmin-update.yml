@@ -101,7 +101,7 @@ jobs:
             git push origin HEAD:main
           fi
 
-      # Post only when the Garmin activity ID differs from the last Facebook-posted activity.
+      # Post every Garmin run detected since the last fully synchronized activity.
       - name: Post new Garmin run to Facebook Page
         env:
           FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}

@@ -110,12 +110,8 @@ def draw_mountains(draw):
     draw.polygon([(0, 455), (175, 330), (330, 430), (500, 300), (655, 445), (815, 330), (970, 450), (1120, 340), (1200, 405), (1200, 525), (0, 525)], fill="#E5EFFA")
 
 
-def main():
-    if not DATA_FILE.exists():
-        raise FileNotFoundError(f"Missing Garmin data: {DATA_FILE}")
-
-    run = json.loads(DATA_FILE.read_text(encoding="utf-8"))
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+def generate_run_card(run: dict, output_file: Path = OUTPUT_FILE) -> Path:
+    output_file.parent.mkdir(parents=True, exist_ok=True)
 
     image = Image.new("RGB", (WIDTH, HEIGHT), ICE)
     draw = ImageDraw.Draw(image)
@@ -193,8 +189,17 @@ def main():
 
     draw.text((72, 1135), "takuyamurami0424-jpg.github.io/TakRunUSA/", font=f_footer, fill=MUTED)
 
-    image.save(OUTPUT_FILE, "PNG", optimize=True)
-    print(f"Generated {OUTPUT_FILE} for activity {run.get('activity_id')}")
+    image.save(output_file, "PNG", optimize=True)
+    print(f"Generated {output_file} for activity {run.get('activity_id')}")
+    return output_file
+
+
+def main():
+    if not DATA_FILE.exists():
+        raise FileNotFoundError(f"Missing Garmin data: {DATA_FILE}")
+
+    run = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+    generate_run_card(run, OUTPUT_FILE)
 
 
 if __name__ == "__main__":

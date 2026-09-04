@@ -3,5 +3,9 @@
   "last_facebook_post_id": "1196272093578743_122107042611455456",
   "last_posted_at": "2026-09-04T18:27:10.833018+00:00",
   "page_id": "1196272093578743",
-  "post_format": "image_card"
+  "post_format": "image_card",
+  "watermark_activity_id": 24224611206,
+  "posted_activity_ids": [
+    24237695762
+  ]
 }
