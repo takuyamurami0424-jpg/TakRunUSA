@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-04T18:26:52.296509+00:00",
+  "generated_at": "2026-09-08T18:43:06.766352+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24286653369,
+      "activity_name": "Adairsville ラン",
+      "activity_name_en": "Adairsville Run",
+      "date": "2026-09-08 12:18:16",
+      "distance_km": 8.82,
+      "duration_minutes": 42.8,
+      "pace_per_km": "4:51",
+      "average_hr": 152,
+      "maximum_hr": 165,
+      "elevation_m": 48,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24237695762,
       "activity_name": "Adairsville ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "安定した有酸素トレーニングと推定されます。",
       "comment_en": "This appears to be a steady and controlled aerobic training run."
-    },
-    {
-      "activity_id": 23388661825,
-      "activity_name": "Adairsville Running",
-      "activity_name_en": "Adairsville Running",
-      "date": "2026-06-26 12:23:46",
-      "distance_km": 5.02,
-      "duration_minutes": 20.0,
-      "pace_per_km": "3:59",
-      "average_hr": 165,
-      "maximum_hr": 177,
-      "elevation_m": 29,
-      "estimated_run_type": "Tempo / High Intensity",
-      "score": 86,
-      "grade": "A",
-      "comment": "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
-      "comment_en": "This appears to be a high-intensity workout. Check your fatigue and recovery tomorrow."
     }
   ]
 }
