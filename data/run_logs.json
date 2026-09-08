@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-08T18:43:06.766352+00:00",
+  "generated_at": "2026-09-08T23:25:20.758860+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24290289839,
+      "activity_name": "Kennesaw ラン",
+      "activity_name_en": "Kennesaw Run",
+      "date": "2026-09-08 18:45:07",
+      "distance_km": 0.8,
+      "duration_minutes": 4.7,
+      "pace_per_km": "5:50",
+      "average_hr": 137,
+      "maximum_hr": 162,
+      "elevation_m": 12,
+      "estimated_run_type": "Recovery Run",
+      "score": 90,
+      "grade": "A",
+      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
+      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
+    },
     {
       "activity_id": 24286653369,
       "activity_name": "Adairsville ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
       "comment_en": "This appears to be a high-intensity workout. Check your fatigue and recovery tomorrow."
-    },
-    {
-      "activity_id": 23388662376,
-      "activity_name": "Bartow County Running",
-      "activity_name_en": "Bartow County Running",
-      "date": "2026-06-26 12:47:23",
-      "distance_km": 2.42,
-      "duration_minutes": 14.9,
-      "pace_per_km": "6:09",
-      "average_hr": 146,
-      "maximum_hr": 151,
-      "elevation_m": 10,
-      "estimated_run_type": "Easy / Steady Run",
-      "score": 85,
-      "grade": "A",
-      "comment": "安定した有酸素トレーニングと推定されます。",
-      "comment_en": "This appears to be a steady and controlled aerobic training run."
     }
   ]
 }
