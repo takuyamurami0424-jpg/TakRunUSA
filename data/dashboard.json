@@ -1,61 +1,61 @@
 {
-  "generated_at": "2026-09-10T08:11:11.173101+00:00",
+  "generated_at": "2026-09-10T18:31:11.466909+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
-    "this_month_km": 46.6,
-    "this_year_km": 1553.9,
-    "last_7_days_km": 40.6,
-    "total_km": 4126.2,
-    "activity_count": 593
+    "this_month_km": 56.7,
+    "this_year_km": 1563.9,
+    "last_7_days_km": 43.8,
+    "total_km": 4136.3,
+    "activity_count": 594
   },
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 138.3,
+      "distance_km": 138.4,
       "run_count": 22,
-      "duration_hours": 11.3,
-      "avg_pace_per_km": "4:55",
-      "avg_hr": 152,
+      "duration_hours": 11.2,
+      "avg_pace_per_km": "4:51",
+      "avg_hr": 154,
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 139.2,
+      "distance_km": 141.2,
       "run_count": 17,
-      "duration_hours": 11.4,
-      "avg_pace_per_km": "4:54",
+      "duration_hours": 11.6,
+      "avg_pace_per_km": "4:56",
       "avg_hr": 156,
       "longest_run_km": 11.2
     },
-    "distance_change_pct": -0.6,
+    "distance_change_pct": -2.0,
     "direction": "steady",
     "weekly": [
       {
         "label": "W1",
         "date_range": "Aug 13–Aug 19",
-        "distance_km": 33.9,
+        "distance_km": 35.0,
         "run_count": 5,
-        "avg_pace_per_km": "5:07"
+        "avg_pace_per_km": "5:00"
       },
       {
         "label": "W2",
         "date_range": "Aug 20–Aug 26",
-        "distance_km": 38.1,
+        "distance_km": 37.0,
         "run_count": 7,
-        "avg_pace_per_km": "4:40"
+        "avg_pace_per_km": "4:27"
       },
       {
         "label": "W3",
         "date_range": "Aug 27–Sep 02",
-        "distance_km": 25.7,
+        "distance_km": 22.5,
         "run_count": 3,
-        "avg_pace_per_km": "4:52"
+        "avg_pace_per_km": "5:07"
       },
       {
         "label": "W4",
         "date_range": "Sep 03–Sep 09",
-        "distance_km": 40.6,
+        "distance_km": 43.8,
         "run_count": 7,
-        "avg_pace_per_km": "5:02"
+        "avg_pace_per_km": "4:55"
       }
     ]
   },
@@ -141,7 +141,7 @@
       "key": "2026-09",
       "label": "Sep",
       "year": 2026,
-      "distance_km": 46.6,
+      "distance_km": 56.7,
       "is_current": true
     }
   ],
