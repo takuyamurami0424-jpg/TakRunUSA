@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-11T18:36:03.660601+00:00",
+  "generated_at": "2026-09-11T23:17:58.476532+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
     "this_month_km": 64.8,
@@ -19,14 +19,14 @@
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 141.2,
-      "run_count": 17,
-      "duration_hours": 11.6,
-      "avg_pace_per_km": "4:56",
-      "avg_hr": 156,
+      "distance_km": 134.8,
+      "run_count": 16,
+      "duration_hours": 11.2,
+      "avg_pace_per_km": "4:58",
+      "avg_hr": 155,
       "longest_run_km": 11.2
     },
-    "distance_change_pct": 3.8,
+    "distance_change_pct": 8.7,
     "direction": "up",
     "weekly": [
       {
