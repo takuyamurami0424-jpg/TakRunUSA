@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-11T18:35:50.619886+00:00",
+  "generated_at": "2026-09-15T19:02:24.778599+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24373592030,
+      "activity_name": "Adairsville ラン",
+      "activity_name_en": "Adairsville Run",
+      "date": "2026-09-15 12:22:41",
+      "distance_km": 10.04,
+      "duration_minutes": 44.4,
+      "pace_per_km": "4:26",
+      "average_hr": 164,
+      "maximum_hr": 180,
+      "elevation_m": 61,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24324341980,
       "activity_name": "Adairsville ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
       "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 23445847370,
-      "activity_name": "Adairsville Running",
-      "activity_name_en": "Adairsville Running",
-      "date": "2026-06-30 12:25:36",
-      "distance_km": 7.07,
-      "duration_minutes": 44.5,
-      "pace_per_km": "6:18",
-      "average_hr": 143,
-      "maximum_hr": 153,
-      "elevation_m": 46,
-      "estimated_run_type": "Easy / Steady Run",
-      "score": 85,
-      "grade": "A",
-      "comment": "安定した有酸素トレーニングと推定されます。",
-      "comment_en": "This appears to be a steady and controlled aerobic training run."
     }
   ]
 }
