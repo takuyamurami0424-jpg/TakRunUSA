@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-19T13:12:19.688188+00:00",
+  "generated_at": "2026-09-22T00:09:13.411494+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24446211180,
+      "activity_name": "Adairsville ラン",
+      "activity_name_en": "Adairsville Run",
+      "date": "2026-09-21 12:17:40",
+      "distance_km": 10.01,
+      "duration_minutes": 48.3,
+      "pace_per_km": "4:49",
+      "average_hr": 155,
+      "maximum_hr": 167,
+      "elevation_m": 62,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24419198134,
       "activity_name": "Kennesaw ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "安定した有酸素トレーニングと推定されます。",
       "comment_en": "This appears to be a steady and controlled aerobic training run."
-    },
-    {
-      "activity_id": 23475361670,
-      "activity_name": "Peachtree Road Race 2026",
-      "activity_name_en": "Peachtree Road Race 2026",
-      "date": "2026-07-04 06:50:18",
-      "distance_km": 10.14,
-      "duration_minutes": 39.7,
-      "pace_per_km": "3:55",
-      "average_hr": 179,
-      "maximum_hr": 186,
-      "elevation_m": 79,
-      "estimated_run_type": "Tempo / High Intensity",
-      "score": 86,
-      "grade": "A",
-      "comment": "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
-      "comment_en": "This appears to be a high-intensity workout. Check your fatigue and recovery tomorrow."
     }
   ]
 }
