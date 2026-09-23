@@ -1,18 +1,18 @@
 {
-  "activity_id": 24459088196,
-  "activity_name": "Adairsville ラン",
-  "activity_name_en": "Adairsville Run",
-  "date": "2026-09-22 12:16:31",
-  "distance_km": 10.17,
-  "duration_minutes": 51.7,
-  "pace_per_km": "5:05",
-  "average_hr": 160,
+  "activity_id": 24463047675,
+  "activity_name": "Kennesaw ラン",
+  "activity_name_en": "Kennesaw Run",
+  "date": "2026-09-22 18:45:19",
+  "distance_km": 8.03,
+  "duration_minutes": 40.7,
+  "pace_per_km": "5:04",
+  "average_hr": 156,
   "maximum_hr": 172,
-  "elevation_m": 64,
+  "elevation_m": 74,
   "estimated_run_type": "Easy / Steady Run",
   "score": 85,
   "grade": "A",
   "comment": "安定した有酸素トレーニングと推定されます。",
   "comment_en": "This appears to be a steady and controlled aerobic training run.",
-  "updated_at": "2026-09-22T18:56:50.076096+00:00"
+  "updated_at": "2026-09-23T08:37:51.942440+00:00"
 }
