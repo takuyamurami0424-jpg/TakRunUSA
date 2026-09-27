@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T13:46:23.049284+00:00",
+  "generated_at": "2026-09-27T09:19:20.095386+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
     "this_month_km": 150.8,
@@ -31,28 +31,28 @@
     "weekly": [
       {
         "label": "W1",
-        "date_range": "Aug 29–Sep 04",
+        "date_range": "Aug 30–Sep 05",
         "distance_km": 23.9,
         "run_count": 4,
         "avg_pace_per_km": "4:46"
       },
       {
         "label": "W2",
-        "date_range": "Sep 05–Sep 11",
+        "date_range": "Sep 06–Sep 12",
         "distance_km": 40.9,
         "run_count": 6,
         "avg_pace_per_km": "5:13"
       },
       {
         "label": "W3",
-        "date_range": "Sep 12–Sep 18",
+        "date_range": "Sep 13–Sep 19",
         "distance_km": 33.2,
         "run_count": 5,
         "avg_pace_per_km": "4:53"
       },
       {
         "label": "W4",
-        "date_range": "Sep 19–Sep 25",
+        "date_range": "Sep 20–Sep 26",
         "distance_km": 52.8,
         "run_count": 6,
         "avg_pace_per_km": "5:04"
