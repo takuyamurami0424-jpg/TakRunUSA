@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-09-28T09:51:21.656669+00:00",
+  "generated_at": "2026-09-28T21:15:35.455317+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
-    "this_month_km": 150.8,
-    "this_year_km": 1658.0,
-    "last_7_days_km": 52.8,
-    "total_km": 4230.4,
-    "activity_count": 606
+    "this_month_km": 159.0,
+    "this_year_km": 1666.2,
+    "last_7_days_km": 50.9,
+    "total_km": 4238.6,
+    "activity_count": 607
   },
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 150.8,
-      "run_count": 21,
-      "duration_hours": 12.6,
-      "avg_pace_per_km": "5:01",
+      "distance_km": 159.0,
+      "run_count": 22,
+      "duration_hours": 13.3,
+      "avg_pace_per_km": "5:02",
       "avg_hr": 154,
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 155.2,
-      "run_count": 20,
-      "duration_hours": 12.4,
-      "avg_pace_per_km": "4:48",
+      "distance_km": 145.1,
+      "run_count": 19,
+      "duration_hours": 11.6,
+      "avg_pace_per_km": "4:49",
       "avg_hr": 154,
       "longest_run_km": 12.0
     },
-    "distance_change_pct": -2.8,
-    "direction": "down",
+    "distance_change_pct": 9.6,
+    "direction": "up",
     "weekly": [
       {
         "label": "W1",
@@ -46,16 +46,16 @@
       {
         "label": "W3",
         "date_range": "Sep 14–Sep 20",
-        "distance_km": 33.2,
-        "run_count": 5,
-        "avg_pace_per_km": "4:53"
+        "distance_km": 43.2,
+        "run_count": 6,
+        "avg_pace_per_km": "4:52"
       },
       {
         "label": "W4",
         "date_range": "Sep 21–Sep 27",
-        "distance_km": 52.8,
+        "distance_km": 50.9,
         "run_count": 6,
-        "avg_pace_per_km": "5:04"
+        "avg_pace_per_km": "5:10"
       }
     ]
   },
@@ -141,7 +141,7 @@
       "key": "2026-09",
       "label": "Sep",
       "year": 2026,
-      "distance_km": 150.8,
+      "distance_km": 159.0,
       "is_current": true
     }
   ],

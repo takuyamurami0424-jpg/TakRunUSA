@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-23T14:15:42.272659+00:00",
+  "generated_at": "2026-09-28T21:15:24.490820+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24531552079,
+      "activity_name": "Adairsville - Interval 6 x 1000m",
+      "activity_name_en": "Adairsville - Interval 6 x 1000m",
+      "date": "2026-09-28 12:17:12",
+      "distance_km": 8.18,
+      "duration_minutes": 44.1,
+      "pace_per_km": "5:23",
+      "average_hr": 149,
+      "maximum_hr": 182,
+      "elevation_m": 55,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24466757083,
       "activity_name": "Cobb County ラン",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
       "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 23667585778,
-      "activity_name": "Adairsville ラン",
-      "activity_name_en": "Adairsville Run",
-      "date": "2026-07-20 12:21:09",
-      "distance_km": 10.01,
-      "duration_minutes": 52.8,
-      "pace_per_km": "5:17",
-      "average_hr": 155,
-      "maximum_hr": 168,
-      "elevation_m": 60,
-      "estimated_run_type": "Easy / Steady Run",
-      "score": 85,
-      "grade": "A",
-      "comment": "安定した有酸素トレーニングと推定されます。",
-      "comment_en": "This appears to be a steady and controlled aerobic training run."
     }
   ]
 }
