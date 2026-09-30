@@ -1,18 +1,18 @@
 {
-  "activity_id": 24531552079,
-  "activity_name": "Adairsville - Interval 6 x 1000m",
-  "activity_name_en": "Adairsville - Interval 6 x 1000m",
-  "date": "2026-09-28 12:17:12",
-  "distance_km": 8.18,
-  "duration_minutes": 44.1,
+  "activity_id": 24548153774,
+  "activity_name": "Kennesaw ラン",
+  "activity_name_en": "Kennesaw Run",
+  "date": "2026-09-29 19:20:28",
+  "distance_km": 0.78,
+  "duration_minutes": 4.2,
   "pace_per_km": "5:23",
-  "average_hr": 149,
-  "maximum_hr": 182,
-  "elevation_m": 55,
+  "average_hr": 142,
+  "maximum_hr": 156,
+  "elevation_m": 11,
   "estimated_run_type": "Easy / Steady Run",
   "score": 85,
   "grade": "A",
   "comment": "安定した有酸素トレーニングと推定されます。",
   "comment_en": "This appears to be a steady and controlled aerobic training run.",
-  "updated_at": "2026-09-28T21:15:15.256931+00:00"
+  "updated_at": "2026-09-30T00:30:04.725313+00:00"
 }
