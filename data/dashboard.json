@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-10-05T10:31:36.550631+00:00",
+  "generated_at": "2026-10-05T22:02:45.689208+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
-    "this_month_km": 17.3,
-    "this_year_km": 1707.4,
-    "last_7_days_km": 49.4,
-    "total_km": 4279.8,
-    "activity_count": 616
+    "this_month_km": 26.4,
+    "this_year_km": 1716.5,
+    "last_7_days_km": 50.3,
+    "total_km": 4288.9,
+    "activity_count": 617
   },
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 176.3,
-      "run_count": 27,
-      "duration_hours": 15.0,
-      "avg_pace_per_km": "5:07",
+      "distance_km": 185.4,
+      "run_count": 28,
+      "duration_hours": 15.8,
+      "avg_pace_per_km": "5:08",
       "avg_hr": 150,
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 137.8,
-      "run_count": 20,
-      "duration_hours": 11.2,
+      "distance_km": 126.8,
+      "run_count": 19,
+      "duration_hours": 10.3,
       "avg_pace_per_km": "4:52",
       "avg_hr": 154,
       "longest_run_km": 12.0
     },
-    "distance_change_pct": 27.9,
+    "distance_change_pct": 46.2,
     "direction": "up",
     "weekly": [
       {
@@ -39,23 +39,23 @@
       {
         "label": "W2",
         "date_range": "Sep 14–Sep 20",
-        "distance_km": 33.2,
-        "run_count": 5,
-        "avg_pace_per_km": "4:53"
+        "distance_km": 43.2,
+        "run_count": 6,
+        "avg_pace_per_km": "4:52"
       },
       {
         "label": "W3",
         "date_range": "Sep 21–Sep 27",
-        "distance_km": 52.8,
+        "distance_km": 50.9,
         "run_count": 6,
-        "avg_pace_per_km": "5:04"
+        "avg_pace_per_km": "5:10"
       },
       {
         "label": "W4",
         "date_range": "Sep 28–Oct 04",
-        "distance_km": 49.4,
+        "distance_km": 50.3,
         "run_count": 10,
-        "avg_pace_per_km": "5:16"
+        "avg_pace_per_km": "5:14"
       }
     ]
   },
@@ -141,7 +141,7 @@
       "key": "2026-10",
       "label": "Oct",
       "year": 2026,
-      "distance_km": 17.3,
+      "distance_km": 26.4,
       "is_current": true
     }
   ],
