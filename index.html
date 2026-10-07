@@ -1130,10 +1130,9 @@
         // Init Map
         const map = L.map('journey-map').setView([38.0, -100.0], 4); // US Wide View
 
-        // Tile Layer (OpenStreetMap)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
+        // Tile Layer (OpenStreetMap — no API key required)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19
         }).addTo(map);
 
@@ -1202,8 +1201,7 @@
                 .openPopup();
         }
         
-        // Initial draw with default value
-        drawMapRoute(3000);
+        // The live route is drawn by journey-route.js after Garmin journey data loads.
 
     </script>
     <script src="journey-route.js"></script>
