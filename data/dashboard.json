@@ -1,40 +1,40 @@
 {
-  "generated_at": "2026-10-09T10:38:13.058862+00:00",
+  "generated_at": "2026-10-09T20:08:19.458643+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
-    "this_month_km": 55.2,
-    "this_year_km": 1745.3,
-    "last_7_days_km": 47.9,
-    "total_km": 4317.7,
-    "activity_count": 621
+    "this_month_km": 60.2,
+    "this_year_km": 1750.3,
+    "last_7_days_km": 42.9,
+    "total_km": 4322.7,
+    "activity_count": 622
   },
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 181.4,
+      "distance_km": 178.3,
       "run_count": 27,
-      "duration_hours": 15.7,
-      "avg_pace_per_km": "5:11",
-      "avg_hr": 148,
+      "duration_hours": 15.3,
+      "avg_pace_per_km": "5:08",
+      "avg_hr": 149,
       "longest_run_km": 12.0
     },
     "previous": {
-      "distance_km": 138.4,
-      "run_count": 22,
-      "duration_hours": 11.2,
-      "avg_pace_per_km": "4:51",
-      "avg_hr": 154,
+      "distance_km": 146.5,
+      "run_count": 23,
+      "duration_hours": 12.0,
+      "avg_pace_per_km": "4:56",
+      "avg_hr": 152,
       "longest_run_km": 12.0
     },
-    "distance_change_pct": 31.1,
+    "distance_change_pct": 21.7,
     "direction": "up",
     "weekly": [
       {
         "label": "W1",
         "date_range": "Sep 11–Sep 17",
-        "distance_km": 36.3,
-        "run_count": 5,
-        "avg_pace_per_km": "5:22"
+        "distance_km": 28.2,
+        "run_count": 4,
+        "avg_pace_per_km": "5:05"
       },
       {
         "label": "W2",
@@ -46,16 +46,16 @@
       {
         "label": "W3",
         "date_range": "Sep 25–Oct 01",
-        "distance_km": 39.4,
-        "run_count": 9,
-        "avg_pace_per_km": "5:18"
+        "distance_km": 49.4,
+        "run_count": 10,
+        "avg_pace_per_km": "5:16"
       },
       {
         "label": "W4",
         "date_range": "Oct 02–Oct 08",
-        "distance_km": 47.9,
+        "distance_km": 42.9,
         "run_count": 6,
-        "avg_pace_per_km": "5:15"
+        "avg_pace_per_km": "5:18"
       }
     ]
   },
@@ -141,7 +141,7 @@
       "key": "2026-10",
       "label": "Oct",
       "year": 2026,
-      "distance_km": 55.2,
+      "distance_km": 60.2,
       "is_current": true
     }
   ],
