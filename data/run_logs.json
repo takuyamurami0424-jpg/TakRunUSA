@@ -1,7 +1,41 @@
 {
-  "generated_at": "2026-10-20T23:55:27.593057+00:00",
+  "generated_at": "2026-10-23T00:00:04.467504+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24820005939,
+      "activity_name": "Kennesaw ラン",
+      "activity_name_en": "Kennesaw Run",
+      "date": "2026-10-22 18:51:01",
+      "distance_km": 6.45,
+      "duration_minutes": 31.3,
+      "pace_per_km": "4:51",
+      "average_hr": 147,
+      "maximum_hr": 164,
+      "elevation_m": 61,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
+    {
+      "activity_id": 24819732383,
+      "activity_name": "Kennesaw ラン",
+      "activity_name_en": "Kennesaw Run",
+      "date": "2026-10-22 18:41:32",
+      "distance_km": 0.89,
+      "duration_minutes": 4.9,
+      "pace_per_km": "5:29",
+      "average_hr": 121,
+      "maximum_hr": 143,
+      "elevation_m": 9,
+      "estimated_run_type": "Recovery Run",
+      "score": 90,
+      "grade": "A",
+      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
+      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
+    },
     {
       "activity_id": 24797085054,
       "activity_name": "Kennesaw ラン",
@@ -817,40 +851,6 @@
       "grade": "A",
       "comment": "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
       "comment_en": "This appears to be a high-intensity workout. Check your fatigue and recovery tomorrow."
-    },
-    {
-      "activity_id": 24116984686,
-      "activity_name": "Kennesaw ラン",
-      "activity_name_en": "Kennesaw Run",
-      "date": "2026-08-25 18:54:51",
-      "distance_km": 1.64,
-      "duration_minutes": 7.6,
-      "pace_per_km": "4:40",
-      "average_hr": 133,
-      "maximum_hr": 158,
-      "elevation_m": 17,
-      "estimated_run_type": "Recovery Run",
-      "score": 90,
-      "grade": "A",
-      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
-      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 24116984191,
-      "activity_name": "Kennesaw ラン",
-      "activity_name_en": "Kennesaw Run",
-      "date": "2026-08-25 18:43:30",
-      "distance_km": 0.8,
-      "duration_minutes": 5.0,
-      "pace_per_km": "6:14",
-      "average_hr": 131,
-      "maximum_hr": 139,
-      "elevation_m": 12,
-      "estimated_run_type": "Recovery Run",
-      "score": 90,
-      "grade": "A",
-      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
-      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
     }
   ]
 }
