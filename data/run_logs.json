@@ -1,7 +1,41 @@
 {
-  "generated_at": "2026-10-30T01:03:47.496579+00:00",
+  "generated_at": "2026-10-31T19:19:46.183449+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 24916200173,
+      "activity_name": "Kennesaw ラン",
+      "activity_name_en": "Kennesaw Run",
+      "date": "2026-10-31 08:08:52",
+      "distance_km": 5.04,
+      "duration_minutes": 18.9,
+      "pace_per_km": "3:46",
+      "average_hr": 176,
+      "maximum_hr": 187,
+      "elevation_m": 33,
+      "estimated_run_type": "Tempo / High Intensity",
+      "score": 86,
+      "grade": "A",
+      "comment": "高強度トレーニングと推定されます。翌日の疲労状態を確認してください。",
+      "comment_en": "This appears to be a high-intensity workout. Check your fatigue and recovery tomorrow."
+    },
+    {
+      "activity_id": 24915587833,
+      "activity_name": "Kennesaw ラン",
+      "activity_name_en": "Kennesaw Run",
+      "date": "2026-10-31 07:38:00",
+      "distance_km": 1.61,
+      "duration_minutes": 7.2,
+      "pace_per_km": "4:30",
+      "average_hr": 142,
+      "maximum_hr": 159,
+      "elevation_m": 16,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 24898960127,
       "activity_name": "Kennesaw ラン",
@@ -817,40 +851,6 @@
       "grade": "A",
       "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
       "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 24290289839,
-      "activity_name": "Kennesaw ラン",
-      "activity_name_en": "Kennesaw Run",
-      "date": "2026-09-08 18:45:07",
-      "distance_km": 0.8,
-      "duration_minutes": 4.7,
-      "pace_per_km": "5:50",
-      "average_hr": 137,
-      "maximum_hr": 162,
-      "elevation_m": 12,
-      "estimated_run_type": "Recovery Run",
-      "score": 90,
-      "grade": "A",
-      "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
-      "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 24286653369,
-      "activity_name": "Adairsville ラン",
-      "activity_name_en": "Adairsville Run",
-      "date": "2026-09-08 12:18:16",
-      "distance_km": 8.82,
-      "duration_minutes": 42.8,
-      "pace_per_km": "4:51",
-      "average_hr": 152,
-      "maximum_hr": 165,
-      "elevation_m": 48,
-      "estimated_run_type": "Easy / Steady Run",
-      "score": 85,
-      "grade": "A",
-      "comment": "安定した有酸素トレーニングと推定されます。",
-      "comment_en": "This appears to be a steady and controlled aerobic training run."
     }
   ]
 }
