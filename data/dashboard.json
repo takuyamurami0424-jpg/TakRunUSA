@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T23:07:31.588365+00:00",
+  "generated_at": "2026-11-03T10:56:23.416337+00:00",
   "scope": "Garmin running activities since July 2024",
   "summary": {
     "this_month_km": 11.3,
@@ -11,48 +11,48 @@
   "training_trend": {
     "period_days": 28,
     "current": {
-      "distance_km": 150.7,
-      "run_count": 25,
-      "duration_hours": 12.2,
-      "avg_pace_per_km": "4:51",
+      "distance_km": 138.7,
+      "run_count": 24,
+      "duration_hours": 11.1,
+      "avg_pace_per_km": "4:47",
+      "avg_hr": 151,
+      "longest_run_km": 11.3
+    },
+    "previous": {
+      "distance_km": 197.4,
+      "run_count": 29,
+      "duration_hours": 17.0,
+      "avg_pace_per_km": "5:09",
       "avg_hr": 149,
       "longest_run_km": 12.0
     },
-    "previous": {
-      "distance_km": 185.4,
-      "run_count": 28,
-      "duration_hours": 15.8,
-      "avg_pace_per_km": "5:08",
-      "avg_hr": 150,
-      "longest_run_km": 12.0
-    },
-    "distance_change_pct": -18.7,
+    "distance_change_pct": -29.7,
     "direction": "down",
     "weekly": [
       {
         "label": "W1",
-        "date_range": "Oct 05–Oct 11",
-        "distance_km": 43.8,
-        "run_count": 6,
-        "avg_pace_per_km": "5:06"
+        "date_range": "Oct 06–Oct 12",
+        "distance_km": 31.8,
+        "run_count": 5,
+        "avg_pace_per_km": "4:55"
       },
       {
         "label": "W2",
-        "date_range": "Oct 12–Oct 18",
+        "date_range": "Oct 13–Oct 19",
         "distance_km": 38.5,
         "run_count": 6,
         "avg_pace_per_km": "4:44"
       },
       {
         "label": "W3",
-        "date_range": "Oct 19–Oct 25",
+        "date_range": "Oct 20–Oct 26",
         "distance_km": 21.6,
         "run_count": 5,
         "avg_pace_per_km": "4:48"
       },
       {
         "label": "W4",
-        "date_range": "Oct 26–Nov 01",
+        "date_range": "Oct 27–Nov 02",
         "distance_km": 46.9,
         "run_count": 8,
         "avg_pace_per_km": "4:44"
