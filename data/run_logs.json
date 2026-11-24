@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-11-24T02:14:36.758475+00:00",
+  "generated_at": "2026-11-24T23:55:10.442211+00:00",
   "count": 50,
   "runs": [
+    {
+      "activity_id": 25186931222,
+      "activity_name": "Adairsville - NXT RUN: Medium KMs",
+      "activity_name_en": "Adairsville - NXT RUN: Medium KMs",
+      "date": "2026-11-24 12:21:49",
+      "distance_km": 9.01,
+      "duration_minutes": 49.4,
+      "pace_per_km": "5:29",
+      "average_hr": 145,
+      "maximum_hr": 170,
+      "elevation_m": 59,
+      "estimated_run_type": "Easy / Steady Run",
+      "score": 85,
+      "grade": "A",
+      "comment": "安定した有酸素トレーニングと推定されます。",
+      "comment_en": "This appears to be a steady and controlled aerobic training run."
+    },
     {
       "activity_id": 25175739764,
       "activity_name": "Adairsville - NXT RUN: Tabata Time",
@@ -834,23 +851,6 @@
       "grade": "A",
       "comment": "心拍を抑えた回復目的のランとして、適切にコントロールされています。",
       "comment_en": "This was a well-controlled recovery run with an appropriately low heart rate."
-    },
-    {
-      "activity_id": 24463047675,
-      "activity_name": "Kennesaw ラン",
-      "activity_name_en": "Kennesaw Run",
-      "date": "2026-09-22 18:45:19",
-      "distance_km": 8.03,
-      "duration_minutes": 40.7,
-      "pace_per_km": "5:04",
-      "average_hr": 156,
-      "maximum_hr": 172,
-      "elevation_m": 74,
-      "estimated_run_type": "Easy / Steady Run",
-      "score": 85,
-      "grade": "A",
-      "comment": "安定した有酸素トレーニングと推定されます。",
-      "comment_en": "This appears to be a steady and controlled aerobic training run."
     }
   ]
 }
